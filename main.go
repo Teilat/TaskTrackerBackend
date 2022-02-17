@@ -3,9 +3,12 @@ package main
 import (
 	"fmt"
 	"github.com/gin-gonic/gin"
+	"main/database/sql"
 )
 
 func main() {
+	sql.Connect()
+
 	router := gin.Default()
 
 	router.GET("/ping", func(c *gin.Context) {
@@ -15,6 +18,11 @@ func main() {
 	err := router.Run()
 	if err != nil {
 		fmt.Println(err)
+		return
+	}
+
+	_, err = fmt.Scanln()
+	if err != nil {
 		return
 	}
 }
