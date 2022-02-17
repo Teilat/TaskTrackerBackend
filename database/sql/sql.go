@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-var server = "192.168.194.131"
+var server = "127.0.0.1"
 var port = 1433
 var user = "admin"
 var password = "Kot_456789"

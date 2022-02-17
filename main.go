@@ -2,26 +2,16 @@ package main
 
 import (
 	"fmt"
-	"github.com/gin-gonic/gin"
 	"main/database/sql"
+	"main/server"
+	_ "net/http/pprof"
 )
 
 func main() {
 	sql.Connect()
+	server.Init()
 
-	router := gin.Default()
-
-	router.GET("/ping", func(c *gin.Context) {
-		c.JSON(200, gin.H{"msg": ""})
-	})
-
-	err := router.Run()
-	if err != nil {
-		fmt.Println(err)
-		return
-	}
-
-	_, err = fmt.Scanln()
+	_, err := fmt.Scanln()
 	if err != nil {
 		return
 	}
