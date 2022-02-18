@@ -13,6 +13,11 @@
 ### [endpoints]
 - [ORM](https://github.com/go-reform/reform)  
 - [Router](https://github.com/gin-gonic/gin)
+- [Middleware](https://github.com/gin-gonic/contrib)
+  * *[Auth](https://github.com/appleboy/gin-jwt)*
+- [Swagger](https://github.com/swaggo/gin-swagger)
+   * [Example main](https://github.com/swaggo/swag/blob/master/example/celler/main.go)
+   * [Example func](https://github.com/swaggo/swag/blob/master/example/celler/controller/examples.go)
 
 **General**
 - /healthcheck  
