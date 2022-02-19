@@ -14,7 +14,11 @@
 - [ORM](https://github.com/go-reform/reform)  
 - [Router](https://github.com/gin-gonic/gin)
 - [Middleware](https://github.com/gin-gonic/contrib)
-  * *[Auth](https://github.com/appleboy/gin-jwt)*
+  * [Auth(OAuth2)]()
+  <details> 
+    <summary>JWT,OAuth,OAuth2</summary>
+    Firstly, we have to differentiate JWT and OAuth. Basically, JWT is a token format. OAuth is an authorization protocol that can use JWT as a token. OAuth uses server-side and client-side storage. If you want to do real logout you must go with OAuth2. Authentication with JWT token can not logout actually. Because you don't have an Authentication Server that keeps track of tokens. If you want to provide an API to 3rd party clients, you must use OAuth2 also. OAuth2 is very flexible. JWT implementation is very easy and does not take long to implement. If your application needs this sort of flexibility, you should go with OAuth2. But if you don't need this use-case scenario, implementing OAuth2 is a waste of time.
+  </details>
 - [Swagger](https://github.com/swaggo/gin-swagger)
    * [Example main](https://github.com/swaggo/swag/blob/master/example/celler/main.go)
    * [Example func](https://github.com/swaggo/swag/blob/master/example/celler/controller/examples.go)
