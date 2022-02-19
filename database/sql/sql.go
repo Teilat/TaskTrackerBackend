@@ -8,7 +8,7 @@ import (
 	"log"
 )
 
-var server = "127.0.0.1"
+var server = "192.168.1.134"
 var port = 1433
 var user = "admin"
 var password = "Kot_456789"
@@ -29,6 +29,6 @@ func Connect() *sql.DB {
 	if err != nil {
 		log.Fatal(err.Error())
 	}
-	fmt.Printf("Connected!\n")
+	log.Println("Connected")
 	return db
 }
