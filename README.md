@@ -1,10 +1,13 @@
 # graduationWork
 ## TODO
 ### [Tags]
-- цвет текста зависит от цвета фона(hex) 
+- цвет текста тега зависит от цвета фона(hex) \
+  ![tagExample](./assets/images/tagExample.png)
 
 ### [Database]
-1. селектор бд по конфигу, что заполнено то и использовать, если несколько то выбор режима
+![ER Model](./assets/images/ER_Diag.png) \
+**Идеи**  
+- селектор бд по конфигу, что заполнено то и использовать, если несколько то выбор режима
     - дублирование
     - резервная копия
     - резервный сервер
@@ -22,18 +25,24 @@
 - [Swagger](https://github.com/swaggo/gin-swagger)
    * [Example main](https://github.com/swaggo/swag/blob/master/example/celler/main.go)
    * [Example func](https://github.com/swaggo/swag/blob/master/example/celler/controller/examples.go)
+  
+**Base Path**  
+> /api/v1  
 
 **General**
-- /healthcheck  
----
-**User**
-- /login
-- /register
-- /logout
----
-**Roles**
-- /roles [Get] Get list of all roles
-- /role?name= [Post] Create role
-- /role
-- */role?id= [Get] Get role with this id*
+> /health
 
+**Users**
+> /login \
+> /register \
+> /logout 
+
+**Roles**
+> /roles [Get] Get list of all roles \
+> /role [Post] (name,privileges) Create role \
+> /role \
+> /role [Get] (name) Get role with this id \
+
+**Tags**
+> /tags [Get] Get list of all tags \
+> /tag [Post] (name,colorCode) Create tag
