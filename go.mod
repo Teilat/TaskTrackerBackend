@@ -3,7 +3,6 @@ module main
 go 1.16
 
 require (
-	github.com/cpuguy83/go-md2man/v2 v2.0.1 // indirect
 	github.com/denisenkom/go-mssqldb v0.12.0
 	github.com/gin-gonic/gin v1.7.7
 	github.com/go-openapi/swag v0.21.1 // indirect
