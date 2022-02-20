@@ -1,7 +1,7 @@
----
 Sql:
-  Addres: 192.168.1.134
+  Host: 192.168.1.134
   Port: 1433
   User: "admin"
   Pass: "Kot_456789"
+  Name: "sqlserver"
   Db: "mainDb"

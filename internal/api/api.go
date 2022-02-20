@@ -1,12 +1,12 @@
-package server
+package api
 
 import (
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
+	"main/internal/api/v1"
 	_ "main/internal/docs"
-	"main/internal/server/v1"
 )
 
 func Init() {

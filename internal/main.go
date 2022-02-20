@@ -3,16 +3,20 @@ package main
 import (
 	"fmt"
 	"log"
-	sql2 "main/internal/database/sql"
-	server2 "main/internal/server"
+	"main/internal/api"
+	"main/internal/config"
+	"main/internal/database/sql"
 	_ "net/http/pprof"
 )
 
 // @host      localhost:8080
 // @BasePath  /api/v1
 func main() {
-	sql2.Connect()
-	server2.Init()
+	var conf config.Configuration
+	conf.GetConf()
+
+	sql.Connect(&conf)
+	api.Init()
 
 	_, err := fmt.Scanln()
 	if err != nil {

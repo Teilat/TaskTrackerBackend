@@ -6,21 +6,17 @@ import (
 	"fmt"
 	_ "github.com/denisenkom/go-mssqldb"
 	"log"
+	"main/internal/config"
 )
 
-var server = "192.168.1.134"
-var port = 1433
-var user = "admin"
-var password = "Kot_456789"
-var database = "mainDb"
+func Connect(conf *config.Configuration) *sql.DB {
 
-func Connect() *sql.DB {
 	// Build connection string
 	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
-		server, user, password, port, database)
+		conf.Sql.Host, conf.Sql.User, conf.Sql.Password, conf.Sql.Port, conf.Sql.Database)
 
 	// Create connection pool
-	db, err := sql.Open("sqlserver", connString)
+	db, err := sql.Open(conf.Sql.Name, connString)
 	if err != nil {
 		log.Fatal("Error creating connection pool: ", err.Error())
 	}
