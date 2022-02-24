@@ -59,3 +59,5 @@
 **Tags**
 > /tags [Get] Get list of all tags \
 > /tag [Post] (name,colorCode) Create tag
+
+**

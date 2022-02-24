@@ -18,7 +18,7 @@ func Init() {
 
 	ver1 := router.Group("/api/v1")
 	{
-		ver1.GET("/health", v1Api.HealthCheck)
+		ver1.GET("/health", v1.HealthCheck)
 	}
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))

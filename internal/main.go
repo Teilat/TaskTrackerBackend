@@ -15,7 +15,8 @@ func main() {
 	var conf config.Configuration
 	conf.GetConf()
 
-	sql.Connect(&conf)
+	db := sql.Connect(&conf)
+	sql.GetAllTags(db)
 	api.Init()
 
 	_, err := fmt.Scanln()
