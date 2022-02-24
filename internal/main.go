@@ -12,10 +12,9 @@ import (
 // @host      localhost:8080
 // @BasePath  /api/v1
 func main() {
-	var conf config.Configuration
-	conf.GetConf()
+	config.GetConf()
 
-	sql.Connect(&conf)
+	sql.Connect()
 	api.Init()
 
 	_, err := fmt.Scanln()

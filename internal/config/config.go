@@ -1,13 +1,18 @@
 package config
 
 import (
-	"gopkg.in/yaml.v2"
-	"log"
-	"os"
+	"fmt"
+	"github.com/spf13/viper"
 )
 
 type Configuration struct {
 	Sql Sql `yaml:"Sql"`
+	jwt Jwt `yaml:"Jwt"`
+}
+
+type Jwt struct {
+	Usage     bool `yaml:"Enable"`
+	ExpiresAt int  `yaml:"ExpiresAt"`
 }
 
 type Sql struct {
@@ -19,17 +24,14 @@ type Sql struct {
 	Password string `yaml:"Pass"`
 }
 
-func (c *Configuration) GetConf() *Configuration {
+func GetConf() {
 
-	pwd, _ := os.Getwd()
-	yamlFile, err := os.ReadFile(pwd + "/config/config.yaml")
-	if err != nil {
-		log.Printf("yamlFile.Get err   #%v ", err)
-	}
-	err = yaml.Unmarshal(yamlFile, c)
-	if err != nil {
-		log.Fatalf("Unmarshal: %v", err)
-	}
+	viper.AddConfigPath("./config")
+	viper.SetConfigName("config")
+	viper.SetConfigType("yml")
 
-	return c
+	err := viper.ReadInConfig()
+	if err != nil {
+		fmt.Printf("Error reading config file, %s", err)
+	}
 }

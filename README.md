@@ -52,10 +52,16 @@
 
 **Roles**
 > /roles [Get] Get list of all roles \
-> /role [Post] (name,privileges) Create role \
+> /role?name=&privileges= [Post] Create role \
 > /role \
-> /role [Get] (name) Get role with this id \
+> /role?name= [Get] Get role with this id 
 
 **Tags**
 > /tags [Get] Get list of all tags \
-> /tag [Post] (name,colorCode) Create tag
+> /tag?name=&ccode= [Post] (name,colorCode) Create tag
+
+**Tasks**
+>
+
+**Projects**
+>

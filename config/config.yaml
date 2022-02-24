@@ -5,3 +5,6 @@ Sql:
   Pass: "Kot_456789"
   Name: "sqlserver"
   Db: "mainDb"
+Jwt:
+  Enable: True
+  ExpiresAt: 0
