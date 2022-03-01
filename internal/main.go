@@ -16,7 +16,6 @@ func main() {
 
 	db := sql.Init()
 	db.GetAllTags()
-	db.CreateNewTag("new", "aaaaaa")
 
 	api.Init()
 

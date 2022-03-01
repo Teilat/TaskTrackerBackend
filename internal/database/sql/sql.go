@@ -3,7 +3,6 @@ package sql
 import (
 	"context"
 	"fmt"
-	"github.com/google/uuid"
 	"github.com/spf13/viper"
 	"log"
 	"os"
@@ -12,7 +11,6 @@ import (
 	_ "github.com/denisenkom/go-mssqldb"
 	"gopkg.in/reform.v1"
 	"gopkg.in/reform.v1/dialects/sqlserver"
-	"main/internal/database/sql/models"
 )
 
 type DatabaseProvider struct {
@@ -50,28 +48,4 @@ func Init() DatabaseProvider {
 		Db:       db,
 		DbLogger: logger,
 	}
-}
-
-func (DbProvider DatabaseProvider) CreateNewTag(tagName, tagColor string) {
-	newUuid := uuid.New()
-	s := &models.Tags{
-		Id:       newUuid,
-		TagName:  tagName,
-		TagColor: tagColor,
-	}
-
-	err := DbProvider.Db.Save(s)
-	if err != nil {
-		DbProvider.DbLogger.Panic(err)
-	}
-}
-func (DbProvider DatabaseProvider) GetAllTags() {
-
-	from, err := DbProvider.Db.SelectAllFrom(models.TagsTable, "")
-	if err != nil {
-		DbProvider.DbLogger.Panic(err)
-	}
-
-	fmt.Println(from)
-
 }
