@@ -2,30 +2,37 @@ package sql
 
 import (
 	"context"
-	"database/sql"
 	"fmt"
+	"github.com/google/uuid"
+	"github.com/spf13/viper"
+	"log"
+	"os"
+
+	"database/sql"
 	_ "github.com/denisenkom/go-mssqldb"
 	"gopkg.in/reform.v1"
 	"gopkg.in/reform.v1/dialects/sqlserver"
-	"log"
-	"main/internal/config"
-	"os"
+	"main/internal/database/sql/models"
 )
 
-type Tags struct {
+type DatabaseProvider struct {
+	Db       *reform.DB
+	DbLogger *log.Logger
 }
 
-func Init(conf *config.Configuration) (*reform.DB, *log.Logger) {
+func Init() DatabaseProvider {
+	// reform-db -db-driver=sqlserver -db-source=server=localhost;userid=admin;password=Kot_456789;port=1433;database=mainDb;  init -gofmt=false
 
 	// Create logger for sql operations
 	logger := log.New(os.Stderr, "SQL: ", log.Flags())
 
 	// Build connection string
 	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
-		conf.Sql.Host, conf.Sql.User, conf.Sql.Password, conf.Sql.Port, conf.Sql.Database)
+		viper.Get("sql.host"), viper.Get("sql.user"), viper.Get("sql.pass"), viper.Get("sql.port"), viper.Get("sql.db"))
+	driverName := fmt.Sprintf("%s", viper.Get("sql.name"))
 
 	// Create connection pool
-	sqlDb, err := sql.Open(conf.Sql.Name, connString)
+	sqlDb, err := sql.Open(driverName, connString)
 	if err != nil {
 		log.Fatal("Error creating connection pool: ", err.Error())
 	}
@@ -39,9 +46,27 @@ func Init(conf *config.Configuration) (*reform.DB, *log.Logger) {
 	// Create Db using reform ORM
 	db := reform.NewDB(sqlDb, sqlserver.Dialect, reform.NewPrintfLogger(logger.Printf))
 
-	return db, logger
+	return DatabaseProvider{
+		Db:       db,
+		DbLogger: logger,
+	}
 }
 
-func GetAllTags(db *reform.DB) {
+func (DbProvider DatabaseProvider) CreateNewTag(tagName, tagColor string) {
+	newUuid := uuid.New()
+	s := &models.Tags{
+		Id:       newUuid,
+		TagName:  tagName,
+		TagColor: tagColor,
+	}
+
+	DbProvider.Db.Save(s)
+}
+func (DbProvider DatabaseProvider) GetAllTags() {
+
+	from, err := DbProvider.Db.SelectAllFrom(TagsTable, "")
+	if err != nil {
+		return
+	}
 
 }

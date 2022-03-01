@@ -12,11 +12,11 @@ import (
 // @host      localhost:8080
 // @BasePath  /api/v1
 func main() {
-	var conf config.Configuration
-	conf.GetConf()
+	config.GetConf()
 
-	db := sql.Connect(&conf)
-	sql.GetAllTags(db)
+	db := sql.Init()
+	db.CreateNewTag()
+
 	api.Init()
 
 	_, err := fmt.Scanln()
