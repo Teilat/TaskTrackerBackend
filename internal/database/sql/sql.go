@@ -60,13 +60,18 @@ func (DbProvider DatabaseProvider) CreateNewTag(tagName, tagColor string) {
 		TagColor: tagColor,
 	}
 
-	DbProvider.Db.Save(s)
+	err := DbProvider.Db.Save(s)
+	if err != nil {
+		DbProvider.DbLogger.Panic(err)
+	}
 }
 func (DbProvider DatabaseProvider) GetAllTags() {
 
-	from, err := DbProvider.Db.SelectAllFrom(TagsTable, "")
+	from, err := DbProvider.Db.SelectAllFrom(models.TagsTable, "")
 	if err != nil {
-		return
+		DbProvider.DbLogger.Panic(err)
 	}
+
+	fmt.Println(from)
 
 }

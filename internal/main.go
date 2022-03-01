@@ -15,7 +15,8 @@ func main() {
 	config.GetConf()
 
 	db := sql.Init()
-	db.CreateNewTag()
+	db.GetAllTags()
+	db.CreateNewTag("new", "aaaaaa")
 
 	api.Init()
 

@@ -4,6 +4,7 @@ package models
 
 import (
 	"fmt"
+	"github.com/google/uuid"
 	"strings"
 
 	"gopkg.in/reform.v1"
@@ -139,7 +140,7 @@ func (s *Users) HasPK() bool {
 //
 // Deprecated: prefer direct field assignment where possible: s.Id = pk.
 func (s *Users) SetPK(pk interface{}) {
-	reform.SetPK(s, pk)
+	reform.SetPK(s, pk.(uuid.UUID))
 }
 
 // check interfaces
