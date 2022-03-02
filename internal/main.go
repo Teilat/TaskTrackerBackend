@@ -12,14 +12,20 @@ import (
 // @host      localhost:8080
 // @BasePath  /api/v1
 func main() {
+
+	// getting config from config file
 	config.GetConf()
 
-	db := sql.Init()
-	db.GetAllTags()
+	// setting up db connection
+	_, err := sql.Init()
+	if err != nil {
+		return
+	}
 
+	// setting up api
 	api.Init()
 
-	_, err := fmt.Scanln()
+	_, err = fmt.Scanln()
 	if err != nil {
 		log.Fatal(err)
 	}

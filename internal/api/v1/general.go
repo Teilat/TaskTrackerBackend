@@ -13,6 +13,8 @@ import (
 // @Success     200  {string}  healthy
 // @Router      /health [get]
 // @BasePath 	/api/v1
+
+//HealthCheck returns http.StatusOK with api version
 func HealthCheck(g *gin.Context) {
 	g.String(http.StatusOK, "OK v1")
 }

@@ -31,3 +31,18 @@ func (DbProvider DatabaseProvider) GetAllTags() ([]reform.Struct, error) {
 
 	return from, nil
 }
+
+func (DbProvider DatabaseProvider) RemoveTag(PKey uuid.UUID) error {
+
+	record, err := DbProvider.Db.FindByPrimaryKeyFrom(models.TagsTable, PKey)
+	if err != nil {
+		return err
+	}
+
+	err = DbProvider.Db.Delete(record)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}

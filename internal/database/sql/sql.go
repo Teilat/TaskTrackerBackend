@@ -6,6 +6,7 @@ import (
 	"github.com/spf13/viper"
 	"log"
 	"os"
+	"sync"
 
 	"database/sql"
 	_ "github.com/denisenkom/go-mssqldb"
@@ -13,12 +14,15 @@ import (
 	"gopkg.in/reform.v1/dialects/sqlserver"
 )
 
+var instance *DatabaseProvider
+var once sync.Once
+
 type DatabaseProvider struct {
-	Db       *reform.DB
+	*reform.DB
 	DbLogger *log.Logger
 }
 
-func Init() DatabaseProvider {
+func Init() (*DatabaseProvider, error) {
 	// reform-db -db-driver=sqlserver -db-source=server=localhost;userid=admin;password=Kot_456789;port=1433;database=mainDb;  init -gofmt=false
 
 	// Create logger for sql operations
@@ -32,20 +36,34 @@ func Init() DatabaseProvider {
 	// Create connection pool
 	sqlDb, err := sql.Open(driverName, connString)
 	if err != nil {
-		log.Fatal("Error creating connection pool: ", err.Error())
+		return nil, err
 	}
 	ctx := context.Background()
 	err = sqlDb.PingContext(ctx)
 	if err != nil {
-		log.Fatal(err.Error())
+		return nil, err
 	}
 	log.Println("Connected")
 
 	// Create Db using reform ORM
 	db := reform.NewDB(sqlDb, sqlserver.Dialect, reform.NewPrintfLogger(logger.Printf))
 
-	return DatabaseProvider{
-		Db:       db,
+	instance = &DatabaseProvider{
+		DB:       db,
 		DbLogger: logger,
 	}
+
+	return instance, nil
+}
+
+func GetDb() *DatabaseProvider {
+	once.Do(func() {
+		var err error
+		instance, err = Init()
+		if err != nil {
+			log.Fatal(err)
+		}
+	})
+
+	return instance
 }
