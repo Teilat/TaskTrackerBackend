@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	_ "main/internal/api/v1/models"
+	"main/internal/api/v1/models"
 	"main/internal/database/sql"
 	"net/http"
 )
@@ -12,8 +12,8 @@ import (
 // @Tags        Tag
 // @Accept      json
 // @Produce     json
-// @Success     200 {array} model.Tag
-// @Error		500	{json}
+// @Success     200 {array}  models.Tag
+// @Error		500	{string} string
 // @Router      / [get]
 // @BasePath 	/api/v1/tag
 func GetAllTags(g *gin.Context) {
@@ -23,4 +23,8 @@ func GetAllTags(g *gin.Context) {
 		g.JSON(http.StatusInternalServerError, err)
 	}
 	g.JSON(http.StatusOK, tags)
+}
+
+func dummy() {
+	_ = models.Tag{}
 }

@@ -27,6 +27,7 @@
     - использовать что-то одно)
   
 ### [endpoints]
+- [Example](https://github.com/eddycjy/go-gin-example)
 - [ORM](https://github.com/go-reform/reform)  
 - [Router](https://github.com/gin-gonic/gin)
 - [Middleware](https://github.com/gin-gonic/contrib)
@@ -58,6 +59,7 @@
 
 **Tags**
 > /tags [Get] Get list of all tags \
+> /tags [Delete] Get list of all tags \
 > /tag?name=&ccode= [Post] (name,colorCode) Create tag
 
 **Tasks**

@@ -1,9 +1,8 @@
 package main
 
 import (
-	"fmt"
-	"log"
 	"main/internal/api"
+	_ "main/internal/api/v1/models"
 	"main/internal/config"
 	"main/internal/database/sql"
 	_ "net/http/pprof"
@@ -24,9 +23,4 @@ func main() {
 
 	// setting up api
 	api.Init()
-
-	_, err = fmt.Scanln()
-	if err != nil {
-		log.Fatal(err)
-	}
 }

@@ -12,6 +12,8 @@ import (
 )
 
 func Init() {
+	//swag init --parseDependency --parseInternal -g main.go
+
 	//gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(gin.Logger())

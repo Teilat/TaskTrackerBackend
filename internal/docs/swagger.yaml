@@ -1,6 +1,22 @@
 basePath: /api/v1
+definitions:
+  models.Tag:
+    properties:
+      color:
+        example: ffffff
+        type: string
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      name:
+        example: tag name
+        type: string
+    type: object
 host: localhost:8080
 info:
+  version: v1
+  title: title
   contact: {}
 paths:
   /:
@@ -13,7 +29,9 @@ paths:
         "200":
           description: OK
           schema:
-            type: json
+            items:
+              $ref: '#/definitions/models.Tag'
+            type: array
       summary: Get all tags
       tags:
       - Tag

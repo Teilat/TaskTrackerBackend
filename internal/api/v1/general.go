@@ -10,7 +10,7 @@ import (
 // @Tags        General
 // @Accept      json
 // @Produce     json
-// @Success     200  {string}  healthy
+// @Success     200 {string} string "healthy"
 // @Router      /health [get]
 // @BasePath 	/api/v1
 
