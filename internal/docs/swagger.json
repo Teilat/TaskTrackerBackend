@@ -6,7 +6,7 @@
     "host": "localhost:8080",
     "basePath": "/api/v1",
     "paths": {
-        "/health": {
+        "/": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -15,14 +15,14 @@
                     "application/json"
                 ],
                 "tags": [
-                    "General"
+                    "Tag"
                 ],
-                "summary": "Health check",
+                "summary": "Get all tags",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "json"
                         }
                     }
                 }

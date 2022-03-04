@@ -9,3 +9,6 @@ Sql:
 Jwt:
   Enable: True
   ExpiresAt: 0
+Api:
+  Address: "localhost"
+  Port: 8080

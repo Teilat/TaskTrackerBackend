@@ -2,7 +2,7 @@ package sql
 
 import (
 	"github.com/google/uuid"
-	"gopkg.in/reform.v1"
+	apimodels "main/internal/api/v1/models"
 	"main/internal/database/sql/models"
 )
 
@@ -14,32 +14,40 @@ func (DbProvider DatabaseProvider) CreateNewTag(tagName, tagColor string) error 
 		TagColor: tagColor,
 	}
 
-	err := DbProvider.Db.Save(s)
+	err := DbProvider.DB.Save(s)
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return err
 	}
 	return nil
 }
-func (DbProvider DatabaseProvider) GetAllTags() ([]reform.Struct, error) {
+func (DbProvider DatabaseProvider) GetAllTags() ([]apimodels.Tag, error) {
 
-	from, err := DbProvider.Db.SelectAllFrom(models.TagsTable, "")
+	from, err := DbProvider.DB.SelectAllFrom(models.TagsTable, "")
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return nil, err
 	}
-
-	return from, nil
+	var list []apimodels.Tag
+	for _, s := range from {
+		q := apimodels.Tag{
+			Id:    s.(*models.Tags).Id,
+			Name:  s.(*models.Tags).TagName,
+			Color: s.(*models.Tags).TagColor,
+		}
+		list = append(list, q)
+	}
+	return list, nil
 }
 
 func (DbProvider DatabaseProvider) RemoveTag(PKey uuid.UUID) error {
 
-	record, err := DbProvider.Db.FindByPrimaryKeyFrom(models.TagsTable, PKey)
+	record, err := DbProvider.DB.FindByPrimaryKeyFrom(models.TagsTable, PKey)
 	if err != nil {
 		return err
 	}
 
-	err = DbProvider.Db.Delete(record)
+	err = DbProvider.DB.Delete(record)
 	if err != nil {
 		return err
 	}

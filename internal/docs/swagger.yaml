@@ -3,7 +3,7 @@ host: localhost:8080
 info:
   contact: {}
 paths:
-  /health:
+  /:
     get:
       consumes:
       - application/json
@@ -13,8 +13,8 @@ paths:
         "200":
           description: OK
           schema:
-            type: string
-      summary: Health check
+            type: json
+      summary: Get all tags
       tags:
-      - General
+      - Tag
 swagger: "2.0"

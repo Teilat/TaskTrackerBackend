@@ -16,7 +16,7 @@ const docTemplate_swagger = `{
     "host": "{{.Host}}",
     "basePath": "{{.BasePath}}",
     "paths": {
-        "/health": {
+        "/": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -25,14 +25,14 @@ const docTemplate_swagger = `{
                     "application/json"
                 ],
                 "tags": [
-                    "General"
+                    "Tag"
                 ],
-                "summary": "Health check",
+                "summary": "Get all tags",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "string"
+                            "type": "json"
                         }
                     }
                 }
