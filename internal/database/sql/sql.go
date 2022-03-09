@@ -43,7 +43,7 @@ func Init() (*DatabaseProvider, error) {
 	if err != nil {
 		return nil, err
 	}
-	log.Println("Connected")
+	logger.Println("Connected")
 
 	// Create Db using reform ORM
 	db := reform.NewDB(sqlDb, sqlserver.Dialect, reform.NewPrintfLogger(logger.Printf))

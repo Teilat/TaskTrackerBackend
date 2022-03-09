@@ -14,6 +14,8 @@ import (
 func Init() {
 	//swag init --parseDependency --parseInternal -g main.go
 
+	address := fmt.Sprintf("%s:%d", viper.Get("api.address"), viper.Get("api.port"))
+
 	//gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
 	router.Use(gin.Logger())
@@ -23,8 +25,7 @@ func Init() {
 	{
 		ver1 := api.Group("/v1")
 		{
-			ver1.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
-			ver1.GET("/health", v1.HealthCheck)
+			ver1.GET("/", v1.HealthCheck)
 
 			tags := ver1.Group("/tag")
 			{
@@ -33,8 +34,7 @@ func Init() {
 		}
 	}
 
-	address := fmt.Sprintf("%s:%d", viper.Get("api.address"), viper.Get("api.port"))
-	log.Printf("Working at %s", address)
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	err := router.Run(address)
 	if err != nil {
