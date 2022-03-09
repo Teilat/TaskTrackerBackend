@@ -1,13 +1,13 @@
 package models
 
-import ()
+import "github.com/google/uuid"
 
 //go:generate reform
 
 // ProjectAndUsers represents a row in ProjectAndUsers table.
 //reform:ProjectAndUsers
 type ProjectAndUsers struct {
-	Id        []byte `reform:"Id,pk"`     // FIXME unhandled database type "uniqueidentifier"
-	UserId    []byte `reform:"UserId"`    // FIXME unhandled database type "uniqueidentifier"
-	ProjectId []byte `reform:"ProjectId"` // FIXME unhandled database type "uniqueidentifier"
+	Id        uuid.UUID `reform:"Id,pk"`
+	UserId    uuid.UUID `reform:"UserId"`
+	ProjectId uuid.UUID `reform:"ProjectId"`
 }

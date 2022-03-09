@@ -5,7 +5,7 @@ import (
 	apiModels "main/internal/server/api/v1/models"
 )
 
-func (DbProvider DatabaseProvider) GetAllTasks() ([]apiModels.Tag, error) {
+func (DbProvider DatabaseProvider) GetAllTasks() ([]apiModels.Task, error) {
 
 	from, err := DbProvider.DB.SelectAllFrom(models.TasksTable, "")
 	if err != nil {
@@ -14,10 +14,12 @@ func (DbProvider DatabaseProvider) GetAllTasks() ([]apiModels.Tag, error) {
 	}
 	var list []apiModels.Task
 	for _, s := range from {
+		s := s.(*models.Tasks)
 		q := apiModels.Task{
-			Id:    s.(*models.Tags).Id,
-			Name:  s.(*models.Tags).TagName,
-			Color: s.(*models.Tags).TagColor,
+			Id:              s.Id,
+			ProjectId:       s.ProjectId,
+			TaskTitle:       s.TaskTitle,
+			TaskDescription: s.TaskDescription,
 		}
 		list = append(list, q)
 	}

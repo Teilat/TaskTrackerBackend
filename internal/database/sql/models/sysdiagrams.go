@@ -1,7 +1,5 @@
 package models
 
-import ()
-
 //go:generate reform
 
 // Sysdiagrams represents a row in sysdiagrams table.
