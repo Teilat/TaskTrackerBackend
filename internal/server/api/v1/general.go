@@ -11,10 +11,7 @@ import (
 // @Accept      json
 // @Produce     json
 // @Success     200 {string} string "healthy"
-// @Router      /health [get]
-// @BasePath 	/api/v1
-
-//HealthCheck returns http.StatusOK with api version
+// @Router      / [get]
 func HealthCheck(g *gin.Context) {
 	g.String(http.StatusOK, "OK v1")
 }

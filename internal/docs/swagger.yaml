@@ -15,11 +15,23 @@ definitions:
     type: object
 host: localhost:8080
 info:
-  version: v1
-  title: title
   contact: {}
 paths:
   /:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: healthy
+          schema:
+            type: string
+      summary: Health check
+      tags:
+      - General
+  /tag/:
     get:
       consumes:
       - application/json
@@ -33,6 +45,28 @@ paths:
               $ref: '#/definitions/models.Tag'
             type: array
       summary: Get all tags
+      tags:
+      - Tag
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: tag name
+        in: query
+        name: name
+        required: true
+        type: string
+      - description: tag color
+        in: query
+        name: color
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Create tag
       tags:
       - Tag
 swagger: "2.0"

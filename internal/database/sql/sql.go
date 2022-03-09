@@ -23,6 +23,7 @@ type DatabaseProvider struct {
 }
 
 func Init() (*DatabaseProvider, error) {
+	// cd database/sql/models
 	// reform-db -db-driver=sqlserver -db-source=server=localhost;userid=admin;password=Kot_456789;port=1433;database=mainDb;  init -gofmt=false
 
 	// Create logger for sql operations

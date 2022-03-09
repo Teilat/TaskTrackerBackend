@@ -25,6 +25,28 @@ const docTemplate_swagger = `{
                     "application/json"
                 ],
                 "tags": [
+                    "General"
+                ],
+                "summary": "Health check",
+                "responses": {
+                    "200": {
+                        "description": "healthy",
+                        "schema": {
+                            "type": "string"
+                        }
+                    }
+                }
+            }
+        },
+        "/tag/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
                     "Tag"
                 ],
                 "summary": "Get all tags",
@@ -37,6 +59,39 @@ const docTemplate_swagger = `{
                                 "$ref": "#/definitions/models.Tag"
                             }
                         }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Create tag",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tag name",
+                        "name": "name",
+                        "in": "query",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "tag color",
+                        "name": "color",
+                        "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
                     }
                 }
             }

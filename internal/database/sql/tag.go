@@ -2,16 +2,16 @@ package sql
 
 import (
 	"github.com/google/uuid"
-	apimodels "main/internal/api/v1/models"
 	"main/internal/database/sql/models"
+	apiModels "main/internal/server/api/v1/models"
 )
 
-func (DbProvider DatabaseProvider) CreateNewTag(tagName, tagColor string) error {
+func (DbProvider DatabaseProvider) CreateNewTag(params apiModels.AddTag) error {
 	newUuid := uuid.New()
 	s := &models.Tags{
 		Id:       newUuid,
-		TagName:  tagName,
-		TagColor: tagColor,
+		TagName:  params.Name,
+		TagColor: params.Color,
 	}
 
 	err := DbProvider.DB.Save(s)
@@ -21,34 +21,56 @@ func (DbProvider DatabaseProvider) CreateNewTag(tagName, tagColor string) error 
 	}
 	return nil
 }
-func (DbProvider DatabaseProvider) GetAllTags() ([]apimodels.Tag, error) {
+
+func (DbProvider DatabaseProvider) GetAllTags() ([]apiModels.Tag, error) {
 
 	from, err := DbProvider.DB.SelectAllFrom(models.TagsTable, "")
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return nil, err
 	}
-	var list []apimodels.Tag
+	var list []apiModels.Tag
 	for _, s := range from {
-		q := apimodels.Tag{
-			Id:    s.(*models.Tags).Id,
-			Name:  s.(*models.Tags).TagName,
-			Color: s.(*models.Tags).TagColor,
+
+		s := s.(*models.Tags)
+		q := apiModels.Tag{
+			Id:    s.Id,
+			Name:  s.TagName,
+			Color: s.TagColor,
 		}
 		list = append(list, q)
 	}
 	return list, nil
 }
 
-func (DbProvider DatabaseProvider) RemoveTag(PKey uuid.UUID) error {
+func (DbProvider DatabaseProvider) DeleteTag(params apiModels.DeleteTag) error {
 
-	record, err := DbProvider.DB.FindByPrimaryKeyFrom(models.TagsTable, PKey)
+	record, err := DbProvider.DB.FindByPrimaryKeyFrom(models.TagsTable, params.Id)
 	if err != nil {
+		DbProvider.DbLogger.Println(err)
 		return err
 	}
 
 	err = DbProvider.DB.Delete(record)
 	if err != nil {
+		DbProvider.DbLogger.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func (DbProvider DatabaseProvider) UpdateTag(params apiModels.UpdateTag) error {
+
+	s := &models.Tags{
+		Id:       params.Id,
+		TagName:  params.Name,
+		TagColor: params.Color,
+	}
+
+	err := DbProvider.DB.Update(s)
+	if err != nil {
+		DbProvider.DbLogger.Println(err)
 		return err
 	}
 

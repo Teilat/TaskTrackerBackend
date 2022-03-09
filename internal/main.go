@@ -1,10 +1,10 @@
 package main
 
 import (
-	"main/internal/api"
-	_ "main/internal/api/v1/models"
 	"main/internal/config"
 	"main/internal/database/sql"
+	"main/internal/server"
+	_ "main/internal/server/api/v1/models"
 	_ "net/http/pprof"
 )
 
@@ -21,6 +21,6 @@ func main() {
 		return
 	}
 
-	// setting up api
-	api.Init()
+	// setting up server
+	server.Init()
 }

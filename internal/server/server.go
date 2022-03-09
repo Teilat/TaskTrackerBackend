@@ -1,4 +1,4 @@
-package api
+package server
 
 import (
 	"fmt"
@@ -7,8 +7,8 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
-	v1 "main/internal/api/v1"
 	_ "main/internal/docs"
+	v1 "main/internal/server/api/v1"
 )
 
 func Init() {
@@ -21,6 +21,8 @@ func Init() {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
+	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+
 	api := router.Group("/api")
 	{
 		ver1 := api.Group("/v1")
@@ -29,12 +31,13 @@ func Init() {
 
 			tags := ver1.Group("/tag")
 			{
-				tags.GET("/", v1.GetAllTags)
+				tags.GET("", v1.GetAllTags)
+				tags.POST("", v1.CreateTag)
+				tags.PATCH("", v1.UpdateTag)
+				tags.DELETE("", v1.DeleteTag)
 			}
 		}
 	}
-
-	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
 	err := router.Run(address)
 	if err != nil {
