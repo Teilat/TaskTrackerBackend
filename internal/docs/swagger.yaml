@@ -3,7 +3,7 @@ definitions:
   models.Tag:
     properties:
       color:
-        example: ffffff
+        example: FFFFFF
         type: string
       id:
         example: 550e8400-e29b-41d4-a716-446655440000
@@ -11,6 +11,23 @@ definitions:
         type: string
       name:
         example: tag name
+        type: string
+    type: object
+  models.Task:
+    properties:
+      id:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      projectId:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      taskDescription:
+        example: example task
+        type: string
+      taskTitle:
+        example: task name
         type: string
     type: object
 host: localhost:8080
@@ -32,6 +49,17 @@ paths:
       tags:
       - General
   /tag/:
+    delete:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Delete tag with provided id
+      tags:
+      - Tag
     get:
       consumes:
       - application/json
@@ -58,6 +86,8 @@ paths:
         type: string
       - description: tag color
         in: query
+        maxLength: 6
+        minLength: 6
         name: color
         required: true
         type: string
@@ -69,4 +99,89 @@ paths:
       summary: Create tag
       tags:
       - Tag
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: tag name
+        in: query
+        name: name
+        type: string
+      - description: tag color
+        in: query
+        name: color
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: update tag with provided id
+      tags:
+      - Tag
+  /tag/task:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Tag'
+            type: array
+      summary: get tags which contains task by provided id
+      tags:
+      - Tag
+  /task/:
+    delete:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Delete tag with provided id
+      tags:
+      - Task
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+      summary: Get all tasks
+      tags:
+      - Task
+    post:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Create tag
+      tags:
+      - Task
+    put:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: update tag with provided id
+      tags:
+      - Task
 swagger: "2.0"

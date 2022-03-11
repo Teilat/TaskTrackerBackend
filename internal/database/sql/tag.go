@@ -76,3 +76,32 @@ func (DbProvider DatabaseProvider) UpdateTag(params apiModels.UpdateTag) error {
 
 	return nil
 }
+
+func (DbProvider DatabaseProvider) GetTagsByTask(params apiModels.TagsByTask) ([]apiModels.Tag, error) {
+
+	tagsInTask, err := DbProvider.DB.SelectAllFrom(models.TaskAndTagsTable, "TaskId", params.TaskId)
+	if err != nil {
+		DbProvider.DbLogger.Println(err)
+		return nil, err
+	}
+
+	from, err := DbProvider.DB.SelectAllFrom(models.TagsTable, "Id", tagsInTask)
+	if err != nil {
+		DbProvider.DbLogger.Println(err)
+		return nil, err
+	}
+
+	var list []apiModels.Tag
+	for _, s := range from {
+
+		s := s.(*models.Tags)
+		q := apiModels.Tag{
+			Id:    s.Id,
+			Name:  s.TagName,
+			Color: s.TagColor,
+		}
+		list = append(list, q)
+	}
+	return list, nil
+
+}

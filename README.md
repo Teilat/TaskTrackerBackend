@@ -52,15 +52,14 @@
 > /logout 
 
 **Roles**
-> /roles [Get] Get list of all roles \
-> /role?name=&privileges= [Post] Create role \
-> /role \
-> /role?name= [Get] Get role with this id 
+> [Get] /role Get list of all roles \
+> [Post] /role?name=&privileges= Create role \
 
 **Tags**
-> /tags [Get] Get list of all tags \
-> /tags [Delete] Get list of all tags \
-> /tag?name=&ccode= [Post] (name,colorCode) Create tag
+> [Get] /tag Get list of all tags \
+> [Delete] /tag?id= Delete tag with id \
+> [Post] /tag?name=&color= (name,colorCode) Create tag \
+> [Put] /tag?id=&name=&color= (id, name, color code) update tag
 
 **Tasks**
 >

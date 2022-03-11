@@ -62,6 +62,37 @@ const docTemplate_swagger = `{
                     }
                 }
             },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "update tag with provided id",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tag name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "type": "string",
+                        "description": "tag color",
+                        "name": "color",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -82,6 +113,8 @@ const docTemplate_swagger = `{
                         "required": true
                     },
                     {
+                        "maxLength": 6,
+                        "minLength": 6,
                         "type": "string",
                         "description": "tag color",
                         "name": "color",
@@ -89,6 +122,124 @@ const docTemplate_swagger = `{
                         "required": true
                     }
                 ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Delete tag with provided id",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/tag/task": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "get tags which contains task by provided id",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Tag"
+                            }
+                        }
+                    }
+                }
+            }
+        },
+        "/task/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get all tasks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Task"
+                            }
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "update tag with provided id",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Create tag",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Delete tag with provided id",
                 "responses": {
                     "200": {
                         "description": ""
@@ -103,7 +254,7 @@ const docTemplate_swagger = `{
             "properties": {
                 "color": {
                     "type": "string",
-                    "example": "ffffff"
+                    "example": "FFFFFF"
                 },
                 "id": {
                     "type": "string",
@@ -113,6 +264,29 @@ const docTemplate_swagger = `{
                 "name": {
                     "type": "string",
                     "example": "tag name"
+                }
+            }
+        },
+        "models.Task": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "taskDescription": {
+                    "type": "string",
+                    "example": "example task"
+                },
+                "taskTitle": {
+                    "type": "string",
+                    "example": "task name"
                 }
             }
         }

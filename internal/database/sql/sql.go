@@ -18,7 +18,7 @@ var instance *DatabaseProvider
 var once sync.Once
 
 type DatabaseProvider struct {
-	*reform.DB
+	DB       *reform.DB
 	DbLogger *log.Logger
 }
 
