@@ -61,14 +61,19 @@ func (DbProvider DatabaseProvider) DeleteTag(params apiModels.DeleteTag) error {
 }
 
 func (DbProvider DatabaseProvider) UpdateTag(params apiModels.UpdateTag) error {
+	from, err := DbProvider.DB.FindByPrimaryKeyFrom(models.TagsTable, params.Id)
+	if err != nil {
+		return err //TODO
+	}
+	rec := from.(*models.Tags)
 
 	s := &models.Tags{
-		Id:       params.Id,
-		TagName:  params.Name,
-		TagColor: params.Color,
+		Id:       NilCheck(params.Id, rec.Id).(uuid.UUID),
+		TagName:  NilCheck(params.Name, rec.TagName).(string),
+		TagColor: NilCheck(params.Color, rec.TagColor).(string),
 	}
 
-	err := DbProvider.DB.Update(s)
+	err = DbProvider.DB.Update(s)
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return err

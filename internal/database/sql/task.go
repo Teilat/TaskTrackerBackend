@@ -64,14 +64,20 @@ func (DbProvider DatabaseProvider) DeleteTask(params apiModels.DeleteTask) error
 
 func (DbProvider DatabaseProvider) UpdateTask(params apiModels.UpdateTask) error {
 
+	from, err := DbProvider.DB.FindByPrimaryKeyFrom(models.TasksTable, params.Id)
+	if err != nil {
+		return err //TODO
+	}
+	rec := from.(*models.Tasks)
+
 	s := &models.Tasks{
-		Id:              params.Id,
-		ProjectId:       params.ProjectId,
-		TaskTitle:       params.TaskTitle,
-		TaskDescription: params.TaskDescription,
+		Id:              NilCheck(params.Id, rec.Id).(uuid.UUID),
+		ProjectId:       NilCheck(params.ProjectId, rec.ProjectId).(uuid.UUID),
+		TaskTitle:       NilCheck(params.TaskTitle, rec.TaskTitle).(string),
+		TaskDescription: NilCheck(params.TaskDescription, rec.TaskDescription).(string),
 	}
 
-	err := DbProvider.DB.Update(s)
+	err = DbProvider.DB.Update(s)
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return err

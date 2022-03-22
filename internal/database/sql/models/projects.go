@@ -13,7 +13,7 @@ type Projects struct {
 	Id                 uuid.UUID `reform:"Id,pk"`
 	ParentId           uuid.UUID `reform:"ParentId"`
 	ProjectName        string    `reform:"ProjectName"`
-	ProjectDescription *string   `reform:"ProjectDescription"`
+	ProjectDescription string    `reform:"ProjectDescription"`
 	CreationDate       time.Time `reform:"CreationDate"`
 	OwnerId            uuid.UUID `reform:"OwnerId"`
 }
