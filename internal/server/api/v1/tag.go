@@ -49,6 +49,7 @@ func CreateTag(g *gin.Context) {
 	if err != nil {
 		g.JSON(http.StatusInternalServerError, err)
 	}
+	g.JSON(http.StatusOK, "")
 }
 
 // DeleteTag  godoc
@@ -74,6 +75,7 @@ func DeleteTag(g *gin.Context) {
 	if err != nil {
 		g.JSON(http.StatusInternalServerError, err)
 	}
+	g.JSON(http.StatusOK, "")
 }
 
 // UpdateTag  godoc
@@ -101,6 +103,7 @@ func UpdateTag(g *gin.Context) {
 	if err != nil {
 		g.JSON(http.StatusInternalServerError, err)
 	}
+	g.JSON(http.StatusOK, "")
 }
 
 // GetTagsByTask  godoc
@@ -109,10 +112,23 @@ func UpdateTag(g *gin.Context) {
 // @Accept      json
 // @Produce     json
 // @Param       id path string true "Task ID"
-// @Success     200 {object}  models.Tag
+// @Success     200 {array}  models.Tag
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /tag/{id} [get]
 func GetTagsByTask(g *gin.Context) {
 
+	var params models.TagsByTask
+	err := g.BindQuery(&params)
+	if err != nil {
+		g.JSON(http.StatusInternalServerError, err)
+	}
+
+	db := sql.GetDb()
+	data, err := db.GetTagsByTask(params)
+	if err != nil {
+		g.JSON(http.StatusInternalServerError, err)
+	}
+
+	g.JSON(http.StatusOK, data)
 }

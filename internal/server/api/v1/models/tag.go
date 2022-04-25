@@ -24,3 +24,11 @@ type UpdateTag struct {
 type DeleteTag struct {
 	Id uuid.UUID `form:"id" json:"id" example:"f40312cd-5995-ec11-b909-0242ac120002" format:"uuid"`
 }
+
+type TagsByTask struct {
+	TaskId uuid.UUID `json:"id" form:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
+}
+
+type TagsByProject struct {
+	TaskId uuid.UUID `json:"id" form:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
+}

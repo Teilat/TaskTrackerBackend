@@ -61,18 +61,52 @@ func (DbProvider DatabaseProvider) DeleteTag(params apiModels.DeleteTag) error {
 }
 
 func (DbProvider DatabaseProvider) UpdateTag(params apiModels.UpdateTag) error {
+	from, err := DbProvider.DB.FindByPrimaryKeyFrom(models.TagsTable, params.Id)
+	if err != nil {
+		return err //TODO
+	}
+	rec := from.(*models.Tags)
 
 	s := &models.Tags{
-		Id:       params.Id,
-		TagName:  params.Name,
-		TagColor: params.Color,
+		Id:       NilCheck(params.Id, rec.Id).(uuid.UUID),
+		TagName:  NilCheck(params.Name, rec.TagName).(string),
+		TagColor: NilCheck(params.Color, rec.TagColor).(string),
 	}
 
-	err := DbProvider.DB.Update(s)
+	err = DbProvider.DB.Update(s)
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return err
 	}
 
 	return nil
+}
+
+func (DbProvider DatabaseProvider) GetTagsByTask(params apiModels.TagsByTask) ([]apiModels.Tag, error) {
+
+	tagsInTask, err := DbProvider.DB.SelectAllFrom(models.TaskAndTagsTable, "TaskId", params.TaskId)
+	if err != nil {
+		DbProvider.DbLogger.Println(err)
+		return nil, err
+	}
+
+	from, err := DbProvider.DB.SelectAllFrom(models.TagsTable, "Id", tagsInTask)
+	if err != nil {
+		DbProvider.DbLogger.Println(err)
+		return nil, err
+	}
+
+	var list []apiModels.Tag
+	for _, s := range from {
+
+		s := s.(*models.Tags)
+		q := apiModels.Tag{
+			Id:    s.Id,
+			Name:  s.TagName,
+			Color: s.TagColor,
+		}
+		list = append(list, q)
+	}
+	return list, nil
+
 }

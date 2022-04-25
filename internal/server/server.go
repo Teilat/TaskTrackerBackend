@@ -29,12 +29,20 @@ func Init() {
 		{
 			ver1.GET("/", v1.HealthCheck)
 
-			tags := ver1.Group("/tag")
+			tag := ver1.Group("/tag")
 			{
-				tags.GET("", v1.GetAllTags)
-				tags.POST("", v1.CreateTag)
-				tags.PATCH(":id", v1.UpdateTag)
-				tags.DELETE(":id", v1.DeleteTag)
+				tag.GET("", v1.GetAllTags)
+				tag.POST("", v1.CreateTag)
+				tag.PATCH(":id", v1.UpdateTag)
+				tag.DELETE(":id", v1.DeleteTag)
+				tag.GET("/task", v1.GetTagsByTask)
+			}
+			task := ver1.Group("/task")
+			{
+				task.GET("", v1.GetAllTasks)
+				task.POST("", v1.GetAllTasks)
+				task.PATCH("", v1.UpdateTask)
+				task.DELETE("", v1.DeleteTask)
 			}
 		}
 	}
