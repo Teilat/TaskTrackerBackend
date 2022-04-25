@@ -3,7 +3,7 @@ definitions:
   models.Tag:
     properties:
       color:
-        example: ffffff
+        example: FFFFFF
         type: string
       id:
         example: 550e8400-e29b-41d4-a716-446655440000
@@ -58,6 +58,8 @@ paths:
         type: string
       - description: tag color
         in: query
+        maxLength: 6
+        minLength: 6
         name: color
         required: true
         type: string
@@ -67,6 +69,70 @@ paths:
         "200":
           description: ""
       summary: Create tag
+      tags:
+      - Tag
+  /tag/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: tag id
+        in: path
+        name: name
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Delete tag
+      tags:
+      - Tag
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tag'
+      summary: Get tags by task
+      tags:
+      - Tag
+    put:
+      consumes:
+      - application/json
+      parameters:
+      - description: tag name
+        in: path
+        name: name
+        required: true
+        type: string
+      - description: tag name
+        in: query
+        name: name
+        type: string
+      - description: tag color
+        in: query
+        maxLength: 6
+        minLength: 6
+        name: color
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Update tag
       tags:
       - Tag
 swagger: "2.0"

@@ -82,10 +82,109 @@ const docTemplate_swagger = `{
                         "required": true
                     },
                     {
+                        "maxLength": 6,
+                        "minLength": 6,
                         "type": "string",
                         "description": "tag color",
                         "name": "color",
                         "in": "query",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/tag/{id}": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Get tags by task",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "Task ID",
+                        "name": "id",
+                        "in": "path",
+                        "required": true
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Tag"
+                        }
+                    }
+                }
+            },
+            "put": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Update tag",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tag name",
+                        "name": "name",
+                        "in": "path",
+                        "required": true
+                    },
+                    {
+                        "type": "string",
+                        "description": "tag name",
+                        "name": "name",
+                        "in": "query"
+                    },
+                    {
+                        "maxLength": 6,
+                        "minLength": 6,
+                        "type": "string",
+                        "description": "tag color",
+                        "name": "color",
+                        "in": "query"
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Delete tag",
+                "parameters": [
+                    {
+                        "type": "string",
+                        "description": "tag id",
+                        "name": "name",
+                        "in": "path",
                         "required": true
                     }
                 ],
@@ -103,7 +202,7 @@ const docTemplate_swagger = `{
             "properties": {
                 "color": {
                     "type": "string",
-                    "example": "ffffff"
+                    "example": "FFFFFF"
                 },
                 "id": {
                     "type": "string",

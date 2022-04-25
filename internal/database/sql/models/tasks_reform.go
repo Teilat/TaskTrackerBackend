@@ -59,7 +59,7 @@ var TasksTable = &tasksTableType{
 			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
 			{Name: "ProjectId", Type: "uuid.UUID", Column: "ProjectId"},
 			{Name: "TaskTitle", Type: "string", Column: "TaskTitle"},
-			{Name: "TaskDescription", Type: "*string", Column: "TaskDescription"},
+			{Name: "TaskDescription", Type: "string", Column: "TaskDescription"},
 		},
 		PKFieldIndex: 0,
 	},

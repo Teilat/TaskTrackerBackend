@@ -33,8 +33,8 @@ func Init() {
 			{
 				tags.GET("", v1.GetAllTags)
 				tags.POST("", v1.CreateTag)
-				tags.PATCH("", v1.UpdateTag)
-				tags.DELETE("", v1.DeleteTag)
+				tags.PATCH(":id", v1.UpdateTag)
+				tags.DELETE(":id", v1.DeleteTag)
 			}
 		}
 	}

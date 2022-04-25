@@ -1,6 +1,7 @@
 package main
 
 import (
+	"fmt"
 	"main/internal/config"
 	"main/internal/database/sql"
 	"main/internal/server"
@@ -18,6 +19,7 @@ func main() {
 	// setting up db connection
 	_, err := sql.Init()
 	if err != nil {
+		fmt.Printf("Database error:%s", err)
 		return
 	}
 

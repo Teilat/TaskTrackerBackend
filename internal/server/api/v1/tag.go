@@ -51,6 +51,16 @@ func CreateTag(g *gin.Context) {
 	}
 }
 
+// DeleteTag  godoc
+// @Summary     Delete tag
+// @Tags        Tag
+// @Accept      json
+// @Produce     json
+// @Param       id path string true "tag id"
+// @Success     200
+// @Error       500 {string} string
+// @Error       404 {string} string
+// @Router      /tag/{id} [delete]
 func DeleteTag(g *gin.Context) {
 
 	var params models.DeleteTag
@@ -66,6 +76,18 @@ func DeleteTag(g *gin.Context) {
 	}
 }
 
+// UpdateTag  godoc
+// @Summary     Update tag
+// @Tags        Tag
+// @Accept      json
+// @Produce     json
+// @Param       id path string true "tag id"
+// @Param       name query string false "tag name"
+// @Param       color query string false "tag color" minlength(6) maxlength(6)
+// @Success     200
+// @Error       500 {string} string
+// @Error       404 {string} string
+// @Router      /tag/{id} [patch]
 func UpdateTag(g *gin.Context) {
 
 	var params models.UpdateTag
@@ -81,6 +103,16 @@ func UpdateTag(g *gin.Context) {
 	}
 }
 
+// GetTagsByTask  godoc
+// @Summary     Get tags by task
+// @Tags        Tag
+// @Accept      json
+// @Produce     json
+// @Param       id path string true "Task ID"
+// @Success     200 {object}  models.Tag
+// @Error       500 {string} string
+// @Error       404 {string} string
+// @Router      /tag/{id} [get]
 func GetTagsByTask(g *gin.Context) {
 
 }
