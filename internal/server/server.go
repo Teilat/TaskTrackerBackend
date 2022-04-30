@@ -2,6 +2,7 @@ package server
 
 import (
 	"fmt"
+	"github.com/ScottHuangZL/gin-jwt-session"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
@@ -20,6 +21,16 @@ func Init() {
 	router := gin.Default()
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
+
+	//below are optional setting, you change it or just comment it to let it as default
+	// session.SecretKey = "You any very secriet key !@#$!@%@"  //Any characters
+	// session.JwtTokenName = "YouCanChangeTokenName"               //no blank character
+	// session.DefaultFlashSessionName = "YouCanChangeTheFlashName" //no blank character
+	// session.DefaultSessionName = "YouCanChangeTheSessionName"    //no blank character
+	//end of optional setting
+
+	session.NewStore()
+	router.Use(session.ClearMiddleware()) //important to avoid mem leak
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
