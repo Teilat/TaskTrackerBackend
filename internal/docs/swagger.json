@@ -1,7 +1,9 @@
 {
     "swagger": "2.0",
     "info": {
-        "contact": {}
+        "title": "title",
+        "contact": {},
+        "version": "1.0"
     },
     "host": "localhost:8080",
     "basePath": "/api/v1",

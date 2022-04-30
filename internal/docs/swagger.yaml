@@ -130,6 +130,8 @@ definitions:
 host: localhost:8080
 info:
   contact: {}
+  title: title
+  version: "1.0"
 paths:
   /:
     get:

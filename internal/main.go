@@ -11,6 +11,8 @@ import (
 
 // @host      localhost:8080
 // @BasePath  /api/v1
+// @Title     title
+// @Version   1.0
 func main() {
 
 	// getting config from config file
