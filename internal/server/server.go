@@ -34,6 +34,8 @@ func Init() {
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 
+	setupRouter(router)
+
 	api := router.Group("/api")
 	{
 		ver1 := api.Group("/v1")
@@ -69,4 +71,20 @@ func Init() {
 	if err != nil {
 		log.Fatal(err)
 	}
+}
+
+func setupRouter(r *gin.Engine) {
+	r.Delims("{%", "%}")
+	// Default With the Logger and Recovery middleware already attached
+	// Set a lower memory limit for multipart forms (default is 32 MiB)
+	r.MaxMultipartMemory = 8 << 20 // 8 MiB
+	r.GET("/login", v1.LoginHandler)
+	r.GET("/logout", v1.LoginHandler) //logout also leverage login handler, since it just need clear session
+	r.POST("/validate-jwt-login", v1.ValidateJwtLoginHandler)
+	r.GET("/index.html", v1.HomeHandler)
+	r.GET("/index", v1.HomeHandler)
+	r.GET("", v1.HomeHandler)
+
+	r.GET("/some-cookie-example", v1.SomeCookiesHandler)
+
 }

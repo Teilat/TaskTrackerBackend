@@ -12,7 +12,7 @@ import (
 func LoginHandler(c *gin.Context) {
 	flashes := session.GetFlashes(c)
 	session.DeleteAllSession(c)
-	c.HTML(http.StatusOK, "home/login.html", gin.H{
+	c.HTML(http.StatusOK, "login.html", gin.H{
 		"title":   "Jwt Login",
 		"flashes": flashes,
 	})
@@ -31,7 +31,7 @@ func HomeHandler(c *gin.Context) {
 	if err == nil && username != "" {
 		loginFlag = true
 	}
-	c.HTML(http.StatusOK, "home/index.html", gin.H{
+	c.HTML(http.StatusOK, "./index.html", gin.H{
 		"title":     "Main website",
 		"now":       time.Now(),
 		"flashes":   flashes,
