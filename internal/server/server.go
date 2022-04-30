@@ -40,9 +40,16 @@ func Init() {
 			task := ver1.Group("/task")
 			{
 				task.GET("", v1.GetAllTasks)
-				task.POST("", v1.GetAllTasks)
+				task.POST("", v1.CreateTask)
 				task.PATCH("", v1.UpdateTask)
 				task.DELETE("", v1.DeleteTask)
+			}
+			proj := ver1.Group("/project")
+			{
+				proj.GET("", v1.GetAllProjects)
+				proj.POST("", v1.CreateProject)
+				proj.PATCH("", v1.UpdateProject)
+				proj.DELETE("", v1.DeleteProject)
 			}
 		}
 	}

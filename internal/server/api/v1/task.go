@@ -31,6 +31,7 @@ func GetAllTasks(g *gin.Context) {
 // @Tags        Task
 // @Accept      json
 // @Produce     json
+// @Param       tag body models.AddTask true "add task"
 // @Success     200
 // @Error       500 {string} string
 // @Error       404 {string} string
@@ -52,7 +53,7 @@ func CreateTask(g *gin.Context) {
 }
 
 // DeleteTask  godoc
-// @Summary     Delete tag with provided id
+// @Summary     Delete task with provided id
 // @Tags        Task
 // @Accept      json
 // @Produce     json
@@ -82,10 +83,11 @@ func DeleteTask(g *gin.Context) {
 // @Tags        Task
 // @Accept      json
 // @Produce     json
-// @Success     200
+// @Param       task body models.UpdateTask true "update task"
+// @Success     200 {object} models.Task
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /task/ [put]
+// @Router      /task/ [patch]
 func UpdateTask(g *gin.Context) {
 
 	var params models.UpdateTask

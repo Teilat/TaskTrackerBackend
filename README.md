@@ -59,7 +59,7 @@
 > [Get] /tag Get list of all tags \
 > [Delete] /tag?id= Delete tag with id \
 > [Post] /tag?name=&color= (name,colorCode) Create tag \
-> [Put] /tag?id=&name=&color= (id, name, color code) update tag
+> [Patch] /tag?id=&name=&color= (id, name, color code) update tag
 
 **Tasks**
 >

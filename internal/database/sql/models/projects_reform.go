@@ -61,7 +61,7 @@ var ProjectsTable = &projectsTableType{
 			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
 			{Name: "ParentId", Type: "uuid.UUID", Column: "ParentId"},
 			{Name: "ProjectName", Type: "string", Column: "ProjectName"},
-			{Name: "ProjectDescription", Type: "*string", Column: "ProjectDescription"},
+			{Name: "ProjectDescription", Type: "string", Column: "ProjectDescription"},
 			{Name: "CreationDate", Type: "time.Time", Column: "CreationDate"},
 			{Name: "OwnerId", Type: "uuid.UUID", Column: "OwnerId"},
 		},

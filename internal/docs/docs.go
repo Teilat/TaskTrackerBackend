@@ -38,6 +38,96 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/project/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Project"
+                ],
+                "summary": "Get all projects",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Project"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Project"
+                ],
+                "summary": "Create tag",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Project"
+                ],
+                "summary": "Delete project with provided id",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Project"
+                ],
+                "summary": "update project with provided id",
+                "parameters": [
+                    {
+                        "description": "update project",
+                        "name": "project",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateProject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Project"
+                        }
+                    }
+                }
+            }
+        },
         "/tag/": {
             "get": {
                 "consumes": [
@@ -62,37 +152,6 @@ const docTemplate_swagger = `{
                     }
                 }
             },
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tag"
-                ],
-                "summary": "update tag with provided id",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "tag name",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "type": "string",
-                        "description": "tag color",
-                        "name": "color",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            },
             "post": {
                 "consumes": [
                     "application/json"
@@ -106,143 +165,21 @@ const docTemplate_swagger = `{
                 "summary": "Create tag",
                 "parameters": [
                     {
-                        "type": "string",
-                        "description": "tag name",
-                        "name": "name",
-                        "in": "query",
-                        "required": true
-                    },
-                    {
-                        "maxLength": 6,
-                        "minLength": 6,
-                        "type": "string",
-                        "description": "tag color",
-                        "name": "color",
-                        "in": "query",
-                        "required": true
+                        "description": "add tag",
+                        "name": "tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AddTag"
+                        }
                     }
                 ],
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            },
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tag"
-                ],
-                "summary": "Delete tag with provided id",
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            }
-        },
-        "/tag/task": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tag"
-                ],
-                "summary": "get tags which contains task by provided id",
                 "responses": {
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Tag"
-                            }
+                            "$ref": "#/definitions/models.Tag"
                         }
-                    }
-                }
-            }
-        },
-        "/task/": {
-            "get": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Task"
-                ],
-                "summary": "Get all tasks",
-                "responses": {
-                    "200": {
-                        "description": "OK",
-                        "schema": {
-                            "type": "array",
-                            "items": {
-                                "$ref": "#/definitions/models.Task"
-                            }
-                        }
-                    }
-                }
-            },
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Task"
-                ],
-                "summary": "update tag with provided id",
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            },
-            "post": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Task"
-                ],
-                "summary": "Create tag",
-                "responses": {
-                    "200": {
-                        "description": ""
-                    }
-                }
-            },
-            "delete": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Task"
-                ],
-                "summary": "Delete tag with provided id",
-                "responses": {
-                    "200": {
-                        "description": ""
                     }
                 }
             }
@@ -272,48 +209,11 @@ const docTemplate_swagger = `{
                     "200": {
                         "description": "OK",
                         "schema": {
-                            "$ref": "#/definitions/models.Tag"
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Tag"
+                            }
                         }
-                    }
-                }
-            },
-            "put": {
-                "consumes": [
-                    "application/json"
-                ],
-                "produces": [
-                    "application/json"
-                ],
-                "tags": [
-                    "Tag"
-                ],
-                "summary": "Update tag",
-                "parameters": [
-                    {
-                        "type": "string",
-                        "description": "tag name",
-                        "name": "name",
-                        "in": "path",
-                        "required": true
-                    },
-                    {
-                        "type": "string",
-                        "description": "tag name",
-                        "name": "name",
-                        "in": "query"
-                    },
-                    {
-                        "maxLength": 6,
-                        "minLength": 6,
-                        "type": "string",
-                        "description": "tag color",
-                        "name": "color",
-                        "in": "query"
-                    }
-                ],
-                "responses": {
-                    "200": {
-                        "description": ""
                     }
                 }
             },
@@ -332,7 +232,7 @@ const docTemplate_swagger = `{
                     {
                         "type": "string",
                         "description": "tag id",
-                        "name": "name",
+                        "name": "id",
                         "in": "path",
                         "required": true
                     }
@@ -342,10 +242,205 @@ const docTemplate_swagger = `{
                         "description": ""
                     }
                 }
+            },
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Tag"
+                ],
+                "summary": "Update tag",
+                "parameters": [
+                    {
+                        "description": "update tag",
+                        "name": "tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateTag"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Tag"
+                        }
+                    }
+                }
+            }
+        },
+        "/task/": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Get all tasks",
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Task"
+                            }
+                        }
+                    }
+                }
+            },
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Create tag",
+                "parameters": [
+                    {
+                        "description": "add task",
+                        "name": "tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AddTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "delete": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "Delete task with provided id",
+                "responses": {
+                    "200": {
+                        "description": ""
+                    }
+                }
+            },
+            "patch": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Task"
+                ],
+                "summary": "update tag with provided id",
+                "parameters": [
+                    {
+                        "description": "update task",
+                        "name": "task",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.UpdateTask"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "$ref": "#/definitions/models.Task"
+                        }
+                    }
+                }
             }
         }
     },
     "definitions": {
+        "models.AddTag": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "FFFFFF"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "tag name"
+                }
+            }
+        },
+        "models.AddTask": {
+            "type": "object",
+            "properties": {
+                "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "taskDescription": {
+                    "type": "string",
+                    "example": "example task"
+                },
+                "taskTitle": {
+                    "type": "string",
+                    "example": "task name"
+                }
+            }
+        },
+        "models.Project": {
+            "type": "object",
+            "properties": {
+                "creationDate": {
+                    "type": "string",
+                    "format": "datetime"
+                },
+                "description": {
+                    "type": "string",
+                    "example": "example"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "project name"
+                },
+                "ownerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "parentId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-44665544000"
+                }
+            }
+        },
         "models.Tag": {
             "type": "object",
             "properties": {
@@ -365,6 +460,75 @@ const docTemplate_swagger = `{
             }
         },
         "models.Task": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "taskDescription": {
+                    "type": "string",
+                    "example": "example task"
+                },
+                "taskTitle": {
+                    "type": "string",
+                    "example": "task name"
+                }
+            }
+        },
+        "models.UpdateProject": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "example"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "project name"
+                },
+                "ownerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "parentId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-44665544000"
+                }
+            }
+        },
+        "models.UpdateTag": {
+            "type": "object",
+            "properties": {
+                "color": {
+                    "type": "string",
+                    "example": "FFFFFF"
+                },
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "f40312cd-5995-ec11-b909-0242ac120002"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "tag name"
+                }
+            }
+        },
+        "models.UpdateTask": {
             "type": "object",
             "properties": {
                 "id": {

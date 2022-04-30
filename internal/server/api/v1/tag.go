@@ -30,9 +30,8 @@ func GetAllTags(g *gin.Context) {
 // @Tags        Tag
 // @Accept      json
 // @Produce     json
-// @Param       name query string true "tag name"
-// @Param       color query string true "tag color" minlength(6) maxlength(6)
-// @Success     200
+// @Param       tag body models.AddTag true "add tag"
+// @Success     200 {object} models.Tag
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /tag/ [post]
@@ -83,10 +82,8 @@ func DeleteTag(g *gin.Context) {
 // @Tags        Tag
 // @Accept      json
 // @Produce     json
-// @Param       id path string true "tag id"
-// @Param       name query string false "tag name"
-// @Param       color query string false "tag color" minlength(6) maxlength(6)
-// @Success     200
+// @Param       tag body models.UpdateTag true "update tag"
+// @Success     200 {object} models.Tag
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /tag/{id} [patch]
