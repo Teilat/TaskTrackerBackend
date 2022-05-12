@@ -2,7 +2,6 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"main/internal/database/sql"
 	"main/internal/server/api/v1/models"
 	"net/http"
@@ -17,13 +16,15 @@ import (
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /task/ [get]
-func GetAllTasks(g *gin.Context) {
-	db := sql.GetDb()
-	tags, err := db.GetAllTasks()
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
+func GetAllTasks() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		db := sql.GetDb()
+		tags, err := db.GetAllTasks()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
+		c.JSON(http.StatusOK, tags)
 	}
-	g.JSON(http.StatusOK, tags)
 }
 
 // CreateTask  godoc
@@ -36,20 +37,21 @@ func GetAllTasks(g *gin.Context) {
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /task/ [post]
-func CreateTask(g *gin.Context) {
+func CreateTask() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var params models.AddTask
+		err := c.BindJSON(&params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
 
-	var params models.AddTask
-	err := g.ShouldBindBodyWith(&params, binding.JSON)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
+		db := sql.GetDb()
+		err = db.CreateNewTask(params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
+		c.JSON(http.StatusOK, "")
 	}
-
-	db := sql.GetDb()
-	err = db.CreateNewTask(params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
-	}
-	g.JSON(http.StatusOK, "")
 }
 
 // DeleteTask  godoc
@@ -62,20 +64,21 @@ func CreateTask(g *gin.Context) {
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /task/ [delete]
-func DeleteTask(g *gin.Context) {
+func DeleteTask() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var params models.DeleteTask
+		err := c.BindQuery(&params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
 
-	var params models.DeleteTask
-	err := g.BindQuery(&params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
+		db := sql.GetDb()
+		err = db.DeleteTask(params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
+		c.JSON(http.StatusOK, "")
 	}
-
-	db := sql.GetDb()
-	err = db.DeleteTask(params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
-	}
-	g.JSON(http.StatusOK, "")
 }
 
 // UpdateTask  godoc
@@ -88,18 +91,19 @@ func DeleteTask(g *gin.Context) {
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /task/ [patch]
-func UpdateTask(g *gin.Context) {
+func UpdateTask() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var params models.UpdateTask
+		err := c.BindQuery(&params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
 
-	var params models.UpdateTask
-	err := g.BindQuery(&params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
+		db := sql.GetDb()
+		err = db.UpdateTask(params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
+		c.JSON(http.StatusOK, "")
 	}
-
-	db := sql.GetDb()
-	err = db.UpdateTask(params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
-	}
-	g.JSON(http.StatusOK, "")
 }

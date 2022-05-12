@@ -11,7 +11,7 @@ import (
 
 // @host      localhost:8080
 // @BasePath  /api/v1
-// @Title     title
+// @Title     Application Api
 // @Version   1.0
 func main() {
 

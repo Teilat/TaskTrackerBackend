@@ -85,6 +85,25 @@ const docTemplate_swagger = `{
                 }
             }
         },
+        "/auth/logout": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout get",
+                "responses": {
+                    "301": {
+                        "description": ""
+                    }
+                }
+            }
+        },
         "/project/": {
             "get": {
                 "consumes": [
@@ -618,7 +637,7 @@ var SwaggerInfo_swagger = &swag.Spec{
 	Host:             "localhost:8080",
 	BasePath:         "/api/v1",
 	Schemes:          []string{},
-	Title:            "title",
+	Title:            "Application Api",
 	Description:      "",
 	InfoInstanceName: "swagger",
 	SwaggerTemplate:  docTemplate_swagger,

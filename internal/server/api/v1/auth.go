@@ -25,14 +25,14 @@ func LoginGetHandler() gin.HandlerFunc {
 		session := sessions.Default(c)
 		user := session.Get(globals.Userkey)
 		if user != nil {
-			c.String(http.StatusBadRequest, "Please logout first",
+			c.HTML(http.StatusBadRequest, "login.html",
 				gin.H{
 					"content": "Please logout first",
 					"user":    user,
 				})
 			return
 		}
-		c.String(http.StatusOK, "logged out", gin.H{
+		c.HTML(http.StatusOK, "login.html", gin.H{
 			"content": "",
 			"user":    user,
 		})
@@ -54,30 +54,31 @@ func LoginPostHandler() gin.HandlerFunc {
 		session := sessions.Default(c)
 		user := session.Get(globals.Userkey)
 		if user != nil {
-			c.String(http.StatusBadRequest, "Please logout first", gin.H{"content": "Please logout first"})
+			c.HTML(http.StatusBadRequest, "login.html", gin.H{"content": "Please logout first"})
 			return
 		}
 
-		var params models.Login
-		err := c.BindJSON(&params)
-		if err != nil {
-			log.Fatal(err)
+		username := c.PostForm("username")
+		password := c.PostForm("password")
+
+		params := models.Login{
+			Username: username,
+			Password: password,
+		}
+
+		if helpers.EmptyUserPass(params) {
+			c.HTML(http.StatusBadRequest, "login.html", gin.H{"content": "Parameters can't be empty"})
 			return
 		}
 
-		if helpers.EmptyUserPass(params.Username, params.Password) {
-			c.String(http.StatusBadRequest, "Parameters can't be empty", gin.H{"content": "Parameters can't be empty"})
-			return
-		}
-
-		if !helpers.CheckUserPass(params.Username, params.Password) {
-			c.String(http.StatusUnauthorized, "Incorrect username or password", gin.H{"content": "Incorrect username or password"})
+		if !helpers.CheckUserPass(params) {
+			c.HTML(http.StatusUnauthorized, "login.html", gin.H{"content": "Incorrect username or password"})
 			return
 		}
 
 		session.Set(globals.Userkey, params.Username)
 		if err := session.Save(); err != nil {
-			c.String(http.StatusInternalServerError, "Failed to save session", gin.H{"content": "Failed to save session"})
+			c.HTML(http.StatusInternalServerError, "login.html", gin.H{"content": "Failed to save session"})
 			return
 		}
 
@@ -85,6 +86,14 @@ func LoginPostHandler() gin.HandlerFunc {
 	}
 }
 
+// LogoutGetHandler  godoc
+// @Summary     Logout get
+// @Tags        Auth
+// @Accept      json
+// @Produce     json
+// @Success     301
+// @Error       500 {string} string
+// @Router      /auth/logout [get]
 func LogoutGetHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
@@ -104,11 +113,22 @@ func LogoutGetHandler() gin.HandlerFunc {
 	}
 }
 
+func IndexGetHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		session := sessions.Default(c)
+		user := session.Get(globals.Userkey)
+		c.HTML(http.StatusOK, "index.html", gin.H{
+			"content": "This is an index page...",
+			"user":    user,
+		})
+	}
+}
+
 func DashboardGetHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		user := session.Get(globals.Userkey)
-		c.String(http.StatusOK, "This is a dashboard", gin.H{
+		c.HTML(http.StatusOK, "dashboard.html", gin.H{
 			"content": "This is a dashboard",
 			"user":    user,
 		})

@@ -2,7 +2,6 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"github.com/gin-gonic/gin/binding"
 	"main/internal/database/sql"
 	"main/internal/server/api/v1/models"
 	"net/http"
@@ -17,13 +16,15 @@ import (
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /project/ [get]
-func GetAllProjects(g *gin.Context) {
-	db := sql.GetDb()
-	tags, err := db.GetAllProjects()
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
+func GetAllProjects() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		db := sql.GetDb()
+		tags, err := db.GetAllProjects()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
+		c.JSON(http.StatusOK, tags)
 	}
-	g.JSON(http.StatusOK, tags)
 }
 
 // CreateProject  godoc
@@ -31,24 +32,26 @@ func GetAllProjects(g *gin.Context) {
 // @Tags        Project
 // @Accept      json
 // @Produce     json
+// @Param       tag body models.AddProject true "add project"
 // @Success     200
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /project/ [post]
-func CreateProject(g *gin.Context) {
+func CreateProject() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var params models.AddProject
+		err := c.BindJSON(&params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
 
-	var params models.AddProject
-	err := g.ShouldBindBodyWith(&params, binding.JSON)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
+		db := sql.GetDb()
+		err = db.CreateProject(params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
+		c.JSON(http.StatusOK, "")
 	}
-
-	db := sql.GetDb()
-	err = db.CreateProject(params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
-	}
-	g.JSON(http.StatusOK, "")
 }
 
 // DeleteProject  godoc
@@ -61,20 +64,21 @@ func CreateProject(g *gin.Context) {
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /project/ [delete]
-func DeleteProject(g *gin.Context) {
+func DeleteProject() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var params models.DeleteProject
+		err := c.BindQuery(&params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
 
-	var params models.DeleteProject
-	err := g.BindQuery(&params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
+		db := sql.GetDb()
+		err = db.DeleteProject(params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
+		c.JSON(http.StatusOK, "")
 	}
-
-	db := sql.GetDb()
-	err = db.DeleteProject(params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
-	}
-	g.JSON(http.StatusOK, "")
 }
 
 // UpdateProject  godoc
@@ -87,18 +91,19 @@ func DeleteProject(g *gin.Context) {
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Router      /project/ [patch]
-func UpdateProject(g *gin.Context) {
+func UpdateProject() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var params models.UpdateProject
+		err := c.BindQuery(&params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
 
-	var params models.UpdateProject
-	err := g.BindQuery(&params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
+		db := sql.GetDb()
+		err = db.UpdateProject(params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
+		c.JSON(http.StatusOK, "")
 	}
-
-	db := sql.GetDb()
-	err = db.UpdateProject(params)
-	if err != nil {
-		g.JSON(http.StatusInternalServerError, err)
-	}
-	g.JSON(http.StatusOK, "")
 }

@@ -12,6 +12,8 @@ import (
 // @Produce     json
 // @Success     200 {string} string "healthy"
 // @Router      / [get]
-func HealthCheck(g *gin.Context) {
-	g.String(http.StatusOK, "OK v1")
+func HealthCheck() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		c.String(http.StatusOK, "OK v1")
+	}
 }

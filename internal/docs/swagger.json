@@ -1,7 +1,7 @@
 {
     "swagger": "2.0",
     "info": {
-        "title": "title",
+        "title": "Application Api",
         "contact": {},
         "version": "1.0"
     },
@@ -70,6 +70,25 @@
                         }
                     }
                 ],
+                "responses": {
+                    "301": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/auth/logout": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "Logout get",
                 "responses": {
                     "301": {
                         "description": ""
