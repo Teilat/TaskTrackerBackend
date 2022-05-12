@@ -2,10 +2,10 @@ package main
 
 import (
 	"fmt"
-	"main/internal/config"
-	"main/internal/database/sql"
-	"main/internal/server"
-	_ "main/internal/server/api/v1/models"
+	"main/config"
+	"main/database/sql"
+	"main/server"
+	_ "main/server/api/v1/models"
 	_ "net/http/pprof"
 )
 

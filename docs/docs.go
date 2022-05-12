@@ -49,7 +49,7 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Login get",
+                "summary": "go to login page",
                 "responses": {
                     "200": {
                         "description": ""
@@ -66,7 +66,7 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Login post",
+                "summary": "Login user",
                 "parameters": [
                     {
                         "description": "credentials",
@@ -96,9 +96,39 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Auth"
                 ],
-                "summary": "Logout get",
+                "summary": "Logout user",
                 "responses": {
                     "301": {
+                        "description": ""
+                    }
+                }
+            }
+        },
+        "/auth/register": {
+            "post": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Auth"
+                ],
+                "summary": "register user",
+                "parameters": [
+                    {
+                        "description": "user",
+                        "name": "tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AddUser"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
                         "description": ""
                     }
                 }
@@ -139,6 +169,17 @@ const docTemplate_swagger = `{
                     "Project"
                 ],
                 "summary": "Create tag",
+                "parameters": [
+                    {
+                        "description": "add project",
+                        "name": "tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.AddProject"
+                        }
+                    }
+                ],
                 "responses": {
                     "200": {
                         "description": ""
@@ -444,6 +485,29 @@ const docTemplate_swagger = `{
         }
     },
     "definitions": {
+        "models.AddProject": {
+            "type": "object",
+            "properties": {
+                "description": {
+                    "type": "string",
+                    "example": "example"
+                },
+                "name": {
+                    "type": "string",
+                    "example": "project name"
+                },
+                "ownerId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "parentId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-44665544000"
+                }
+            }
+        },
         "models.AddTag": {
             "type": "object",
             "properties": {
@@ -472,6 +536,32 @@ const docTemplate_swagger = `{
                 "taskTitle": {
                     "type": "string",
                     "example": "task name"
+                }
+            }
+        },
+        "models.AddUser": {
+            "type": "object",
+            "properties": {
+                "name": {
+                    "type": "string",
+                    "example": "John"
+                },
+                "nickname": {
+                    "type": "string",
+                    "example": "Nickname"
+                },
+                "password": {
+                    "type": "string",
+                    "example": "password"
+                },
+                "projectId": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "surname": {
+                    "type": "string",
+                    "example": "Joe"
                 }
             }
         },

@@ -4,14 +4,15 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"log"
-	"main/internal/server/api/globals"
-	"main/internal/server/api/helpers"
-	"main/internal/server/api/v1/models"
+	"main/database/sql"
+	"main/server/api/globals"
+	"main/server/api/helpers"
+	"main/server/api/v1/models"
 	"net/http"
 )
 
 // LoginGetHandler  godoc
-// @Summary     Login get
+// @Summary     go to login page
 // @Tags        Auth
 // @Accept      json
 // @Produce     json
@@ -40,7 +41,7 @@ func LoginGetHandler() gin.HandlerFunc {
 }
 
 // LoginPostHandler  godoc
-// @Summary     Login post
+// @Summary     Login user
 // @Tags        Auth
 // @Accept      json
 // @Produce     json
@@ -87,7 +88,7 @@ func LoginPostHandler() gin.HandlerFunc {
 }
 
 // LogoutGetHandler  godoc
-// @Summary     Logout get
+// @Summary     Logout user
 // @Tags        Auth
 // @Accept      json
 // @Produce     json
@@ -110,6 +111,34 @@ func LogoutGetHandler() gin.HandlerFunc {
 		}
 
 		c.Redirect(http.StatusMovedPermanently, "/api/v1/auth/")
+	}
+}
+
+// RegisterHandler  godoc
+// @Summary     register user
+// @Tags        Auth
+// @Accept      json
+// @Produce     json
+// @Param       tag body models.AddUser true "user"
+// @Success     200
+// @Error       500 {string} string
+// @Router      /auth/register [post]
+func RegisterHandler() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var params models.AddUser
+		err := c.BindJSON(&params)
+		if err != nil {
+			log.Println(err)
+			c.HTML(http.StatusInternalServerError, "login.html", gin.H{"content": "Failed to register"})
+		}
+
+		db := sql.GetDb()
+		err = db.CreateNewUser(params)
+		if err != nil {
+			log.Println(err)
+			c.HTML(http.StatusInternalServerError, "login.html", gin.H{"content": "Failed to register"})
+		}
+		c.Redirect(http.StatusMovedPermanently, "/api/v1/auth/login")
 	}
 }
 

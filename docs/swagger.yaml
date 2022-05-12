@@ -1,5 +1,22 @@
 basePath: /api/v1
 definitions:
+  models.AddProject:
+    properties:
+      description:
+        example: example
+        type: string
+      name:
+        example: project name
+        type: string
+      ownerId:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      parentId:
+        example: 550e8400-e29b-41d4-a716-44665544000
+        format: uuid
+        type: string
+    type: object
   models.AddTag:
     properties:
       color:
@@ -20,6 +37,25 @@ definitions:
         type: string
       taskTitle:
         example: task name
+        type: string
+    type: object
+  models.AddUser:
+    properties:
+      name:
+        example: John
+        type: string
+      nickname:
+        example: Nickname
+        type: string
+      password:
+        example: password
+        type: string
+      projectId:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
+      surname:
+        example: Joe
         type: string
     type: object
   models.Login:
@@ -163,7 +199,7 @@ paths:
       responses:
         "200":
           description: ""
-      summary: Login get
+      summary: go to login page
       tags:
       - Auth
     post:
@@ -181,7 +217,7 @@ paths:
       responses:
         "301":
           description: ""
-      summary: Login post
+      summary: Login user
       tags:
       - Auth
   /auth/logout:
@@ -193,7 +229,26 @@ paths:
       responses:
         "301":
           description: ""
-      summary: Logout get
+      summary: Logout user
+      tags:
+      - Auth
+  /auth/register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: register user
       tags:
       - Auth
   /project/:
@@ -246,6 +301,13 @@ paths:
     post:
       consumes:
       - application/json
+      parameters:
+      - description: add project
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddProject'
       produces:
       - application/json
       responses:

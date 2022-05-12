@@ -10,10 +10,10 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
-	_ "main/internal/docs"
-	"main/internal/server/api/globals"
-	"main/internal/server/api/middleware"
-	v1 "main/internal/server/api/v1"
+	_ "main/docs"
+	"main/server/api/globals"
+	"main/server/api/middleware"
+	v1 "main/server/api/v1"
 )
 
 func Init() {
@@ -71,6 +71,7 @@ func Init() {
 				authPublic.GET("/login", v1.LoginGetHandler())
 				authPublic.POST("/login", v1.LoginPostHandler())
 				authPublic.GET("/", v1.IndexGetHandler())
+				authPublic.POST("/register", v1.RegisterHandler())
 			}
 
 			authPrivate := apiV1.Group("/auth")

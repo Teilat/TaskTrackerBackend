@@ -2,8 +2,8 @@ package sql
 
 import (
 	"github.com/google/uuid"
-	"main/internal/database/sql/models"
-	apiModels "main/internal/server/api/v1/models"
+	"main/database/sql/models"
+	apiModels "main/server/api/v1/models"
 )
 
 func (DbProvider DatabaseProvider) CreateNewTask(params apiModels.AddTask) error {

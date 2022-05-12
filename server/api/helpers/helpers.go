@@ -2,19 +2,25 @@ package helpers
 
 import (
 	"log"
-	"main/internal/server/api/v1/models"
+	"main/database/sql"
+	"main/server/api/v1/models"
 	"strings"
 )
 
 func CheckUserPass(credentials models.Login) bool {
-	userpass := make(map[string]string)
-	userpass["hello"] = "itsme"
-	userpass["john"] = "doe"
-	userpass["user"] = "user"
+	db := sql.GetDb()
+	users, err := db.GetUsersCredentials()
+	if err != nil {
+		return false
+	}
+	userPass := make(map[string]string)
+	for _, user := range users {
+		userPass[user.Nickname] = user.Password
+	}
 
-	log.Println("checkUserPass", credentials.Username, credentials.Password, userpass)
+	log.Println("checkUserPass", credentials.Username, credentials.Password, userPass)
 
-	if val, ok := userpass[credentials.Username]; ok {
+	if val, ok := userPass[credentials.Username]; ok {
 		log.Println(val, ok)
 		if val == credentials.Password {
 			return true
