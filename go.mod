@@ -1,6 +1,6 @@
 module main
 
-go 1.17
+go 1.18
 
 require (
 	github.com/ScottHuangZL/gin-jwt-session v0.0.0-20180104053042-37788797635a

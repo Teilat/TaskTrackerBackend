@@ -2,7 +2,7 @@ package server
 
 import (
 	"fmt"
-	"github.com/ScottHuangZL/gin-jwt-session"
+	session "github.com/ScottHuangZL/gin-jwt-session"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -16,8 +16,13 @@ import (
 	v1 "main/server/api/v1"
 )
 
+// @host      localhost:8080
+// @BasePath  /api/v1
+// @Title     Application Api
+// @Version   1.0
+
 func Init() {
-	//swag init --parseDependency --parseInternal -g main.go
+	//swag init --parseDependency --parseInternal -g server.go
 
 	address := fmt.Sprintf("%s:%d", viper.Get("api.address"), viper.Get("api.port"))
 
@@ -28,9 +33,9 @@ func Init() {
 
 	session.NewStore()
 	router.Use(session.ClearMiddleware()) //important to avoid mem leak
-	router.Use(sessions.Sessions("session", cookie.NewStore(globals.Secret)))
+	router.Use(sessions.Sessions("AuthToken", cookie.NewStore(globals.Secret)))
 
-	router.LoadHTMLGlob("./internal/server/api/templates/*.html")
+	router.LoadHTMLGlob("./server/api/templates/*.html")
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
 	router.GET("/swagger", ginSwagger.WrapHandler(swaggerFiles.Handler))
@@ -40,7 +45,6 @@ func Init() {
 		apiV1 := api.Group("/v1")
 		{
 			apiV1.GET("/", v1.HealthCheck())
-
 			tag := apiV1.Group("/tag")
 			{
 				tag.Use(middleware.Auth)
@@ -73,7 +77,6 @@ func Init() {
 				authPublic.GET("/", v1.IndexGetHandler())
 				authPublic.POST("/register", v1.RegisterHandler())
 			}
-
 			authPrivate := apiV1.Group("/auth")
 			{
 				authPrivate.Use(middleware.Auth)

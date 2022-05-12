@@ -9,10 +9,6 @@ import (
 	_ "net/http/pprof"
 )
 
-// @host      localhost:8080
-// @BasePath  /api/v1
-// @Title     Application Api
-// @Version   1.0
 func main() {
 
 	// getting config from config file
