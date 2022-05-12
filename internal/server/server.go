@@ -3,12 +3,16 @@ package server
 import (
 	"fmt"
 	"github.com/ScottHuangZL/gin-jwt-session"
+	"github.com/gin-contrib/sessions"
+	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
 	"github.com/spf13/viper"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 	_ "main/internal/docs"
+	"main/internal/server/api/globals"
+	"main/internal/server/api/middleware"
 	v1 "main/internal/server/api/v1"
 )
 
@@ -33,6 +37,7 @@ func Init() {
 	router.Use(session.ClearMiddleware()) //important to avoid mem leak
 
 	router.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerFiles.Handler))
+	router.Use(sessions.Sessions("session", cookie.NewStore(globals.Secret)))
 
 	api := router.Group("/api")
 	{
@@ -61,6 +66,14 @@ func Init() {
 				proj.POST("", v1.CreateProject)
 				proj.PATCH("", v1.UpdateProject)
 				proj.DELETE("", v1.DeleteProject)
+			}
+			auth := ver1.Group("/auth")
+			{
+				auth.GET("/login", v1.LoginGetHandler())
+				auth.POST("/login", v1.LoginPostHandler())
+				auth.GET("/dashboard", v1.DashboardGetHandler())
+				auth.GET("/logout", v1.LogoutGetHandler())
+				router.Use(middleware.Auth)
 			}
 		}
 	}

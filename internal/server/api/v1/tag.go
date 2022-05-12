@@ -2,6 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
+	"github.com/gin-gonic/gin/binding"
 	"main/internal/database/sql"
 	"main/internal/server/api/v1/models"
 	"net/http"
@@ -90,7 +91,7 @@ func DeleteTag(g *gin.Context) {
 func UpdateTag(g *gin.Context) {
 
 	var params models.UpdateTag
-	err := g.BindQuery(&params)
+	err := g.MustBindWith(&params, binding.FormPost)
 	if err != nil {
 		g.JSON(http.StatusInternalServerError, err)
 	}
