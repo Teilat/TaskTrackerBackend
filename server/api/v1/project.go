@@ -28,7 +28,7 @@ func GetAllProjects() gin.HandlerFunc {
 }
 
 // CreateProject  godoc
-// @Summary     Create tag
+// @Summary     Create project
 // @Tags        Project
 // @Accept      json
 // @Produce     json

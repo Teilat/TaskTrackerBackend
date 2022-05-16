@@ -9,13 +9,25 @@ import (
 
 func (DbProvider DatabaseProvider) CreateProject(params apiModels.AddProject) error {
 	newUuid := uuid.New()
-	s := &models.Projects{
-		Id:                 newUuid,
-		ParentId:           params.ParentId,
-		ProjectName:        params.Name,
-		ProjectDescription: params.Description,
-		CreationDate:       time.Now(),
-		OwnerId:            params.OwnerId,
+	var s *models.Projects
+	if params.ParentId == uuid.Nil {
+		s = &models.Projects{
+			Id:                 newUuid,
+			ParentId:           nil,
+			ProjectName:        params.Name,
+			ProjectDescription: params.Description,
+			CreationDate:       time.Now(),
+			OwnerId:            params.OwnerId,
+		}
+	} else {
+		s = &models.Projects{
+			Id:                 newUuid,
+			ParentId:           &params.ParentId,
+			ProjectName:        params.Name,
+			ProjectDescription: params.Description,
+			CreationDate:       time.Now(),
+			OwnerId:            params.OwnerId,
+		}
 	}
 
 	err := DbProvider.DB.Save(s)
@@ -73,7 +85,7 @@ func (DbProvider DatabaseProvider) UpdateProject(params apiModels.UpdateProject)
 
 	s := &models.Projects{
 		Id:                 NilCheck(params.Id, rec.Id).(uuid.UUID),
-		ParentId:           NilCheck(params.ParentId, rec.ParentId).(uuid.UUID),
+		ParentId:           NilCheck(&params.ParentId, &rec.ParentId).(*uuid.UUID),
 		ProjectName:        NilCheck(params.Name, rec.ProjectName).(string),
 		ProjectDescription: NilCheck(params.Description, rec.ProjectDescription).(string),
 		OwnerId:            NilCheck(params.OwnerId, rec.OwnerId).(uuid.UUID),
