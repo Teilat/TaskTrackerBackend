@@ -10,5 +10,5 @@ type Tasks struct {
 	Id              uuid.UUID `reform:"Id,pk"`
 	ProjectId       uuid.UUID `reform:"ProjectId"`
 	TaskTitle       string    `reform:"TaskTitle"`
-	TaskDescription *string   `reform:"TaskDescription"`
+	TaskDescription string    `reform:"TaskDescription"`
 }

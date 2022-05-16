@@ -47,7 +47,7 @@ func Init() {
 			apiV1.GET("/", v1.HealthCheck())
 			tag := apiV1.Group("/tag")
 			{
-				//tag.Use(middleware.Auth)
+				tag.Use(middleware.Auth)
 				tag.GET("", v1.GetAllTags())
 				tag.POST("", v1.CreateTag())
 				tag.PATCH(":id", v1.UpdateTag())
@@ -56,7 +56,7 @@ func Init() {
 			}
 			task := apiV1.Group("/task")
 			{
-				//task.Use(middleware.Auth)
+				task.Use(middleware.Auth)
 				task.GET("", v1.GetAllTasks())
 				task.POST("", v1.CreateTask())
 				task.PATCH("", v1.UpdateTask())
@@ -64,7 +64,7 @@ func Init() {
 			}
 			proj := apiV1.Group("/project")
 			{
-				//proj.Use(middleware.Auth)
+				proj.Use(middleware.Auth)
 				proj.GET("", v1.GetAllProjects())
 				proj.POST("", v1.CreateProject())
 				proj.PATCH("", v1.UpdateProject())
