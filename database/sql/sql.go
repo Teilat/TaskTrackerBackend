@@ -31,7 +31,11 @@ func Init() (*DatabaseProvider, error) {
 
 	// Build connection string
 	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
-		viper.Get("sql.host"), viper.Get("sql.user"), viper.Get("sql.pass"), viper.Get("sql.port"), viper.Get("sql.db"))
+		viper.Get("sql.host"),
+		viper.Get("sql.user"),
+		viper.Get("sql.pass"),
+		viper.Get("sql.port"),
+		viper.Get("sql.db"))
 	driverName := fmt.Sprintf("%s", viper.Get("sql.name"))
 
 	// Create connection pool

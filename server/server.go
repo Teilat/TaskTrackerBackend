@@ -10,10 +10,10 @@ import (
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
-	_ "main/docs"
 	"main/server/api/globals"
 	"main/server/api/middleware"
 	v1 "main/server/api/v1"
+	_ "main/server/docs"
 )
 
 // @host      localhost:8080
