@@ -38,21 +38,28 @@ func (DbProvider DatabaseProvider) CreateProject(params apiModels.AddProject) er
 	return nil
 }
 
-func (DbProvider DatabaseProvider) GetAllProjects() ([]apiModels.Tag, error) {
+func (DbProvider DatabaseProvider) GetAllProjects() ([]apiModels.Project, error) {
 
 	from, err := DbProvider.DB.SelectAllFrom(models.ProjectsTable, "")
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return nil, err
 	}
-	var list []apiModels.Tag
+	var list []apiModels.Project
 	for _, s := range from {
 
-		s := s.(*models.Tags)
-		q := apiModels.Tag{
-			Id:    s.Id,
-			Name:  s.TagName,
-			Color: s.TagColor,
+		s := s.(*models.Projects)
+		q := apiModels.Project{
+			Id:           s.Id,
+			Name:         s.ProjectName,
+			Description:  s.ProjectDescription,
+			CreationDate: s.CreationDate,
+			OwnerId:      s.OwnerId,
+		}
+		if s.ParentId != nil {
+			q.ParentId = *s.ParentId
+		} else {
+			q.ParentId = uuid.Nil
 		}
 		list = append(list, q)
 	}
