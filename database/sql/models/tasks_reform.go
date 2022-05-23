@@ -32,6 +32,7 @@ func (v *tasksTableType) Columns() []string {
 		"ProjectId",
 		"TaskTitle",
 		"TaskDescription",
+		"ColumnId",
 	}
 }
 
@@ -59,7 +60,8 @@ var TasksTable = &tasksTableType{
 			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
 			{Name: "ProjectId", Type: "uuid.UUID", Column: "ProjectId"},
 			{Name: "TaskTitle", Type: "string", Column: "TaskTitle"},
-			{Name: "TaskDescription", Type: "string", Column: "TaskDescription"},
+			{Name: "TaskDescription", Type: "*string", Column: "TaskDescription"},
+			{Name: "ColumnId", Type: "uuid.UUID", Column: "ColumnId"},
 		},
 		PKFieldIndex: 0,
 	},
@@ -68,11 +70,12 @@ var TasksTable = &tasksTableType{
 
 // String returns a string representation of this struct or record.
 func (s Tasks) String() string {
-	res := make([]string, 4)
+	res := make([]string, 5)
 	res[0] = "Id: " + reform.Inspect(s.Id, true)
 	res[1] = "ProjectId: " + reform.Inspect(s.ProjectId, true)
 	res[2] = "TaskTitle: " + reform.Inspect(s.TaskTitle, true)
 	res[3] = "TaskDescription: " + reform.Inspect(s.TaskDescription, true)
+	res[4] = "ColumnId: " + reform.Inspect(s.ColumnId, true)
 	return strings.Join(res, ", ")
 }
 
@@ -84,6 +87,7 @@ func (s *Tasks) Values() []interface{} {
 		s.ProjectId,
 		s.TaskTitle,
 		s.TaskDescription,
+		s.ColumnId,
 	}
 }
 
@@ -95,6 +99,7 @@ func (s *Tasks) Pointers() []interface{} {
 		&s.ProjectId,
 		&s.TaskTitle,
 		&s.TaskDescription,
+		&s.ColumnId,
 	}
 }
 

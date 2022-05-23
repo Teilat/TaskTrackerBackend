@@ -1,6 +1,7 @@
 package models
 
 import (
+	"github.com/google/uuid"
 )
 
 //go:generate reform
@@ -8,6 +9,6 @@ import (
 // Columns represents a row in Columns table.
 //reform:Columns
 type Columns struct {
-    ID []byte `reform:"id,pk"` // FIXME unhandled database type "uniqueidentifier"
-    Name string `reform:"Name"` 
+	ID   uuid.UUID `reform:"id,pk"`
+	Name string    `reform:"Name"`
 }

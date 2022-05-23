@@ -1,16 +1,15 @@
 package models
 
-import (
-)
+import "github.com/google/uuid"
 
 //go:generate reform
 
 // Tasks represents a row in Tasks table.
 //reform:Tasks
 type Tasks struct {
-    Id []byte `reform:"Id,pk"` // FIXME unhandled database type "uniqueidentifier"
-    ProjectId []byte `reform:"ProjectId"` // FIXME unhandled database type "uniqueidentifier"
-    TaskTitle string `reform:"TaskTitle"` 
-    TaskDescription *string `reform:"TaskDescription"` 
-    ColumnId []byte `reform:"ColumnId"` // FIXME unhandled database type "uniqueidentifier"
+	Id              uuid.UUID `reform:"Id,pk"`
+	ProjectId       uuid.UUID `reform:"ProjectId"`
+	TaskTitle       string    `reform:"TaskTitle"`
+	TaskDescription *string   `reform:"TaskDescription"`
+	ColumnId        uuid.UUID `reform:"ColumnId"`
 }
