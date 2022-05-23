@@ -3,6 +3,7 @@ package server
 import (
 	"fmt"
 	session "github.com/ScottHuangZL/gin-jwt-session"
+	"github.com/gin-contrib/cors"
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-contrib/sessions/cookie"
 	"github.com/gin-gonic/gin"
@@ -23,17 +24,18 @@ import (
 
 func Init() {
 	//swag init --parseDependency --parseInternal -g server.go
-
 	address := fmt.Sprintf("%s:%d", viper.Get("api.address"), viper.Get("api.port"))
 
 	//gin.SetMode(gin.ReleaseMode)
 	router := gin.Default()
-	router.Use(gin.Logger())
-	router.Use(gin.Recovery())
 
 	session.NewStore()
 	router.Use(session.ClearMiddleware()) //important to avoid mem leak
 	router.Use(sessions.Sessions("AuthToken", cookie.NewStore(globals.Secret)))
+	router.Use(gin.Recovery())
+	router.Use(gin.Logger())
+	router.Use(cors.Default())
+	router.Use(middleware.Header)
 
 	router.LoadHTMLGlob("./server/api/templates/*.html")
 

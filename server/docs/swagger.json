@@ -160,7 +160,7 @@
                 "tags": [
                     "Project"
                 ],
-                "summary": "Create tag",
+                "summary": "Create project",
                 "parameters": [
                     {
                         "description": "add project",
@@ -408,7 +408,7 @@
                 "tags": [
                     "Task"
                 ],
-                "summary": "Create tag",
+                "summary": "Create task",
                 "parameters": [
                     {
                         "description": "add task",

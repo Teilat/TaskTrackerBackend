@@ -22,13 +22,14 @@ func GetAllTasks() gin.HandlerFunc {
 		tags, err := db.GetAllTasks()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, tags)
 		}
-		c.JSON(http.StatusOK, tags)
 	}
 }
 
 // CreateTask  godoc
-// @Summary     Create tag
+// @Summary     Create task
 // @Tags        Task
 // @Accept      json
 // @Produce     json
@@ -49,8 +50,9 @@ func CreateTask() gin.HandlerFunc {
 		err = db.CreateNewTask(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, "")
 		}
-		c.JSON(http.StatusOK, "")
 	}
 }
 
@@ -76,8 +78,9 @@ func DeleteTask() gin.HandlerFunc {
 		err = db.DeleteTask(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, "")
 		}
-		c.JSON(http.StatusOK, "")
 	}
 }
 
@@ -103,7 +106,8 @@ func UpdateTask() gin.HandlerFunc {
 		err = db.UpdateTask(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, "")
 		}
-		c.JSON(http.StatusOK, "")
 	}
 }

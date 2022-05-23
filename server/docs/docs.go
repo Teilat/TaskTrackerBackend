@@ -168,7 +168,7 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Project"
                 ],
-                "summary": "Create tag",
+                "summary": "Create project",
                 "parameters": [
                     {
                         "description": "add project",
@@ -416,7 +416,7 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Task"
                 ],
-                "summary": "Create tag",
+                "summary": "Create task",
                 "parameters": [
                     {
                         "description": "add task",

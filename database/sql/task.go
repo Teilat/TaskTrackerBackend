@@ -17,7 +17,7 @@ func (DbProvider DatabaseProvider) CreateNewTask(params apiModels.AddTask) error
 
 	err := DbProvider.DB.Save(s)
 	if err != nil {
-		DbProvider.DbLogger.Println(err)
+		DbProvider.DbLogger.Fatalln(err)
 		return err
 	}
 	return nil
@@ -49,13 +49,13 @@ func (DbProvider DatabaseProvider) DeleteTask(params apiModels.DeleteTask) error
 
 	record, err := DbProvider.DB.FindByPrimaryKeyFrom(models.TasksTable, params.Id)
 	if err != nil {
-		DbProvider.DbLogger.Println(err)
+		DbProvider.DbLogger.Fatal(err)
 		return err
 	}
 
 	err = DbProvider.DB.Delete(record)
 	if err != nil {
-		DbProvider.DbLogger.Println(err)
+		DbProvider.DbLogger.Fatal(err)
 		return err
 	}
 
@@ -79,7 +79,7 @@ func (DbProvider DatabaseProvider) UpdateTask(params apiModels.UpdateTask) error
 
 	err = DbProvider.DB.Update(s)
 	if err != nil {
-		DbProvider.DbLogger.Println(err)
+		DbProvider.DbLogger.Fatal(err)
 		return err
 	}
 

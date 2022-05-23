@@ -5,6 +5,7 @@ go 1.18
 require (
 	github.com/ScottHuangZL/gin-jwt-session v0.0.0-20180104053042-37788797635a
 	github.com/denisenkom/go-mssqldb v0.12.0
+	github.com/gin-contrib/cors v1.3.1
 	github.com/gin-contrib/sessions v0.0.5
 	github.com/gin-gonic/gin v1.7.7
 	github.com/google/uuid v1.3.0

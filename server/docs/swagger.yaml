@@ -313,7 +313,7 @@ paths:
       responses:
         "200":
           description: ""
-      summary: Create tag
+      summary: Create project
       tags:
       - Project
   /tag/:
@@ -473,7 +473,7 @@ paths:
       responses:
         "200":
           description: ""
-      summary: Create tag
+      summary: Create task
       tags:
       - Task
 swagger: "2.0"

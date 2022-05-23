@@ -22,8 +22,9 @@ func GetAllTags() gin.HandlerFunc {
 		tags, err := db.GetAllTags()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, tags)
 		}
-		c.JSON(http.StatusOK, tags)
 	}
 }
 
@@ -49,8 +50,9 @@ func CreateTag() gin.HandlerFunc {
 		err = db.CreateNewTag(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, "")
 		}
-		c.JSON(http.StatusOK, "")
 	}
 }
 
@@ -76,8 +78,9 @@ func DeleteTag() gin.HandlerFunc {
 		err = db.DeleteTag(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, "")
 		}
-		c.JSON(http.StatusOK, "")
 	}
 }
 
@@ -103,8 +106,9 @@ func UpdateTag() gin.HandlerFunc {
 		err = db.UpdateTag(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, "")
 		}
-		c.JSON(http.StatusOK, "")
 	}
 }
 
@@ -130,8 +134,8 @@ func GetTagsByTask() gin.HandlerFunc {
 		data, err := db.GetTagsByTask(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, data)
 		}
-
-		c.JSON(http.StatusOK, data)
 	}
 }

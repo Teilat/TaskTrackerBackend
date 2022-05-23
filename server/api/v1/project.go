@@ -22,8 +22,9 @@ func GetAllProjects() gin.HandlerFunc {
 		tags, err := db.GetAllProjects()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, tags)
 		}
-		c.JSON(http.StatusOK, tags)
 	}
 }
 
@@ -49,8 +50,9 @@ func CreateProject() gin.HandlerFunc {
 		err = db.CreateProject(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, "")
 		}
-		c.JSON(http.StatusOK, "")
 	}
 }
 
@@ -76,8 +78,9 @@ func DeleteProject() gin.HandlerFunc {
 		err = db.DeleteProject(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, "")
 		}
-		c.JSON(http.StatusOK, "")
 	}
 }
 
@@ -103,7 +106,8 @@ func UpdateProject() gin.HandlerFunc {
 		err = db.UpdateProject(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, "")
 		}
-		c.JSON(http.StatusOK, "")
 	}
 }
