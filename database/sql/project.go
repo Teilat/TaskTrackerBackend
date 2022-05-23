@@ -15,7 +15,7 @@ func (DbProvider DatabaseProvider) CreateProject(params apiModels.AddProject) er
 			Id:                 newUuid,
 			ParentId:           nil,
 			ProjectName:        params.Name,
-			ProjectDescription: params.Description,
+			ProjectDescription: &params.Description,
 			CreationDate:       time.Now(),
 			OwnerId:            params.OwnerId,
 		}
@@ -24,7 +24,7 @@ func (DbProvider DatabaseProvider) CreateProject(params apiModels.AddProject) er
 			Id:                 newUuid,
 			ParentId:           &params.ParentId,
 			ProjectName:        params.Name,
-			ProjectDescription: params.Description,
+			ProjectDescription: &params.Description,
 			CreationDate:       time.Now(),
 			OwnerId:            params.OwnerId,
 		}
@@ -52,7 +52,7 @@ func (DbProvider DatabaseProvider) GetAllProjects() ([]apiModels.Project, error)
 		q := apiModels.Project{
 			Id:           s.Id,
 			Name:         s.ProjectName,
-			Description:  s.ProjectDescription,
+			Description:  *s.ProjectDescription,
 			CreationDate: s.CreationDate,
 			OwnerId:      s.OwnerId,
 		}
@@ -94,7 +94,7 @@ func (DbProvider DatabaseProvider) UpdateProject(params apiModels.UpdateProject)
 		Id:                 NilCheck(params.Id, rec.Id).(uuid.UUID),
 		ParentId:           NilCheck(&params.ParentId, &rec.ParentId).(*uuid.UUID),
 		ProjectName:        NilCheck(params.Name, rec.ProjectName).(string),
-		ProjectDescription: NilCheck(params.Description, rec.ProjectDescription).(string),
+		ProjectDescription: NilCheck(params.Description, rec.ProjectDescription).(*string),
 		OwnerId:            NilCheck(params.OwnerId, rec.OwnerId).(uuid.UUID),
 	}
 
