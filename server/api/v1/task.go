@@ -15,7 +15,7 @@ import (
 // @Success     200 {array}  models.Task
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /task/ [get]
+// @Router      /task [get]
 func GetAllTasks() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := sql.GetDb()
@@ -37,7 +37,7 @@ func GetAllTasks() gin.HandlerFunc {
 // @Success     200
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /task/ [post]
+// @Router      /task [post]
 func CreateTask() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var params models.AddTask
@@ -65,7 +65,7 @@ func CreateTask() gin.HandlerFunc {
 // @Success     200
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /task/ [delete]
+// @Router      /task [delete]
 func DeleteTask() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var params models.DeleteTask
@@ -93,7 +93,7 @@ func DeleteTask() gin.HandlerFunc {
 // @Success     200 {object} models.Task
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /task/ [patch]
+// @Router      /task [patch]
 func UpdateTask() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var params models.UpdateTask

@@ -134,7 +134,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "/project/": {
+        "/project": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -230,6 +230,42 @@ const docTemplate_swagger = `{
                         "description": "OK",
                         "schema": {
                             "$ref": "#/definitions/models.Project"
+                        }
+                    }
+                }
+            }
+        },
+        "/project/task": {
+            "get": {
+                "consumes": [
+                    "application/json"
+                ],
+                "produces": [
+                    "application/json"
+                ],
+                "tags": [
+                    "Project"
+                ],
+                "summary": "Get all projects",
+                "parameters": [
+                    {
+                        "description": "projectId",
+                        "name": "tag",
+                        "in": "body",
+                        "required": true,
+                        "schema": {
+                            "$ref": "#/definitions/models.TaskByProject"
+                        }
+                    }
+                ],
+                "responses": {
+                    "200": {
+                        "description": "OK",
+                        "schema": {
+                            "type": "array",
+                            "items": {
+                                "$ref": "#/definitions/models.Task"
+                            }
                         }
                     }
                 }
@@ -382,7 +418,7 @@ const docTemplate_swagger = `{
                 }
             }
         },
-        "/task/": {
+        "/task": {
             "get": {
                 "consumes": [
                     "application/json"
@@ -646,6 +682,16 @@ const docTemplate_swagger = `{
                 "taskTitle": {
                     "type": "string",
                     "example": "task name"
+                }
+            }
+        },
+        "models.TaskByProject": {
+            "type": "object",
+            "properties": {
+                "id": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
                 }
             }
         },

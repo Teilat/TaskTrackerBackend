@@ -59,7 +59,7 @@ var ProjectsTable = &projectsTableType{
 		SQLName: "Projects",
 		Fields: []parse.FieldInfo{
 			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
-			{Name: "ParentId", Type: "uuid.UUID", Column: "ParentId"},
+			{Name: "ParentId", Type: "*uuid.UUID", Column: "ParentId"},
 			{Name: "ProjectName", Type: "string", Column: "ProjectName"},
 			{Name: "ProjectDescription", Type: "*string", Column: "ProjectDescription"},
 			{Name: "CreationDate", Type: "time.Time", Column: "CreationDate"},

@@ -15,6 +15,7 @@ import (
 	"main/server/api/middleware"
 	v1 "main/server/api/v1"
 	_ "main/server/docs"
+	"time"
 )
 
 // @host      localhost:8080
@@ -30,12 +31,19 @@ func Init() {
 	router := gin.Default()
 
 	session.NewStore()
+	cookieStore := cookie.NewStore(globals.Secret)
+	cookieStore.Options(sessions.Options{HttpOnly: true, Secure: false})
 	router.Use(session.ClearMiddleware()) //important to avoid mem leak
-	router.Use(sessions.Sessions("AuthToken", cookie.NewStore(globals.Secret)))
+	router.Use(sessions.Sessions("token", cookieStore))
 	router.Use(gin.Recovery())
 	router.Use(gin.Logger())
-	router.Use(cors.Default())
-	router.Use(middleware.Header)
+	router.Use(cors.New(cors.Config{
+		AllowOrigins:     []string{"http://localhost:3000", "http://localhost", "http://localhost:8080", "http://localhost:*"},
+		AllowMethods:     []string{"PUT", "PATCH", "GET", "DELETE"},
+		AllowHeaders:     []string{"Access-Control-Allow-Headers", "Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers"},
+		AllowCredentials: true,
+		MaxAge:           12 * time.Hour,
+	}))
 
 	router.LoadHTMLGlob("./server/api/templates/*.html")
 
@@ -68,6 +76,7 @@ func Init() {
 			{
 				//proj.Use(middleware.Auth)
 				proj.GET("", v1.GetAllProjects())
+				proj.GET("/task", v1.GetAllTasksByProject())
 				proj.POST("", v1.CreateProject())
 				proj.PATCH("", v1.UpdateProject())
 				proj.DELETE("", v1.DeleteProject())

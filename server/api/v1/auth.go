@@ -55,16 +55,11 @@ func LoginPostHandler() gin.HandlerFunc {
 		session := sessions.Default(c)
 		user := session.Get(globals.Userkey)
 		if user != nil {
-			c.HTML(http.StatusBadRequest, "login.html", gin.H{"content": "Please logout first"})
+			c.JSON(http.StatusBadRequest, gin.H{"content": "Please logout first"})
 		}
+		var params models.Login
 
-		username := c.PostForm("username")
-		password := c.PostForm("password")
-
-		params := models.Login{
-			Username: username,
-			Password: password,
-		}
+		c.BindJSON(&params)
 
 		if helpers.EmptyUserPass(params) {
 			c.JSON(http.StatusBadRequest, gin.H{"content": "Parameters can't be empty"})
@@ -78,8 +73,6 @@ func LoginPostHandler() gin.HandlerFunc {
 		if err := session.Save(); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"content": "Failed to save session"})
 		}
-
-		c.Redirect(http.StatusMovedPermanently, "/api/v1/auth/dashboard")
 	}
 }
 
@@ -103,8 +96,6 @@ func LogoutGetHandler() gin.HandlerFunc {
 		if err := session.Save(); err != nil {
 			log.Println("Failed to save session:", err)
 		}
-
-		c.Redirect(http.StatusMovedPermanently, "/api/v1/auth/")
 	}
 }
 
@@ -132,7 +123,6 @@ func RegisterHandler() gin.HandlerFunc {
 			log.Println(err)
 			c.JSON(http.StatusInternalServerError, gin.H{"content": "Failed to register"})
 		}
-		c.Redirect(http.StatusMovedPermanently, "/api/v1/auth/login")
 	}
 }
 

@@ -18,8 +18,3 @@ func Auth(c *gin.Context) {
 	}
 	c.Next()
 }
-
-func Header(c *gin.Context) {
-	c.Request.Header.Set("Access-Control-Allow-Origin", "*")
-	c.Next()
-}

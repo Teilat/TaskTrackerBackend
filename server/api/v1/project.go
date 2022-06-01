@@ -15,11 +15,39 @@ import (
 // @Success     200 {array}  models.Project
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /project/ [get]
+// @Router      /project [get]
 func GetAllProjects() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		db := sql.GetDb()
 		tags, err := db.GetAllProjects()
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		} else {
+			c.JSON(http.StatusOK, tags)
+		}
+	}
+}
+
+// GetAllTasksByProject  godoc
+// @Summary     Get all projects
+// @Tags        Project
+// @Accept      json
+// @Produce     json
+// @Param       tag body models.TaskByProject true "projectId"
+// @Success     200 {array}  models.Task
+// @Error       500 {string} string
+// @Error       404 {string} string
+// @Router      /project/task [get]
+func GetAllTasksByProject() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var params models.TaskByProject
+		err := c.BindJSON(&params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
+
+		db := sql.GetDb()
+		tags, err := db.GetAllTasksByProject(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 		} else {
@@ -37,7 +65,7 @@ func GetAllProjects() gin.HandlerFunc {
 // @Success     200
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /project/ [post]
+// @Router      /project [post]
 func CreateProject() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var params models.AddProject
@@ -65,7 +93,7 @@ func CreateProject() gin.HandlerFunc {
 // @Success     200
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /project/ [delete]
+// @Router      /project [delete]
 func DeleteProject() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var params models.DeleteProject
@@ -93,7 +121,7 @@ func DeleteProject() gin.HandlerFunc {
 // @Success     200 {object} models.Project
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /project/ [patch]
+// @Router      /project [patch]
 func UpdateProject() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var params models.UpdateProject

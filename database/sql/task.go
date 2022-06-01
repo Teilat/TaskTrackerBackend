@@ -12,7 +12,7 @@ func (DbProvider DatabaseProvider) CreateNewTask(params apiModels.AddTask) error
 		Id:              newUuid,
 		ProjectId:       params.ProjectId,
 		TaskTitle:       params.TaskTitle,
-		TaskDescription: params.TaskDescription,
+		TaskDescription: &params.TaskDescription,
 	}
 
 	err := DbProvider.DB.Save(s)
@@ -38,7 +38,29 @@ func (DbProvider DatabaseProvider) GetAllTasks() ([]apiModels.Task, error) {
 			Id:              s.Id,
 			ProjectId:       s.ProjectId,
 			TaskTitle:       s.TaskTitle,
-			TaskDescription: s.TaskDescription,
+			TaskDescription: *s.TaskDescription,
+		}
+		list = append(list, q)
+	}
+	return list, nil
+}
+
+func (DbProvider DatabaseProvider) GetAllTasksByProject(params apiModels.TaskByProject) ([]apiModels.Task, error) {
+
+	from, err := DbProvider.DB.SelectAllFrom(models.TasksTable, "ProjectId", params.Id)
+	if err != nil {
+		DbProvider.DbLogger.Println(err)
+		return nil, err
+	}
+	var list []apiModels.Task
+	for _, s := range from {
+
+		s := s.(*models.Tasks)
+		q := apiModels.Task{
+			Id:              s.Id,
+			ProjectId:       s.ProjectId,
+			TaskTitle:       s.TaskTitle,
+			TaskDescription: *s.TaskDescription,
 		}
 		list = append(list, q)
 	}
@@ -74,7 +96,7 @@ func (DbProvider DatabaseProvider) UpdateTask(params apiModels.UpdateTask) error
 		Id:              NilCheck(params.Id, rec.Id).(uuid.UUID),
 		ProjectId:       NilCheck(params.ProjectId, rec.ProjectId).(uuid.UUID),
 		TaskTitle:       NilCheck(params.TaskTitle, rec.TaskTitle).(string),
-		TaskDescription: NilCheck(params.TaskDescription, rec.TaskDescription).(string),
+		TaskDescription: NilCheck(params.TaskDescription, rec.TaskDescription).(*string),
 	}
 
 	err = DbProvider.DB.Update(s)
