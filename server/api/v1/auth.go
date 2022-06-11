@@ -59,7 +59,10 @@ func LoginPostHandler() gin.HandlerFunc {
 		}
 		var params models.Login
 
-		c.BindJSON(&params)
+		err := c.BindJSON(&params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err)
+		}
 
 		if helpers.EmptyUserPass(params) {
 			c.JSON(http.StatusBadRequest, gin.H{"content": "Parameters can't be empty"})

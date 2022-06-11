@@ -29,27 +29,27 @@ func GetAllProjects() gin.HandlerFunc {
 }
 
 // GetAllTasksByProject  godoc
-// @Summary     Get all projects
+// @Summary     Get all tasks by project id
 // @Tags        Project
 // @Accept      json
 // @Produce     json
-// @Param       tag body models.TaskByProject true "projectId"
-// @Success     200 {array}  models.Task
-// @Error       500 {string} string
-// @Error       404 {string} string
+// @Param       projectId query    uuid.UUID true "projectId"
+// @Success     200       {array}  models.Task
+// @Error       500       {string} string
+// @Error       404       {string} string
 // @Router      /project/task [get]
 func GetAllTasksByProject() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		var params models.TaskByProject
-		err := c.BindJSON(&params)
+		var params models.TasksByProject
+		err := c.BindQuery(&params)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
 		db := sql.GetDb()
 		tags, err := db.GetAllTasksByProject(params)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
 			c.JSON(http.StatusOK, tags)
 		}
@@ -61,23 +61,23 @@ func GetAllTasksByProject() gin.HandlerFunc {
 // @Tags        Project
 // @Accept      json
 // @Produce     json
-// @Param       tag body models.AddProject true "add project"
+// @Param       project body     models.AddProject true "add project"
 // @Success     200
-// @Error       500 {string} string
-// @Error       404 {string} string
+// @Error       500     {string} string
+// @Error       404     {string} string
 // @Router      /project [post]
 func CreateProject() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var params models.AddProject
 		err := c.BindJSON(&params)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
 		db := sql.GetDb()
 		err = db.CreateProject(params)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
 			c.JSON(http.StatusOK, "")
 		}
@@ -99,13 +99,13 @@ func DeleteProject() gin.HandlerFunc {
 		var params models.DeleteProject
 		err := c.BindQuery(&params)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
 		db := sql.GetDb()
 		err = db.DeleteProject(params)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
 			c.JSON(http.StatusOK, "")
 		}
@@ -127,13 +127,13 @@ func UpdateProject() gin.HandlerFunc {
 		var params models.UpdateProject
 		err := c.BindQuery(&params)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
 		db := sql.GetDb()
 		err = db.UpdateProject(params)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
 			c.JSON(http.StatusOK, "")
 		}

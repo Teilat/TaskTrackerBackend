@@ -28,6 +28,10 @@ definitions:
     type: object
   models.AddTask:
     properties:
+      column:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
       projectId:
         example: 550e8400-e29b-41d4-a716-446655440000
         format: uuid
@@ -104,6 +108,10 @@ definitions:
     type: object
   models.Task:
     properties:
+      column:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
       id:
         example: 550e8400-e29b-41d4-a716-446655440000
         format: uuid
@@ -118,13 +126,14 @@ definitions:
       taskTitle:
         example: task name
         type: string
-    type: object
-  models.TaskByProject:
-    properties:
-      id:
-        example: 550e8400-e29b-41d4-a716-446655440000
-        format: uuid
-        type: string
+      users:
+        example:
+        - '[550e8400-e29b-41d4-a716-446655440000'
+        - 550e8400-e29b-41d4-a716-446655440000]
+        items:
+          format: '[]uuid'
+          type: string
+        type: array
     type: object
   models.UpdateProject:
     properties:
@@ -162,6 +171,10 @@ definitions:
     type: object
   models.UpdateTask:
     properties:
+      column:
+        example: 550e8400-e29b-41d4-a716-446655440000
+        format: uuid
+        type: string
       id:
         example: 550e8400-e29b-41d4-a716-446655440000
         format: uuid
@@ -176,6 +189,14 @@ definitions:
       taskTitle:
         example: task name
         type: string
+      users:
+        example:
+        - '[550e8400-e29b-41d4-a716-446655440000'
+        - 550e8400-e29b-41d4-a716-446655440000]
+        items:
+          format: '[]uuid'
+          type: string
+        type: array
     type: object
 host: localhost:8080
 info:
@@ -311,7 +332,7 @@ paths:
       parameters:
       - description: add project
         in: body
-        name: tag
+        name: project
         required: true
         schema:
           $ref: '#/definitions/models.AddProject'
@@ -327,13 +348,6 @@ paths:
     get:
       consumes:
       - application/json
-      parameters:
-      - description: projectId
-        in: body
-        name: tag
-        required: true
-        schema:
-          $ref: '#/definitions/models.TaskByProject'
       produces:
       - application/json
       responses:
@@ -343,7 +357,7 @@ paths:
             items:
               $ref: '#/definitions/models.Task'
             type: array
-      summary: Get all projects
+      summary: Get all tasks by project id
       tags:
       - Project
   /tag/:
@@ -506,4 +520,9 @@ paths:
       summary: Create task
       tags:
       - Task
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: Authorization
+    type: apiKey
 swagger: "2.0"

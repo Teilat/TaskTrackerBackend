@@ -30,8 +30,8 @@ func (v *projectsTableType) Columns() []string {
 	return []string{
 		"Id",
 		"ParentId",
-		"ProjectName",
-		"ProjectDescription",
+		"Name",
+		"Description",
 		"CreationDate",
 		"OwnerId",
 	}
@@ -60,8 +60,8 @@ var ProjectsTable = &projectsTableType{
 		Fields: []parse.FieldInfo{
 			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
 			{Name: "ParentId", Type: "*uuid.UUID", Column: "ParentId"},
-			{Name: "ProjectName", Type: "string", Column: "ProjectName"},
-			{Name: "ProjectDescription", Type: "*string", Column: "ProjectDescription"},
+			{Name: "Name", Type: "string", Column: "Name"},
+			{Name: "Description", Type: "*string", Column: "Description"},
 			{Name: "CreationDate", Type: "time.Time", Column: "CreationDate"},
 			{Name: "OwnerId", Type: "uuid.UUID", Column: "OwnerId"},
 		},
@@ -75,8 +75,8 @@ func (s Projects) String() string {
 	res := make([]string, 6)
 	res[0] = "Id: " + reform.Inspect(s.Id, true)
 	res[1] = "ParentId: " + reform.Inspect(s.ParentId, true)
-	res[2] = "ProjectName: " + reform.Inspect(s.ProjectName, true)
-	res[3] = "ProjectDescription: " + reform.Inspect(s.ProjectDescription, true)
+	res[2] = "Name: " + reform.Inspect(s.Name, true)
+	res[3] = "Description: " + reform.Inspect(s.Description, true)
 	res[4] = "CreationDate: " + reform.Inspect(s.CreationDate, true)
 	res[5] = "OwnerId: " + reform.Inspect(s.OwnerId, true)
 	return strings.Join(res, ", ")
@@ -88,8 +88,8 @@ func (s *Projects) Values() []interface{} {
 	return []interface{}{
 		s.Id,
 		s.ParentId,
-		s.ProjectName,
-		s.ProjectDescription,
+		s.Name,
+		s.Description,
 		s.CreationDate,
 		s.OwnerId,
 	}
@@ -101,8 +101,8 @@ func (s *Projects) Pointers() []interface{} {
 	return []interface{}{
 		&s.Id,
 		&s.ParentId,
-		&s.ProjectName,
-		&s.ProjectDescription,
+		&s.Name,
+		&s.Description,
 		&s.CreationDate,
 		&s.OwnerId,
 	}

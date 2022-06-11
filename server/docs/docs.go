@@ -172,7 +172,7 @@ const docTemplate_swagger = `{
                 "parameters": [
                     {
                         "description": "add project",
-                        "name": "tag",
+                        "name": "project",
                         "in": "body",
                         "required": true,
                         "schema": {
@@ -246,18 +246,7 @@ const docTemplate_swagger = `{
                 "tags": [
                     "Project"
                 ],
-                "summary": "Get all projects",
-                "parameters": [
-                    {
-                        "description": "projectId",
-                        "name": "tag",
-                        "in": "body",
-                        "required": true,
-                        "schema": {
-                            "$ref": "#/definitions/models.TaskByProject"
-                        }
-                    }
-                ],
+                "summary": "Get all tasks by project id",
                 "responses": {
                     "200": {
                         "description": "OK",
@@ -560,6 +549,11 @@ const docTemplate_swagger = `{
         "models.AddTask": {
             "type": "object",
             "properties": {
+                "column": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
                 "projectId": {
                     "type": "string",
                     "format": "uuid",
@@ -665,6 +659,11 @@ const docTemplate_swagger = `{
         "models.Task": {
             "type": "object",
             "properties": {
+                "column": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
                 "id": {
                     "type": "string",
                     "format": "uuid",
@@ -682,16 +681,17 @@ const docTemplate_swagger = `{
                 "taskTitle": {
                     "type": "string",
                     "example": "task name"
-                }
-            }
-        },
-        "models.TaskByProject": {
-            "type": "object",
-            "properties": {
-                "id": {
-                    "type": "string",
-                    "format": "uuid",
-                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "[]uuid"
+                    },
+                    "example": [
+                        "[550e8400-e29b-41d4-a716-446655440000",
+                        "550e8400-e29b-41d4-a716-446655440000]"
+                    ]
                 }
             }
         },
@@ -744,6 +744,11 @@ const docTemplate_swagger = `{
         "models.UpdateTask": {
             "type": "object",
             "properties": {
+                "column": {
+                    "type": "string",
+                    "format": "uuid",
+                    "example": "550e8400-e29b-41d4-a716-446655440000"
+                },
                 "id": {
                     "type": "string",
                     "format": "uuid",
@@ -761,8 +766,26 @@ const docTemplate_swagger = `{
                 "taskTitle": {
                     "type": "string",
                     "example": "task name"
+                },
+                "users": {
+                    "type": "array",
+                    "items": {
+                        "type": "string",
+                        "format": "[]uuid"
+                    },
+                    "example": [
+                        "[550e8400-e29b-41d4-a716-446655440000",
+                        "550e8400-e29b-41d4-a716-446655440000]"
+                    ]
                 }
             }
+        }
+    },
+    "securityDefinitions": {
+        "BearerAuth": {
+            "type": "apiKey",
+            "name": "Authorization",
+            "in": "header"
         }
     }
 }`

@@ -30,8 +30,8 @@ func (v *tasksTableType) Columns() []string {
 	return []string{
 		"Id",
 		"ProjectId",
-		"TaskTitle",
-		"TaskDescription",
+		"Title",
+		"Description",
 		"ColumnId",
 	}
 }
@@ -59,8 +59,8 @@ var TasksTable = &tasksTableType{
 		Fields: []parse.FieldInfo{
 			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
 			{Name: "ProjectId", Type: "uuid.UUID", Column: "ProjectId"},
-			{Name: "TaskTitle", Type: "string", Column: "TaskTitle"},
-			{Name: "TaskDescription", Type: "*string", Column: "TaskDescription"},
+			{Name: "Title", Type: "string", Column: "Title"},
+			{Name: "Description", Type: "*string", Column: "Description"},
 			{Name: "ColumnId", Type: "uuid.UUID", Column: "ColumnId"},
 		},
 		PKFieldIndex: 0,
@@ -73,8 +73,8 @@ func (s Tasks) String() string {
 	res := make([]string, 5)
 	res[0] = "Id: " + reform.Inspect(s.Id, true)
 	res[1] = "ProjectId: " + reform.Inspect(s.ProjectId, true)
-	res[2] = "TaskTitle: " + reform.Inspect(s.TaskTitle, true)
-	res[3] = "TaskDescription: " + reform.Inspect(s.TaskDescription, true)
+	res[2] = "Title: " + reform.Inspect(s.Title, true)
+	res[3] = "Description: " + reform.Inspect(s.Description, true)
 	res[4] = "ColumnId: " + reform.Inspect(s.ColumnId, true)
 	return strings.Join(res, ", ")
 }
@@ -85,8 +85,8 @@ func (s *Tasks) Values() []interface{} {
 	return []interface{}{
 		s.Id,
 		s.ProjectId,
-		s.TaskTitle,
-		s.TaskDescription,
+		s.Title,
+		s.Description,
 		s.ColumnId,
 	}
 }
@@ -97,8 +97,8 @@ func (s *Tasks) Pointers() []interface{} {
 	return []interface{}{
 		&s.Id,
 		&s.ProjectId,
-		&s.TaskTitle,
-		&s.TaskDescription,
+		&s.Title,
+		&s.Description,
 		&s.ColumnId,
 	}
 }
