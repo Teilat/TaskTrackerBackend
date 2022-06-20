@@ -55,9 +55,9 @@ var TaskAndTagsTable = &taskAndTagsTableType{
 		Type:    "TaskAndTags",
 		SQLName: "TaskAndTags",
 		Fields: []parse.FieldInfo{
-			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
-			{Name: "TaskId", Type: "uuid.UUID", Column: "TaskId"},
-			{Name: "TagId", Type: "uuid.UUID", Column: "TagId"},
+			{Name: "Id", Type: "int32", Column: "Id"},
+			{Name: "TaskId", Type: "int32", Column: "TaskId"},
+			{Name: "TagId", Type: "int32", Column: "TagId"},
 		},
 		PKFieldIndex: 0,
 	},

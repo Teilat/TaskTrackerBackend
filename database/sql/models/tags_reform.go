@@ -29,8 +29,8 @@ func (v *tagsTableType) Name() string {
 func (v *tagsTableType) Columns() []string {
 	return []string{
 		"Id",
-		"TagName",
-		"TagColor",
+		"Name",
+		"Color",
 	}
 }
 
@@ -55,9 +55,9 @@ var TagsTable = &tagsTableType{
 		Type:    "Tags",
 		SQLName: "Tags",
 		Fields: []parse.FieldInfo{
-			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
-			{Name: "TagName", Type: "string", Column: "TagName"},
-			{Name: "TagColor", Type: "string", Column: "TagColor"},
+			{Name: "Id", Type: "int32", Column: "Id"},
+			{Name: "Name", Type: "string", Column: "Name"},
+			{Name: "Color", Type: "string", Column: "Color"},
 		},
 		PKFieldIndex: 0,
 	},
@@ -68,8 +68,8 @@ var TagsTable = &tagsTableType{
 func (s Tags) String() string {
 	res := make([]string, 3)
 	res[0] = "Id: " + reform.Inspect(s.Id, true)
-	res[1] = "TagName: " + reform.Inspect(s.TagName, true)
-	res[2] = "TagColor: " + reform.Inspect(s.TagColor, true)
+	res[1] = "Name: " + reform.Inspect(s.Name, true)
+	res[2] = "Color: " + reform.Inspect(s.Color, true)
 	return strings.Join(res, ", ")
 }
 
@@ -78,8 +78,8 @@ func (s Tags) String() string {
 func (s *Tags) Values() []interface{} {
 	return []interface{}{
 		s.Id,
-		s.TagName,
-		s.TagColor,
+		s.Name,
+		s.Color,
 	}
 }
 
@@ -88,8 +88,8 @@ func (s *Tags) Values() []interface{} {
 func (s *Tags) Pointers() []interface{} {
 	return []interface{}{
 		&s.Id,
-		&s.TagName,
-		&s.TagColor,
+		&s.Name,
+		&s.Color,
 	}
 }
 

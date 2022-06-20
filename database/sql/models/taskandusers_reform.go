@@ -55,9 +55,9 @@ var TaskAndUsersTable = &taskAndUsersTableType{
 		Type:    "TaskAndUsers",
 		SQLName: "TaskAndUsers",
 		Fields: []parse.FieldInfo{
-			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
-			{Name: "TaskId", Type: "uuid.UUID", Column: "TaskId"},
-			{Name: "UserId", Type: "uuid.UUID", Column: "UserId"},
+			{Name: "Id", Type: "int32", Column: "Id"},
+			{Name: "TaskId", Type: "int32", Column: "TaskId"},
+			{Name: "UserId", Type: "int32", Column: "UserId"},
 		},
 		PKFieldIndex: 0,
 	},

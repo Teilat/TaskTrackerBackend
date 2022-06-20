@@ -1,24 +1,20 @@
 package sql
 
 import (
-	"github.com/google/uuid"
 	"main/database/sql/models"
 	apiModels "main/server/api/v1/models"
 )
 
 func (DbProvider DatabaseProvider) CreateNewUser(params apiModels.AddUser) error {
-	newUuid := uuid.New()
-	roleId, err := uuid.Parse("550e8400-e29b-41d4-a716-446655440000")
 	s := &models.Users{
-		Id:       newUuid,
 		Name:     params.Name,
 		Surname:  params.Surname,
 		Nickname: params.Nickname,
-		RoleId:   roleId,
+		RoleId:   1,
 		Password: params.Password,
 	}
 
-	err = DbProvider.DB.Save(s)
+	err := DbProvider.DB.Save(s)
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return err
@@ -97,7 +93,7 @@ func (DbProvider DatabaseProvider) UpdateUser(params apiModels.UpdateUser) error
 	rec := from.(*models.Users)
 
 	s := &models.Users{
-		RoleId:   NilCheck(params.RoleId, rec.RoleId).(uuid.UUID),
+		RoleId:   NilCheck(params.RoleId, rec.RoleId).(int32),
 		Name:     NilCheck(params.Name, rec.Name).(string),
 		Surname:  NilCheck(params.Surname, rec.Surname).(string),
 		Nickname: NilCheck(params.Nickname, rec.Nickname).(string),

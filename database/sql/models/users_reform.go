@@ -58,11 +58,11 @@ var UsersTable = &usersTableType{
 		Type:    "Users",
 		SQLName: "Users",
 		Fields: []parse.FieldInfo{
-			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
+			{Name: "Id", Type: "int32", Column: "Id"},
 			{Name: "Name", Type: "string", Column: "Name"},
 			{Name: "Surname", Type: "string", Column: "Surname"},
 			{Name: "Nickname", Type: "string", Column: "Nickname"},
-			{Name: "RoleId", Type: "uuid.UUID", Column: "RoleId"},
+			{Name: "RoleId", Type: "int32", Column: "RoleId"},
 			{Name: "Password", Type: "string", Column: "Password"},
 		},
 		PKFieldIndex: 0,

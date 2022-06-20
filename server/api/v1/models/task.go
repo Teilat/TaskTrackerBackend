@@ -1,36 +1,34 @@
 package models
 
-import "github.com/google/uuid"
-
 type Task struct {
-	Id          uuid.UUID   `json:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
-	ProjectId   uuid.UUID   `json:"projectId" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
-	Title       string      `json:"title" example:"task name"`
-	Description string      `json:"description" example:"example task"`
-	Column      string      `json:"column" form:"column" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
-	Users       []uuid.UUID `json:"users" form:"users" example:"[550e8400-e29b-41d4-a716-446655440000,550e8400-e29b-41d4-a716-446655440000]" format:"[]uuid"`
+	Id          int32   `json:"id" example:"15" format:"integer"`
+	ProjectId   int32   `json:"projectId" example:"2" format:"integer"`
+	Title       string  `json:"title" example:"task name"`
+	Description string  `json:"description" example:"example task"`
+	Column      string  `json:"column" form:"column" example:"To Do" format:"string"`
+	Users       []int32 `json:"users" form:"users" example:"12,24,36,1" format:"[]integer"`
 }
 
 type AddTask struct {
-	ProjectId   uuid.UUID `json:"projectId" form:"projectId" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
-	Title       string    `json:"taskTitle" form:"taskTitle" example:"task name"`
-	Description string    `json:"taskDescription" form:"taskDescription" example:"example task"`
-	Column      string    `json:"column" form:"column" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
+	ProjectId   int32  `json:"projectId" form:"projectId" example:"2" format:"integer"`
+	Title       string `json:"Title" form:"Title" example:"task name"`
+	Description string `json:"Description" form:"Description" example:"example task"`
+	Column      string `json:"column" form:"column" example:"To Do" format:"string"`
 }
 
 type UpdateTask struct {
-	Id          uuid.UUID   `json:"id" form:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
-	ProjectId   uuid.UUID   `json:"projectId" form:"projectId" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
-	Title       string      `json:"taskTitle" form:"taskTitle" example:"task name"`
-	Description string      `json:"taskDescription" form:"taskDescription" example:"example task"`
-	Column      string      `json:"column" form:"column" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
-	Users       []uuid.UUID `json:"users" form:"users" example:"[550e8400-e29b-41d4-a716-446655440000,550e8400-e29b-41d4-a716-446655440000]" format:"[]uuid"`
+	Id          int32   `json:"id" form:"id" example:"15" format:"integer"`
+	ProjectId   int32   `json:"projectId" form:"projectId" example:"2" format:"integer"`
+	Title       string  `json:"Title" form:"Title" example:"task name"`
+	Description string  `json:"Description" form:"Description" example:"example task"`
+	Column      string  `json:"column" form:"column" example:"To Do" format:"string"`
+	Users       []int32 `json:"users" form:"users" example:"12,24,36,1" format:"[]integer"`
 }
 
 type DeleteTask struct {
-	Id string `form:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
+	Id int32 `form:"id" example:"15" format:"integer"`
 }
 
 type TasksByProject struct {
-	Id string `form:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"uuid"`
+	Id int32 `form:"id" example:"15" format:"integer"`
 }

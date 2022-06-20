@@ -29,8 +29,8 @@ func (v *projectAndUsersTableType) Name() string {
 func (v *projectAndUsersTableType) Columns() []string {
 	return []string{
 		"Id",
-		"UserId",
 		"ProjectId",
+		"UserId",
 	}
 }
 
@@ -55,9 +55,9 @@ var ProjectAndUsersTable = &projectAndUsersTableType{
 		Type:    "ProjectAndUsers",
 		SQLName: "ProjectAndUsers",
 		Fields: []parse.FieldInfo{
-			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
-			{Name: "UserId", Type: "uuid.UUID", Column: "UserId"},
-			{Name: "ProjectId", Type: "uuid.UUID", Column: "ProjectId"},
+			{Name: "Id", Type: "int32", Column: "Id"},
+			{Name: "ProjectId", Type: "int32", Column: "ProjectId"},
+			{Name: "UserId", Type: "int32", Column: "UserId"},
 		},
 		PKFieldIndex: 0,
 	},
@@ -68,8 +68,8 @@ var ProjectAndUsersTable = &projectAndUsersTableType{
 func (s ProjectAndUsers) String() string {
 	res := make([]string, 3)
 	res[0] = "Id: " + reform.Inspect(s.Id, true)
-	res[1] = "UserId: " + reform.Inspect(s.UserId, true)
-	res[2] = "ProjectId: " + reform.Inspect(s.ProjectId, true)
+	res[1] = "ProjectId: " + reform.Inspect(s.ProjectId, true)
+	res[2] = "UserId: " + reform.Inspect(s.UserId, true)
 	return strings.Join(res, ", ")
 }
 
@@ -78,8 +78,8 @@ func (s ProjectAndUsers) String() string {
 func (s *ProjectAndUsers) Values() []interface{} {
 	return []interface{}{
 		s.Id,
-		s.UserId,
 		s.ProjectId,
+		s.UserId,
 	}
 }
 
@@ -88,8 +88,8 @@ func (s *ProjectAndUsers) Values() []interface{} {
 func (s *ProjectAndUsers) Pointers() []interface{} {
 	return []interface{}{
 		&s.Id,
-		&s.UserId,
 		&s.ProjectId,
+		&s.UserId,
 	}
 }
 

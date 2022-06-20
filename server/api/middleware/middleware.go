@@ -5,6 +5,7 @@ import (
 	"github.com/gin-gonic/gin"
 	"log"
 	"main/server/api/globals"
+	"net/http"
 )
 
 func Auth(c *gin.Context) {
@@ -12,9 +13,9 @@ func Auth(c *gin.Context) {
 	user := session.Get(globals.Userkey)
 	if user == nil {
 		log.Println("User not logged in")
-		//c.Redirect(http.StatusMovedPermanently, "/login")
-		//c.Abort()
-		//return
+		c.JSON(http.StatusBadRequest, gin.H{"content": "Please login first"})
+		c.Abort()
+		return
 	}
 	c.Next()
 }

@@ -33,7 +33,7 @@ func GetAllProjects() gin.HandlerFunc {
 // @Tags        Project
 // @Accept      json
 // @Produce     json
-// @Param       projectId query    uuid.UUID true "projectId"
+// @Param       projectId query    integer true "projectId"
 // @Success     200       {array}  models.Task
 // @Error       500       {string} string
 // @Error       404       {string} string

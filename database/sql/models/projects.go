@@ -1,7 +1,6 @@
 package models
 
 import (
-	"github.com/google/uuid"
 	"time"
 )
 
@@ -10,10 +9,10 @@ import (
 // Projects represents a row in Projects table.
 //reform:Projects
 type Projects struct {
-	Id           uuid.UUID  `reform:"Id,pk"`
-	ParentId     *uuid.UUID `reform:"ParentId"`
-	Name         string     `reform:"Name"`
-	Description  *string    `reform:"Description"`
-	CreationDate time.Time  `reform:"CreationDate"`
-	OwnerId      uuid.UUID  `reform:"OwnerId"`
+	Id           int32     `reform:"Id,pk"`
+	ParentId     *int32    `reform:"ParentId"`
+	Name         string    `reform:"Name"`
+	Description  *string   `reform:"Description"`
+	CreationDate time.Time `reform:"CreationDate"`
+	OwnerId      int32     `reform:"OwnerId"`
 }

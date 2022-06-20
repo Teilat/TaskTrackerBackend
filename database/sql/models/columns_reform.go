@@ -28,7 +28,7 @@ func (v *columnsTableType) Name() string {
 // Columns returns a new slice of column names for that view or table in SQL database.
 func (v *columnsTableType) Columns() []string {
 	return []string{
-		"id",
+		"Id",
 		"Name",
 	}
 }
@@ -54,7 +54,7 @@ var ColumnsTable = &columnsTableType{
 		Type:    "Columns",
 		SQLName: "Columns",
 		Fields: []parse.FieldInfo{
-			{Name: "ID", Type: "uuid.UUID", Column: "id"},
+			{Name: "Id", Type: "int32", Column: "Id"},
 			{Name: "Name", Type: "string", Column: "Name"},
 		},
 		PKFieldIndex: 0,
@@ -65,7 +65,7 @@ var ColumnsTable = &columnsTableType{
 // String returns a string representation of this struct or record.
 func (s Columns) String() string {
 	res := make([]string, 2)
-	res[0] = "ID: " + reform.Inspect(s.ID, true)
+	res[0] = "Id: " + reform.Inspect(s.Id, true)
 	res[1] = "Name: " + reform.Inspect(s.Name, true)
 	return strings.Join(res, ", ")
 }
@@ -74,7 +74,7 @@ func (s Columns) String() string {
 // Returned interface{} values are never untyped nils.
 func (s *Columns) Values() []interface{} {
 	return []interface{}{
-		s.ID,
+		s.Id,
 		s.Name,
 	}
 }
@@ -83,7 +83,7 @@ func (s *Columns) Values() []interface{} {
 // Returned interface{} values are never untyped nils.
 func (s *Columns) Pointers() []interface{} {
 	return []interface{}{
-		&s.ID,
+		&s.Id,
 		&s.Name,
 	}
 }
@@ -101,23 +101,23 @@ func (s *Columns) Table() reform.Table {
 // PKValue returns a value of primary key for that record.
 // Returned interface{} value is never untyped nil.
 func (s *Columns) PKValue() interface{} {
-	return s.ID
+	return s.Id
 }
 
 // PKPointer returns a pointer to primary key field for that record.
 // Returned interface{} value is never untyped nil.
 func (s *Columns) PKPointer() interface{} {
-	return &s.ID
+	return &s.Id
 }
 
 // HasPK returns true if record has non-zero primary key set, false otherwise.
 func (s *Columns) HasPK() bool {
-	return s.ID != ColumnsTable.z[ColumnsTable.s.PKFieldIndex]
+	return s.Id != ColumnsTable.z[ColumnsTable.s.PKFieldIndex]
 }
 
 // SetPK sets record primary key, if possible.
 //
-// Deprecated: prefer direct field assignment where possible: s.ID = pk.
+// Deprecated: prefer direct field assignment where possible: s.Id = pk.
 func (s *Columns) SetPK(pk interface{}) {
 	reform.SetPK(s, pk)
 }

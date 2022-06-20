@@ -29,7 +29,7 @@ func (v *rolesTableType) Name() string {
 func (v *rolesTableType) Columns() []string {
 	return []string{
 		"Id",
-		"RoleName",
+		"Name",
 	}
 }
 
@@ -54,8 +54,8 @@ var RolesTable = &rolesTableType{
 		Type:    "Roles",
 		SQLName: "Roles",
 		Fields: []parse.FieldInfo{
-			{Name: "Id", Type: "uuid.UUID", Column: "Id"},
-			{Name: "RoleName", Type: "string", Column: "RoleName"},
+			{Name: "Id", Type: "int32", Column: "Id"},
+			{Name: "Name", Type: "string", Column: "Name"},
 		},
 		PKFieldIndex: 0,
 	},
@@ -66,7 +66,7 @@ var RolesTable = &rolesTableType{
 func (s Roles) String() string {
 	res := make([]string, 2)
 	res[0] = "Id: " + reform.Inspect(s.Id, true)
-	res[1] = "RoleName: " + reform.Inspect(s.RoleName, true)
+	res[1] = "Name: " + reform.Inspect(s.Name, true)
 	return strings.Join(res, ", ")
 }
 
@@ -75,7 +75,7 @@ func (s Roles) String() string {
 func (s *Roles) Values() []interface{} {
 	return []interface{}{
 		s.Id,
-		s.RoleName,
+		s.Name,
 	}
 }
 
@@ -84,7 +84,7 @@ func (s *Roles) Values() []interface{} {
 func (s *Roles) Pointers() []interface{} {
 	return []interface{}{
 		&s.Id,
-		&s.RoleName,
+		&s.Name,
 	}
 }
 

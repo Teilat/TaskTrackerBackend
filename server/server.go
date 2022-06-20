@@ -19,7 +19,6 @@ import (
 )
 
 // @host      localhost:8080
-// @BasePath  /api/v1
 // @Title     Application Api
 // @Version   1.0
 // @securityDefinitions.apikey BearerAuth
@@ -35,7 +34,7 @@ func Init() {
 
 	session.NewStore()
 	cookieStore := cookie.NewStore(globals.Secret)
-	cookieStore.Options(sessions.Options{HttpOnly: true, Secure: false})
+	cookieStore.Options(sessions.Options{HttpOnly: false, Secure: false, MaxAge: 86400, Path: "/"})
 	router.Use(session.ClearMiddleware()) //important to avoid mem leak
 	router.Use(sessions.Sessions("token", cookieStore))
 	router.Use(gin.Recovery())
@@ -43,7 +42,7 @@ func Init() {
 	router.Use(cors.New(cors.Config{
 		AllowOrigins:     []string{"http://localhost:3000", "http://localhost", "http://localhost:8080", "http://localhost:*"},
 		AllowMethods:     []string{"PUT", "PATCH", "GET", "DELETE"},
-		AllowHeaders:     []string{"Access-Control-Allow-Headers", "Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers"},
+		AllowHeaders:     []string{"Access-Control-Allow-Headers", "Authorization", "Origin", "Accept", "X-Requested-With", "Content-Type", "Access-Control-Request-Method", "Access-Control-Request-Headers"},
 		AllowCredentials: true,
 		MaxAge:           12 * time.Hour,
 	}))
@@ -54,38 +53,33 @@ func Init() {
 	router.POST("/register", v1.RegisterHandler())
 	router.GET("/logout", v1.LogoutGetHandler())
 
-	api := router.Group("/api")
+	router.GET("/", v1.HealthCheck())
+	tag := router.Group("/tag")
 	{
-		api.Use(middleware.Auth)
-		apiV1 := api.Group("/v1")
-		{
-			apiV1.GET("/", v1.HealthCheck())
-			tag := apiV1.Group("/tag")
-			{
-				tag.GET("", v1.GetAllTags())
-				tag.POST("", v1.CreateTag())
-				tag.PATCH(":id", v1.UpdateTag())
-				tag.DELETE(":id", v1.DeleteTag())
-				tag.GET("/task", v1.GetTagsByTask())
-			}
-			task := apiV1.Group("/task")
-			{
-				task.GET("", v1.GetAllTasks())
-				task.POST("", v1.CreateTask())
-				task.PATCH("", v1.UpdateTask())
-				task.DELETE("", v1.DeleteTask())
-			}
-			proj := apiV1.Group("/project")
-			{
-				proj.GET("", v1.GetAllProjects())
-				proj.GET("/task", v1.GetAllTasksByProject())
-				proj.POST("", v1.CreateProject())
-				proj.PATCH("", v1.UpdateProject())
-				proj.DELETE("", v1.DeleteProject())
-			}
-		}
+		router.Use(middleware.Auth)
+		tag.GET("", v1.GetAllTags())
+		tag.POST("", v1.CreateTag())
+		tag.PATCH(":id", v1.UpdateTag())
+		tag.DELETE(":id", v1.DeleteTag())
+		tag.GET("/task", v1.GetTagsByTask())
 	}
-
+	task := router.Group("/task")
+	{
+		router.Use(middleware.Auth)
+		task.GET("", v1.GetAllTasks())
+		task.POST("", v1.CreateTask())
+		task.PATCH("", v1.UpdateTask())
+		task.DELETE("", v1.DeleteTask())
+	}
+	proj := router.Group("/project")
+	{
+		router.Use(middleware.Auth)
+		proj.GET("", v1.GetAllProjects())
+		proj.GET("/task", v1.GetAllTasksByProject())
+		proj.POST("", v1.CreateProject())
+		proj.PATCH("", v1.UpdateProject())
+		proj.DELETE("", v1.DeleteProject())
+	}
 	err := router.Run(address)
 	if err != nil {
 		log.Fatal(err)

@@ -20,7 +20,7 @@ import (
 // @Error       500 {string} string
 // @Error       404 {string} string
 // @Error       400 {string} string
-// @Router      /auth/login [get]
+// @Router      /login [get]
 func LoginGetHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
@@ -49,32 +49,37 @@ func LoginGetHandler() gin.HandlerFunc {
 // @Success     301
 // @Error       500 {string} string
 // @Error       404 {string} string
-// @Router      /auth/login [post]
+// @Router      /login [post]
 func LoginPostHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
 		user := session.Get(globals.Userkey)
 		if user != nil {
 			c.JSON(http.StatusBadRequest, gin.H{"content": "Please logout first"})
+			return
 		}
 		var params models.Login
 
 		err := c.BindJSON(&params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
+			return
 		}
 
 		if helpers.EmptyUserPass(params) {
 			c.JSON(http.StatusBadRequest, gin.H{"content": "Parameters can't be empty"})
+			return
 		}
 
 		if !helpers.CheckUserPass(params) {
 			c.JSON(http.StatusUnauthorized, gin.H{"content": "Incorrect username or password"})
+			return
 		}
 
 		session.Set(globals.Userkey, params.Username)
 		if err := session.Save(); err != nil {
 			c.JSON(http.StatusInternalServerError, gin.H{"content": "Failed to save session"})
+			return
 		}
 	}
 }
@@ -86,7 +91,7 @@ func LoginPostHandler() gin.HandlerFunc {
 // @Produce     json
 // @Success     301
 // @Error       500 {string} string
-// @Router      /auth/logout [get]
+// @Router      /logout [get]
 func LogoutGetHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		session := sessions.Default(c)
@@ -110,7 +115,7 @@ func LogoutGetHandler() gin.HandlerFunc {
 // @Param       tag body models.AddUser true "user"
 // @Success     200
 // @Error       500 {string} string
-// @Router      /auth/register [post]
+// @Router      /register [post]
 func RegisterHandler() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		var params models.AddUser

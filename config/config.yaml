@@ -5,7 +5,7 @@ Sql:
   User: "admin"
   Pass: "Kot_456789"
   Name: "sqlserver"
-  Db: "mainDb"
+  Db: "reMainDb"
 Api:
   Address: "localhost"
   Port: 8080

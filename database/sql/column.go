@@ -1,15 +1,12 @@
 package sql
 
 import (
-	"github.com/google/uuid"
 	"main/database/sql/models"
 	apiModels "main/server/api/v1/models"
 )
 
 func (DbProvider DatabaseProvider) CreateNewColumn(params apiModels.AddColumn) error {
-	newUuid := uuid.New()
 	s := &models.Columns{
-		ID:   newUuid,
 		Name: params.Name,
 	}
 
@@ -33,7 +30,7 @@ func (DbProvider DatabaseProvider) GetAllColumns() ([]apiModels.Column, error) {
 
 		s := s.(*models.Columns)
 		q := apiModels.Column{
-			Id:   s.ID,
+			Id:   s.Id,
 			Name: s.Name,
 		}
 		list = append(list, q)
@@ -66,7 +63,6 @@ func (DbProvider DatabaseProvider) UpdateColumn(params apiModels.UpdateColumn) e
 	rec := from.(*models.Columns)
 
 	s := &models.Columns{
-		ID:   NilCheck(params.Id, rec.ID).(uuid.UUID),
 		Name: NilCheck(params.Name, rec.Name).(string),
 	}
 

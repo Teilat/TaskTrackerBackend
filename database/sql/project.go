@@ -1,18 +1,15 @@
 package sql
 
 import (
-	"github.com/google/uuid"
 	"main/database/sql/models"
 	apiModels "main/server/api/v1/models"
 	"time"
 )
 
 func (DbProvider DatabaseProvider) CreateProject(params apiModels.AddProject) error {
-	newUuid := uuid.New()
 	var s *models.Projects
-	if params.ParentId == uuid.Nil {
+	if params.ParentId == 0 {
 		s = &models.Projects{
-			Id:           newUuid,
 			ParentId:     nil,
 			Name:         params.Name,
 			Description:  &params.Description,
@@ -21,7 +18,6 @@ func (DbProvider DatabaseProvider) CreateProject(params apiModels.AddProject) er
 		}
 	} else {
 		s = &models.Projects{
-			Id:           newUuid,
 			ParentId:     &params.ParentId,
 			Name:         params.Name,
 			Description:  &params.Description,
@@ -59,7 +55,7 @@ func (DbProvider DatabaseProvider) GetAllProjects() ([]apiModels.Project, error)
 		if s.ParentId != nil {
 			q.ParentId = *s.ParentId
 		} else {
-			q.ParentId = uuid.Nil
+			q.ParentId = 0
 		}
 		list = append(list, q)
 	}
@@ -91,11 +87,10 @@ func (DbProvider DatabaseProvider) UpdateProject(params apiModels.UpdateProject)
 	rec := from.(*models.Projects)
 
 	s := &models.Projects{
-		Id:          NilCheck(params.Id, rec.Id).(uuid.UUID),
-		ParentId:    NilCheck(&params.ParentId, &rec.ParentId).(*uuid.UUID),
+		ParentId:    NilCheck(&params.ParentId, &rec.ParentId).(*int32),
 		Name:        NilCheck(params.Name, rec.Name).(string),
 		Description: NilCheck(params.Description, rec.Description).(*string),
-		OwnerId:     NilCheck(params.OwnerId, rec.OwnerId).(uuid.UUID),
+		OwnerId:     NilCheck(params.OwnerId, rec.OwnerId).(int32),
 	}
 
 	err = DbProvider.DB.Update(s)

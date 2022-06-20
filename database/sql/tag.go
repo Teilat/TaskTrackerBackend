@@ -1,17 +1,14 @@
 package sql
 
 import (
-	"github.com/google/uuid"
 	"main/database/sql/models"
 	apiModels "main/server/api/v1/models"
 )
 
 func (DbProvider DatabaseProvider) CreateNewTag(params apiModels.AddTag) error {
-	newUuid := uuid.New()
 	s := &models.Tags{
-		Id:       newUuid,
-		TagName:  params.Name,
-		TagColor: params.Color,
+		Name:  params.Name,
+		Color: params.Color,
 	}
 
 	err := DbProvider.DB.Save(s)
@@ -35,8 +32,8 @@ func (DbProvider DatabaseProvider) GetAllTags() ([]apiModels.Tag, error) {
 		s := s.(*models.Tags)
 		q := apiModels.Tag{
 			Id:    s.Id,
-			Name:  s.TagName,
-			Color: s.TagColor,
+			Name:  s.Name,
+			Color: s.Color,
 		}
 		list = append(list, q)
 	}
@@ -68,9 +65,8 @@ func (DbProvider DatabaseProvider) UpdateTag(params apiModels.UpdateTag) error {
 	rec := from.(*models.Tags)
 
 	s := &models.Tags{
-		Id:       NilCheck(params.Id, rec.Id).(uuid.UUID),
-		TagName:  NilCheck(params.Name, rec.TagName).(string),
-		TagColor: NilCheck(params.Color, rec.TagColor).(string),
+		Name:  NilCheck(params.Name, rec.Name).(string),
+		Color: NilCheck(params.Color, rec.Color).(string),
 	}
 
 	err = DbProvider.DB.Update(s)
@@ -84,7 +80,7 @@ func (DbProvider DatabaseProvider) UpdateTag(params apiModels.UpdateTag) error {
 
 func (DbProvider DatabaseProvider) GetTagsByTask(params apiModels.TagsByTask) ([]apiModels.Tag, error) {
 
-	tagsInTask, err := DbProvider.DB.SelectAllFrom(models.TaskAndTagsTable, "TaskId", params.TaskId)
+	tagsInTask, err := DbProvider.DB.SelectAllFrom(models.TaskAndTagsTable, "TaskId", params.Id)
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return nil, err
@@ -102,8 +98,8 @@ func (DbProvider DatabaseProvider) GetTagsByTask(params apiModels.TagsByTask) ([
 		s := s.(*models.Tags)
 		q := apiModels.Tag{
 			Id:    s.Id,
-			Name:  s.TagName,
-			Color: s.TagColor,
+			Name:  s.Name,
+			Color: s.Color,
 		}
 		list = append(list, q)
 	}

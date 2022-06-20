@@ -1,14 +1,11 @@
 package sql
 
 import (
-	"github.com/google/uuid"
 	"main/database/sql/models"
 	apiModels "main/server/api/v1/models"
-	"strings"
 )
 
 func (DbProvider DatabaseProvider) CreateNewTask(params apiModels.AddTask) error {
-	newUuid := uuid.New()
 
 	columns, err := DbProvider.DB.SelectAllFrom(models.ColumnsTable, "")
 	if err != nil {
@@ -16,17 +13,16 @@ func (DbProvider DatabaseProvider) CreateNewTask(params apiModels.AddTask) error
 		return err
 	}
 
-	var c uuid.UUID
+	var c int32
 
 	for _, column := range columns {
 		column := column.(*models.Columns)
 		if params.Column == column.Name {
-			c = column.ID
+			c = column.Id
 		}
 	}
 
 	s := &models.Tasks{
-		Id:          newUuid,
 		ProjectId:   params.ProjectId,
 		Title:       params.Title,
 		Description: &params.Description,
@@ -35,7 +31,7 @@ func (DbProvider DatabaseProvider) CreateNewTask(params apiModels.AddTask) error
 
 	err = DbProvider.DB.Save(s)
 	if err != nil {
-		DbProvider.DbLogger.Fatalln(err)
+		DbProvider.DbLogger.Println(err)
 		return err
 	}
 	return nil
@@ -62,7 +58,7 @@ func (DbProvider DatabaseProvider) GetAllTasks() ([]apiModels.Task, error) {
 		var c string
 		for _, column := range columns {
 			column := column.(*models.Columns)
-			if s.ColumnId == column.ID {
+			if s.ColumnId == column.Id {
 				c = column.Name
 			}
 		}
@@ -92,17 +88,16 @@ func (DbProvider DatabaseProvider) GetAllTasksByProject(params apiModels.TasksBy
 	}
 
 	list := []apiModels.Task{}
-	id := strings.ToLower(params.Id)
 
 	for _, s := range from {
 		s := s.(*models.Tasks)
-		if s.ProjectId.String() != id {
+		if s.ProjectId != params.Id {
 			continue
 		}
 		var columnsName string
 		for _, column := range columns {
 			column := column.(*models.Columns)
-			if s.ColumnId == column.ID {
+			if s.ColumnId == column.Id {
 				columnsName = column.Name
 			}
 		}
@@ -145,8 +140,7 @@ func (DbProvider DatabaseProvider) UpdateTask(params apiModels.UpdateTask) error
 	rec := from.(*models.Tasks)
 
 	s := &models.Tasks{
-		Id:          NilCheck(params.Id, rec.Id).(uuid.UUID),
-		ProjectId:   NilCheck(params.ProjectId, rec.ProjectId).(uuid.UUID),
+		ProjectId:   NilCheck(params.ProjectId, rec.ProjectId).(int32),
 		Title:       NilCheck(params.Title, rec.Title).(string),
 		Description: NilCheck(params.Description, rec.Description).(*string),
 		ColumnId:    rec.ColumnId,
