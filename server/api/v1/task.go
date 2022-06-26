@@ -84,12 +84,39 @@ func DeleteTask() gin.HandlerFunc {
 	}
 }
 
+// UpdateTaskPos  godoc
+// @Summary     Update task column
+// @Tags        Task
+// @Accept      json
+// @Produce     json
+// @Param       task body models.UpdateTaskPos true "Update column"
+// @Error       500       {string} string
+// @Error       404       {string} string
+// @Router      /task/column [patch]
+func UpdateTaskPos() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		var params models.UpdateTaskPos
+		err := c.BindJSON(&params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+		}
+
+		db := sql.GetDb()
+		err = db.UpdateTaskPos(params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+		} else {
+			c.JSON(http.StatusOK, "")
+		}
+	}
+}
+
 // UpdateTask  godoc
 // @Summary     update tag with provided id
 // @Tags        Task
 // @Accept      json
 // @Produce     json
-// @Param       task body models.UpdateTask true "update task"
+// @Param       task body models.UpdateTask true "Update task"
 // @Success     200 {object} models.Task
 // @Error       500 {string} string
 // @Error       404 {string} string

@@ -1,0 +1,591 @@
+definitions:
+  models.AddProject:
+    properties:
+      description:
+        example: example
+        type: string
+      name:
+        example: project name
+        type: string
+      ownerId:
+        example: 1
+        format: integer
+        type: integer
+      parentId:
+        example: 2
+        format: integer
+        type: integer
+    type: object
+  models.AddTag:
+    properties:
+      color:
+        example: FFFFFF
+        type: string
+      name:
+        example: tag name
+        type: string
+    type: object
+  models.AddTask:
+    properties:
+      Description:
+        example: example task
+        type: string
+      Title:
+        example: task name
+        type: string
+      column:
+        example: To Do
+        format: string
+        type: string
+      projectId:
+        example: 2
+        format: integer
+        type: integer
+    type: object
+  models.AddUser:
+    properties:
+      name:
+        example: John
+        type: string
+      nickname:
+        example: Joe
+        type: string
+      password:
+        example: password
+        type: string
+      roleId:
+        example: 2
+        format: integer
+        type: integer
+      surname:
+        example: Doe
+        type: string
+    type: object
+  models.Login:
+    properties:
+      password:
+        type: string
+      username:
+        type: string
+    type: object
+  models.Project:
+    properties:
+      creationDate:
+        format: datetime
+        type: string
+      description:
+        example: example
+        type: string
+      id:
+        example: 2
+        format: integer
+        type: integer
+      name:
+        example: project name
+        type: string
+      ownerId:
+        example: 1
+        format: integer
+        type: integer
+      parentId:
+        example: 1
+        format: integer
+        type: integer
+    type: object
+  models.Tag:
+    properties:
+      color:
+        example: FFFFFF
+        type: string
+      id:
+        example: 1
+        format: integer
+        type: integer
+      name:
+        example: tag name
+        type: string
+    type: object
+  models.Task:
+    properties:
+      column:
+        example: To Do
+        format: string
+        type: string
+      description:
+        example: example task
+        type: string
+      id:
+        example: 15
+        format: integer
+        type: integer
+      projectId:
+        example: 2
+        format: integer
+        type: integer
+      title:
+        example: task name
+        type: string
+      users:
+        example:
+        - 12
+        - 24
+        - 36
+        - 1
+        items:
+          format: '[]integer'
+          type: integer
+        type: array
+    type: object
+  models.TreeNode:
+    properties:
+      children:
+        items:
+          $ref: '#/definitions/models.TreeNode'
+        type: array
+      key:
+        type: integer
+      title:
+        example: ProjectName
+        type: string
+    type: object
+  models.UpdateProject:
+    properties:
+      description:
+        example: example
+        type: string
+      id:
+        example: 2
+        format: integer
+        type: integer
+      name:
+        example: project name
+        type: string
+      ownerId:
+        example: 1
+        format: integer
+        type: integer
+      parentId:
+        example: 1
+        format: integer
+        type: integer
+    type: object
+  models.UpdateTag:
+    properties:
+      color:
+        example: FFFFFF
+        type: string
+      id:
+        example: 1
+        format: integer
+        type: integer
+      name:
+        example: tag name
+        type: string
+    type: object
+  models.UpdateTask:
+    properties:
+      Description:
+        example: example task
+        type: string
+      Title:
+        example: task name
+        type: string
+      column:
+        example: To Do
+        format: string
+        type: string
+      id:
+        example: 15
+        format: integer
+        type: integer
+      projectId:
+        example: 2
+        format: integer
+        type: integer
+      users:
+        example:
+        - 12
+        - 24
+        - 36
+        - 1
+        items:
+          format: '[]integer'
+          type: integer
+        type: array
+    type: object
+  models.UpdateTaskPos:
+    properties:
+      column:
+        example: To Do
+        format: string
+        type: string
+      id:
+        example: 15
+        format: integer
+        type: integer
+    type: object
+host: localhost:8080
+info:
+  contact: {}
+  title: Application Api
+  version: "1.0"
+paths:
+  /:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: healthy
+          schema:
+            type: string
+      summary: Health check
+      tags:
+      - General
+  /login:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: go to login page
+      tags:
+      - Auth
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: credentials
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.Login'
+      produces:
+      - application/json
+      responses:
+        "301":
+          description: ""
+      summary: Login user
+      tags:
+      - Auth
+  /logout:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "301":
+          description: ""
+      summary: Logout user
+      tags:
+      - Auth
+  /project:
+    delete:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Delete project with provided id
+      tags:
+      - Project
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Project'
+            type: array
+      summary: Get all projects
+      tags:
+      - Project
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: update project
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateProject'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Project'
+      summary: update project with provided id
+      tags:
+      - Project
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: add project
+        in: body
+        name: project
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddProject'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Create project
+      tags:
+      - Project
+  /project/task:
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: projectId
+        in: query
+        name: projectId
+        required: true
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+      summary: Get all tasks by project id
+      tags:
+      - Project
+  /project/tree:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.TreeNode'
+            type: array
+      summary: Get tree
+      tags:
+      - Project
+  /register:
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: user
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddUser'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: register user
+      tags:
+      - Auth
+  /tag/:
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Tag'
+            type: array
+      summary: Get all tags
+      tags:
+      - Tag
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: add tag
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddTag'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tag'
+      summary: Create tag
+      tags:
+      - Tag
+  /tag/{id}:
+    delete:
+      consumes:
+      - application/json
+      parameters:
+      - description: tag id
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Delete tag
+      tags:
+      - Tag
+    get:
+      consumes:
+      - application/json
+      parameters:
+      - description: Task ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Tag'
+            type: array
+      summary: Get tags by task
+      tags:
+      - Tag
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: update tag
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateTag'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Tag'
+      summary: Update tag
+      tags:
+      - Tag
+  /task:
+    delete:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Delete task with provided id
+      tags:
+      - Task
+    get:
+      consumes:
+      - application/json
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            items:
+              $ref: '#/definitions/models.Task'
+            type: array
+      summary: Get all tasks
+      tags:
+      - Task
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Update task
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/models.Task'
+      summary: update tag with provided id
+      tags:
+      - Task
+    post:
+      consumes:
+      - application/json
+      parameters:
+      - description: add task
+        in: body
+        name: tag
+        required: true
+        schema:
+          $ref: '#/definitions/models.AddTask'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: ""
+      summary: Create task
+      tags:
+      - Task
+  /task/column:
+    patch:
+      consumes:
+      - application/json
+      parameters:
+      - description: Update column
+        in: body
+        name: task
+        required: true
+        schema:
+          $ref: '#/definitions/models.UpdateTaskPos'
+      produces:
+      - application/json
+      responses: {}
+      summary: Update task column
+      tags:
+      - Task
+securityDefinitions:
+  BearerAuth:
+    in: header
+    name: token
+    type: apiKey
+swagger: "2.0"

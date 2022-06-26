@@ -18,12 +18,26 @@ import (
 // @Router      /project [get]
 func GetAllProjects() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		db := sql.GetDb()
-		tags, err := db.GetAllProjects()
+		var params models.GetProject
+		err := c.BindQuery(&params)
 		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
+			c.JSON(http.StatusInternalServerError, err.Error())
+		}
+		db := sql.GetDb()
+		if params.Id != 0 {
+			proj, err := db.GetProject(params)
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, err)
+			} else {
+				c.JSON(http.StatusOK, proj)
+			}
 		} else {
-			c.JSON(http.StatusOK, tags)
+			tags, err := db.GetAllProjects()
+			if err != nil {
+				c.JSON(http.StatusInternalServerError, err)
+			} else {
+				c.JSON(http.StatusOK, tags)
+			}
 		}
 	}
 }
@@ -34,7 +48,7 @@ func GetAllProjects() gin.HandlerFunc {
 // @Accept      json
 // @Produce     json
 // @Param       projectId query    integer true "projectId"
-// @Success     200       {array}  models.Task
+// @Success     200       {object} models.Task
 // @Error       500       {string} string
 // @Error       404       {string} string
 // @Router      /project/task [get]
@@ -48,6 +62,27 @@ func GetAllTasksByProject() gin.HandlerFunc {
 
 		db := sql.GetDb()
 		tags, err := db.GetAllTasksByProject(params)
+		if err != nil {
+			c.JSON(http.StatusInternalServerError, err.Error())
+		} else {
+			c.JSON(http.StatusOK, tags)
+		}
+	}
+}
+
+// GetProjectsTree  godoc
+// @Summary     Get tree
+// @Tags        Project
+// @Accept      json
+// @Produce     json
+// @Success     200       {array}  models.TreeNode
+// @Error       500       {string} string
+// @Error       404       {string} string
+// @Router      /project/tree [get]
+func GetProjectsTree() gin.HandlerFunc {
+	return func(c *gin.Context) {
+		db := sql.GetDb()
+		tags, err := db.GetProjectsTree()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {

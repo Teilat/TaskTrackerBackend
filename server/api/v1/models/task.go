@@ -29,6 +29,11 @@ type DeleteTask struct {
 	Id int32 `form:"id" example:"15" format:"integer"`
 }
 
+type UpdateTaskPos struct {
+	Id     int32  `form:"id" example:"15" format:"integer"`
+	Column string `json:"column" form:"column" example:"To Do" format:"string"`
+}
+
 type TasksByProject struct {
 	Id int32 `form:"id" example:"15" format:"integer"`
 }

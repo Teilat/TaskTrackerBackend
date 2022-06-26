@@ -114,6 +114,36 @@ func (DbProvider DatabaseProvider) GetAllTasksByProject(params apiModels.TasksBy
 	return list, nil
 }
 
+func (DbProvider DatabaseProvider) UpdateTaskPos(params apiModels.UpdateTaskPos) error {
+	record, err := DbProvider.DB.FindByPrimaryKeyFrom(models.TasksTable, params.Id)
+	if err != nil {
+		DbProvider.DbLogger.Fatal(err)
+		return err
+	}
+	rec := record.(*models.Tasks)
+
+	columns, err := DbProvider.DB.SelectAllFrom(models.ColumnsTable, "")
+	if err != nil {
+		DbProvider.DbLogger.Println(err)
+		return err
+	}
+
+	for _, column := range columns {
+		column := column.(*models.Columns)
+		if params.Column == column.Name {
+			rec.ColumnId = column.Id
+		}
+	}
+
+	err = DbProvider.DB.Update(rec)
+	if err != nil {
+		DbProvider.DbLogger.Fatal(err)
+		return err
+	}
+
+	return nil
+}
+
 func (DbProvider DatabaseProvider) DeleteTask(params apiModels.DeleteTask) error {
 
 	record, err := DbProvider.DB.FindByPrimaryKeyFrom(models.TasksTable, params.Id)

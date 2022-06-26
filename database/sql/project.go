@@ -34,6 +34,80 @@ func (DbProvider DatabaseProvider) CreateProject(params apiModels.AddProject) er
 	return nil
 }
 
+func (DbProvider DatabaseProvider) GetProjectsTree() ([]apiModels.TreeNode, error) {
+	var tree []apiModels.TreeNode
+
+	projects, err := DbProvider.GetAllProjects()
+	if err != nil {
+		return nil, err
+	}
+
+	for _, project := range projects {
+		if project.ParentId == 0 {
+			tree = append(tree, apiModels.TreeNode{
+				Title: project.Name,
+				Key:   project.Id,
+			})
+		}
+	}
+	for i, node := range tree {
+		tree[i] = createNode(projects, node)
+	}
+
+	return tree, nil
+}
+
+func createNode(list []apiModels.Project, node apiModels.TreeNode) apiModels.TreeNode {
+	for _, project := range list {
+		if node.Key == project.ParentId {
+			node.Children = []apiModels.TreeNode{}
+			break
+		}
+	}
+
+	if node.Children != nil {
+		for _, project := range list {
+			if node.Key == project.ParentId {
+				node.Children = append(node.Children, apiModels.TreeNode{
+					Title: project.Name,
+					Key:   project.Id,
+				})
+			}
+		}
+	}
+
+	return node
+}
+
+func (DbProvider DatabaseProvider) GetProject(param apiModels.GetProject) (apiModels.Project, error) {
+	from, err := DbProvider.DB.SelectAllFrom(models.ProjectsTable, "")
+	if err != nil {
+		DbProvider.DbLogger.Println(err)
+		return apiModels.Project{}, err
+	}
+
+	var project = apiModels.Project{}
+	for _, s := range from {
+		s := s.(*models.Projects)
+		if s.Id == param.Id {
+			project = apiModels.Project{
+				Id:           s.Id,
+				Name:         s.Name,
+				Description:  *s.Description,
+				CreationDate: s.CreationDate,
+				OwnerId:      s.OwnerId,
+			}
+			if s.ParentId == nil {
+				project.ParentId = 0
+			} else {
+				project.ParentId = *s.ParentId
+			}
+		}
+	}
+
+	return project, nil
+}
+
 func (DbProvider DatabaseProvider) GetAllProjects() ([]apiModels.Project, error) {
 
 	from, err := DbProvider.DB.SelectAllFrom(models.ProjectsTable, "")

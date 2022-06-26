@@ -67,6 +67,7 @@ func Init() {
 	{
 		router.Use(middleware.Auth)
 		task.GET("", v1.GetAllTasks())
+		task.PATCH("/column", v1.UpdateTaskPos())
 		task.POST("", v1.CreateTask())
 		task.PATCH("", v1.UpdateTask())
 		task.DELETE("", v1.DeleteTask())
@@ -76,6 +77,7 @@ func Init() {
 		router.Use(middleware.Auth)
 		proj.GET("", v1.GetAllProjects())
 		proj.GET("/task", v1.GetAllTasksByProject())
+		proj.GET("/tree", v1.GetProjectsTree())
 		proj.POST("", v1.CreateProject())
 		proj.PATCH("", v1.UpdateProject())
 		proj.DELETE("", v1.DeleteProject())

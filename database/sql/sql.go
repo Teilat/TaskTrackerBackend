@@ -26,7 +26,6 @@ func Init() (*DatabaseProvider, error) {
 	// cd database/sql/models
 	// reform-db -db-driver=sqlserver -db-source='server=localhost;user=admin;password=Kot_456789;port=1433;database=reMainDb;' init -gofmt=false
 	// reform-db -db-driver=sqlserver -db-source='server=192.168.1.134;user=admin;password=Kot_456789;port=1433;database=reMainDb;' init -gofmt=false
-
 	// Create logger for sql operations
 	logger := log.New(os.Stderr, "SQL: ", log.Flags())
 
