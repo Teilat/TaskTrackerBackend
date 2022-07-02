@@ -1,7 +1,6 @@
 package sql
 
 import (
-	"fmt"
 	"main/db/sql/models"
 	apiModels "main/server/api/v1/models"
 )
@@ -31,11 +30,6 @@ func (DbProvider DatabaseProvider) CreateNewTask(params apiModels.AddTask) error
 	}
 
 	err = Upsert([]*models.Tasks{s})
-	if err != nil {
-		fmt.Println(err)
-	}
-
-	err = DbProvider.DB.Save(s)
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return err
