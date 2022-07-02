@@ -3,7 +3,7 @@ package main
 import (
 	"fmt"
 	"main/config"
-	"main/database/sql"
+	"main/db/sql"
 	"main/server"
 	_ "main/server/api/v1/models"
 	_ "net/http/pprof"

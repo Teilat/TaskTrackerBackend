@@ -2,7 +2,7 @@ package helpers
 
 import (
 	"log"
-	"main/database/sql"
+	"main/db/sql"
 	"main/server/api/v1/models"
 	"strings"
 )

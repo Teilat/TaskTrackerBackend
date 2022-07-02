@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"github.com/spf13/viper"
 	"log"
+	"main/db/sql/models"
 	"os"
 	"sync"
 
@@ -17,20 +18,25 @@ import (
 var instance *DatabaseProvider
 var once sync.Once
 
+type Tables interface {
+	*models.Tasks | *models.Columns | *models.Users | *models.TaskAndUsers | *models.ProjectAndUsers | *models.Projects | *models.Roles | *models.Tags | *models.TaskAndTags
+}
+
 type DatabaseProvider struct {
 	DB       *reform.DB
 	DbLogger *log.Logger
 }
 
 func Init() (*DatabaseProvider, error) {
-	// cd database/sql/models
-	// reform-db -db-driver=sqlserver -db-source='server=localhost;user=admin;password=Kot_456789;port=1433;database=reMainDb;' init -gofmt=false
-	// reform-db -db-driver=sqlserver -db-source='server=192.168.1.134;user=admin;password=Kot_456789;port=1433;database=reMainDb;' init -gofmt=false
+	// cd db/sql/models
+	// reform-db -db-driver=sqlserver -db-source='server=localhost;user=admin;password=Kot_456789;port=1433;db=reMainDb;' init -gofmt=false
+	// reform-db -db-driver=sqlserver -db-source='server=192.168.1.134;user=admin;password=Kot_456789;port=1433;db=reMainDb;' init -gofmt=false
+
 	// Create logger for sql operations
 	logger := log.New(os.Stderr, "SQL: ", log.Flags())
 
 	// Build connection string
-	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;database=%s;",
+	connString := fmt.Sprintf("server=%s;user id=%s;password=%s;port=%d;db=%s;",
 		viper.Get("sql.host"),
 		viper.Get("sql.user"),
 		viper.Get("sql.pass"),
@@ -71,4 +77,36 @@ func GetDb() *DatabaseProvider {
 	})
 
 	return instance
+}
+
+func Upsert[T Tables](s []T) error {
+	var err error
+	for _, a := range s {
+		fmt.Printf("%v\n", a)
+		return err
+	}
+
+	return nil
+}
+
+func (DbProvider DatabaseProvider) Delete(s []models.Columns) error {
+	var err error
+	for _, a := range s {
+		err = DbProvider.DB.Delete(&a)
+		DbProvider.DbLogger.Println(err)
+		return err
+	}
+
+	return nil
+}
+
+func (DbProvider DatabaseProvider) Update(s []models.Columns) error {
+	var err error
+	for _, a := range s {
+		err = DbProvider.DB.Update(&a)
+		DbProvider.DbLogger.Println(err)
+		return err
+	}
+
+	return nil
 }

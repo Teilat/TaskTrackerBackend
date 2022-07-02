@@ -25,9 +25,7 @@ type Sql struct {
 }
 
 func GetConf() {
-
 	viper.AddConfigPath("./config")
-	viper.AddConfigPath("../config")
 	viper.SetConfigName("config")
 	viper.SetConfigType("yml")
 

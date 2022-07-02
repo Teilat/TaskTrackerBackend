@@ -12,7 +12,6 @@ import (
 	ginSwagger "github.com/swaggo/gin-swagger"
 	"log"
 	"main/server/api/globals"
-	"main/server/api/middleware"
 	v1 "main/server/api/v1"
 	_ "main/server/docs"
 	"time"
@@ -56,7 +55,7 @@ func Init() {
 	router.GET("/", v1.HealthCheck())
 	tag := router.Group("/tag")
 	{
-		router.Use(middleware.Auth)
+		//router.Use(middleware.Auth)
 		tag.GET("", v1.GetAllTags())
 		tag.POST("", v1.CreateTag())
 		tag.PATCH(":id", v1.UpdateTag())
@@ -65,7 +64,7 @@ func Init() {
 	}
 	task := router.Group("/task")
 	{
-		router.Use(middleware.Auth)
+		//router.Use(middleware.Auth)
 		task.GET("", v1.GetAllTasks())
 		task.PATCH("/column", v1.UpdateTaskPos())
 		task.POST("", v1.CreateTask())
@@ -74,7 +73,7 @@ func Init() {
 	}
 	proj := router.Group("/project")
 	{
-		router.Use(middleware.Auth)
+		//router.Use(middleware.Auth)
 		proj.GET("", v1.GetAllProjects())
 		proj.GET("/task", v1.GetAllTasksByProject())
 		proj.GET("/tree", v1.GetProjectsTree())

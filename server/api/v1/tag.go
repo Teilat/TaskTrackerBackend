@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"main/database/sql"
+	"main/db/sql"
 	"main/server/api/v1/models"
 	"net/http"
 )

@@ -1,7 +1,7 @@
 package sql
 
 import (
-	"main/database/sql/models"
+	"main/db/sql/models"
 	apiModels "main/server/api/v1/models"
 )
 

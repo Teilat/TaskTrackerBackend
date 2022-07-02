@@ -1,7 +1,7 @@
 package sql
 
 import (
-	"main/database/sql/models"
+	"main/db/sql/models"
 	apiModels "main/server/api/v1/models"
 )
 
@@ -28,6 +28,11 @@ func (DbProvider DatabaseProvider) CreateNewTask(params apiModels.AddTask) error
 		Description: &params.Description,
 		ColumnId:    c,
 	}
+
+	//err = Upsert[*models.Tasks]([]*models.Tasks{s})
+	//if err != nil {
+	//	fmt.Println(err)
+	//}
 
 	err = DbProvider.DB.Save(s)
 	if err != nil {

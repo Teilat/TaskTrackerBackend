@@ -4,7 +4,7 @@ import (
 	"github.com/gin-contrib/sessions"
 	"github.com/gin-gonic/gin"
 	"log"
-	"main/database/sql"
+	"main/db/sql"
 	"main/server/api/globals"
 	"main/server/api/helpers"
 	"main/server/api/v1/models"
