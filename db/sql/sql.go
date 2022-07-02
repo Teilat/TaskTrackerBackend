@@ -79,6 +79,19 @@ func GetDb() *DatabaseProvider {
 	return instance
 }
 
+func Upsert[T Tables](s []T) error {
+	DbProvider := GetDb()
+	for _, a := range s {
+		err := DbProvider.DB.Save(a)
+		if err != nil {
+			return err
+		}
+		fmt.Printf("%v\n", a)
+	}
+
+	return nil
+}
+
 func (DbProvider DatabaseProvider) Delete(s []models.Columns) error {
 	var err error
 	for _, a := range s {
