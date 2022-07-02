@@ -5,13 +5,13 @@ import (
 	apiModels "main/server/api/v1/models"
 )
 
-func (db *reform.DB) CreateNewTag(params apiModels.AddTag) error {
+func (DbProvider DatabaseProvider) CreateNewTag(params apiModels.AddTag) error {
 	s := &models.Tags{
 		Name:  params.Name,
 		Color: params.Color,
 	}
 
-	err := db.Save(s)
+	err := DbProvider.DB.Save(s)
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return err

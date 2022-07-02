@@ -1,19 +1,19 @@
 package models
 
 type Column struct {
-	Id   int32  `json:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"integer"`
-	Name string `json:"name" example:"project name"`
+	Id   int32  `json:"id" format:"integer"`
+	Name string `json:"name" example:"To Do"`
 }
 
 type UpdateColumn struct {
-	Id   int32  `json:"id" form:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"integer"`
-	Name string `json:"name" form:"name" example:"project name"`
+	Id   int32  `json:"id" form:"id" format:"integer"`
+	Name string `json:"name" form:"name" example:"To Do"`
 }
 
 type DeleteColumn struct {
-	Id int32 `json:"id" form:"id" example:"550e8400-e29b-41d4-a716-446655440000" format:"integer"`
+	Id int32 `json:"id" form:"id" format:"integer"`
 }
 
 type AddColumn struct {
-	Name string `json:"name" form:"name" example:"column name"`
+	Name string `json:"name" form:"name" example:"To Do"`
 }

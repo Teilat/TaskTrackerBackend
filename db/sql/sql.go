@@ -15,14 +15,19 @@ import (
 	"gopkg.in/reform.v1/dialects/sqlserver"
 )
 
-var instance *reform.DB
+var instance *DatabaseProvider
 var once sync.Once
 
-type Tables interface {
-	*models.Tasks | *models.Columns | *models.Users | *models.TaskAndUsers | *models.ProjectAndUsers | *models.Projects | *models.Roles | *models.Tags | *models.TaskAndTags | *reform.Record
+type DatabaseProvider struct {
+	DB       *reform.DB
+	DbLogger *log.Logger
 }
 
-func Init() (*reform.DB, error) {
+type Tables interface {
+	*models.Tasks | *models.Columns | *models.Users | *models.TaskAndUsers | *models.ProjectAndUsers | *models.Projects | *models.Roles | *models.Tags | *models.TaskAndTags
+}
+
+func Init() (*DatabaseProvider, error) {
 	// cd db/sql/models
 	// reform-db -db-driver=sqlserver -db-source='server=localhost;user=admin;password=Kot_456789;port=1433;db=reMainDb;' init -gofmt=false
 	// reform-db -db-driver=sqlserver -db-source='server=192.168.1.134;user=admin;password=Kot_456789;port=1433;db=reMainDb;' init -gofmt=false
@@ -54,10 +59,15 @@ func Init() (*reform.DB, error) {
 	// Create Db using reform ORM
 	db := reform.NewDB(sqlDb, sqlserver.Dialect, reform.NewPrintfLogger(logger.Printf))
 
-	return db, nil
+	instance = &DatabaseProvider{
+		DB:       db,
+		DbLogger: logger,
+	}
+
+	return instance, nil
 }
 
-func GetDb() *reform.DB {
+func GetDb() *DatabaseProvider {
 	once.Do(func() {
 		var err error
 		instance, err = Init()
@@ -72,7 +82,7 @@ func GetDb() *reform.DB {
 func Upsert[T reform.Record](s []T) error {
 	Db := GetDb()
 	for _, a := range s {
-		err := Db.Save(a)
+		err := Db.DB.Save(a)
 		if err != nil {
 			return err
 		}
@@ -83,7 +93,7 @@ func Upsert[T reform.Record](s []T) error {
 func Delete[T reform.Record](s []T) error {
 	Db := GetDb()
 	for _, a := range s {
-		err := Db.Delete(a)
+		err := Db.DB.Delete(a)
 		if err != nil {
 			return err
 		}
@@ -94,7 +104,7 @@ func Delete[T reform.Record](s []T) error {
 func Update[T reform.Record](s []T) error {
 	Db := GetDb()
 	for _, a := range s {
-		err := Db.Update(a)
+		err := Db.DB.Update(a)
 		if err != nil {
 			return err
 		}
@@ -102,11 +112,16 @@ func Update[T reform.Record](s []T) error {
 	return nil
 }
 
-func GetAll[T reform.View](s T) []reform.Struct {
+func GetAll[V Tables](s reform.View) []V {
 	Db := GetDb()
-	from, err := Db.SelectAllFrom(s, "")
+	from, err := Db.DB.SelectAllFrom(s, "")
 	if err != nil {
 		return nil
 	}
-	return from
+	var res []V
+	for _, s := range from {
+		s := s.(V)
+		res = append(res, s)
+	}
+	return res
 }

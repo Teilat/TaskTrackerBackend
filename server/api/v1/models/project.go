@@ -5,39 +5,39 @@ import (
 )
 
 type Project struct {
-	Id           int32     `json:"id" example:"2" format:"integer"`
-	ParentId     int32     `json:"parentId" example:"1" format:"integer"`
+	Id           int32     `json:"id" format:"integer"`
+	ParentId     int32     `json:"parentId" format:"integer"`
 	Name         string    `json:"name" example:"project name"`
-	Description  string    `json:"description" example:"example"`
+	Description  string    `json:"description" example:"description"`
 	CreationDate time.Time `json:"creationDate" format:"datetime"`
-	OwnerId      int32     `json:"ownerId" example:"1" format:"integer"`
+	OwnerId      int32     `json:"ownerId" format:"integer"`
 }
 
 type UpdateProject struct {
-	Id          int32   `json:"id" form:"id" example:"2" format:"integer"`
-	ParentId    int32   `json:"parentId" form:"parentId" example:"1" format:"integer"`
-	Name        string  `json:"name" form:"name" example:"project name"`
-	Description *string `json:"description" form:"description" example:"example"`
-	OwnerId     int32   `json:"ownerId" form:"ownerId" example:"1" format:"integer"`
+	Id          int32  `json:"id" form:"id" format:"integer"`
+	ParentId    int32  `json:"parentId" form:"parentId" format:"integer"`
+	Name        string `json:"name" form:"name" example:"project name"`
+	Description string `json:"description" form:"description" example:"description"`
+	OwnerId     int32  `json:"ownerId" form:"ownerId" format:"integer"`
 }
 
 type DeleteProject struct {
-	Id int32 `json:"id" form:"id" example:"2" format:"integer"`
+	Id int32 `json:"id" form:"id" format:"integer"`
 }
 
 type GetProject struct {
-	Id int32 `json:"id" form:"id" example:"2" format:"integer"`
+	Id int32 `json:"id" form:"id" format:"integer"`
 }
 
 type AddProject struct {
-	ParentId    int32  `json:"parentId" form:"parentId" example:"2" format:"integer"`
+	ParentId    int32  `json:"parentId" form:"parentId" format:"integer"`
 	Name        string `json:"name" form:"name" example:"project name"`
-	Description string `json:"description" form:"description" example:"example"`
-	OwnerId     int32  `json:"ownerId" form:"ownerId" example:"1" format:"integer"`
+	Description string `json:"description" form:"description" example:"description"`
+	OwnerId     int32  `json:"ownerId" form:"ownerId" format:"integer"`
 }
 
 type TreeNode struct {
-	Title    string     `json:"title" example:"ProjectName"`
+	Title    string     `json:"title" example:"Project name"`
 	Key      int32      `json:"key"`
 	Children []TreeNode `json:"children"`
 }
