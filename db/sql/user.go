@@ -2,6 +2,7 @@ package sql
 
 import (
 	"main/db/sql/models"
+	"main/internal/util"
 	apiModels "main/server/api/v1/models"
 )
 
@@ -93,10 +94,10 @@ func (DbProvider DatabaseProvider) UpdateUser(params apiModels.UpdateUser) error
 	rec := from.(*models.Users)
 
 	s := &models.Users{
-		RoleId:   NilCheck(params.RoleId, rec.RoleId).(int32),
-		Name:     NilCheck(params.Name, rec.Name).(string),
-		Surname:  NilCheck(params.Surname, rec.Surname).(string),
-		Nickname: NilCheck(params.Nickname, rec.Nickname).(string),
+		RoleId:   util.NilCheck(params.RoleId, rec.RoleId).(int32),
+		Name:     util.NilCheck(params.Name, rec.Name).(string),
+		Surname:  util.NilCheck(params.Surname, rec.Surname).(string),
+		Nickname: util.NilCheck(params.Nickname, rec.Nickname).(string),
 	}
 
 	err = DbProvider.DB.Update(s)
@@ -118,7 +119,7 @@ func (DbProvider DatabaseProvider) UpdateUserPassword(params apiModels.UpdateUse
 	rec := from.(*models.Users)
 
 	s := &models.Users{
-		Password: NilCheck(params.Password, rec.Password).(string),
+		Password: util.NilCheck(params.Password, rec.Password).(string),
 	}
 
 	err = DbProvider.DB.Update(s)

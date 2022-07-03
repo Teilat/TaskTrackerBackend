@@ -2,6 +2,7 @@ package sql
 
 import (
 	"main/db/sql/models"
+	"main/internal/util"
 	apiModels "main/server/api/v1/models"
 	"time"
 )
@@ -161,10 +162,10 @@ func (DbProvider DatabaseProvider) UpdateProject(params apiModels.UpdateProject)
 	rec := from.(*models.Projects)
 
 	s := &models.Projects{
-		ParentId:    NilCheck(&params.ParentId, &rec.ParentId).(*int32),
-		Name:        NilCheck(params.Name, rec.Name).(string),
-		Description: NilCheck(params.Description, rec.Description).(*string),
-		OwnerId:     NilCheck(params.OwnerId, rec.OwnerId).(int32),
+		ParentId:    util.NilCheck(&params.ParentId, &rec.ParentId).(*int32),
+		Name:        util.NilCheck(params.Name, rec.Name).(string),
+		Description: util.NilCheck(params.Description, rec.Description).(*string),
+		OwnerId:     util.NilCheck(params.OwnerId, rec.OwnerId).(int32),
 	}
 
 	err = DbProvider.DB.Update(s)

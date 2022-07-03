@@ -1,5 +1,6 @@
 Sql:
-  Host: 192.168.1.134
+  #Host: 192.168.1.134
+  Host: 192.168.1.93
   #Host: localhost
   Port: 1433
   User: "admin"

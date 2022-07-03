@@ -3,9 +3,13 @@ package cache
 import (
 	"main/db/sql"
 	"main/db/sql/models"
+	"main/internal/util"
 	"sync"
 	"time"
 )
+
+const defaultProjectId = int32(0)
+const defaultDescription = ""
 
 var once sync.Once
 var Cache cache
@@ -92,14 +96,15 @@ func Init() error {
 func convertProject(projects []*models.Projects) map[int32]project {
 	res := make(map[int32]project, 0)
 	for _, p := range projects {
+
 		res[p.Id] = project{
 			Id:           p.Id,
-			Project:      *p.ParentId,
+			Project:      util.NilCheck(*p.ParentId, *defaultProjectId),
 			Name:         p.Name,
-			Description:  *p.Description,
+			Description:  util.NilCheck(*p.Description, *defaultDescription),
 			CreationDate: p.CreationDate,
 			Owner:        Cache.Users[p.OwnerId],
-			//Users:      use, //TODO
+			//Users:      users, //TODO
 		}
 	}
 	return res
