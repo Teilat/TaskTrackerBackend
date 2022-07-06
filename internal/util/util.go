@@ -4,8 +4,8 @@ import (
 	"reflect"
 )
 
-// NilCheck return C if C != nil , else A
-func NilCheck(c, a interface{}) interface{} {
+// NilCheck return c if c != nil , else a
+func NilCheck(c, a any) any {
 	if c == nil ||
 		(reflect.ValueOf(c).Kind() == reflect.Ptr && reflect.ValueOf(c).IsNil()) ||
 		c == "" {

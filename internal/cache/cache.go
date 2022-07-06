@@ -3,7 +3,6 @@ package cache
 import (
 	"main/db/sql"
 	"main/db/sql/models"
-	"main/internal/util"
 	"sync"
 	"time"
 )
@@ -28,18 +27,18 @@ type user struct {
 	Name     string
 	Surname  string
 	Nickname string
-	Role     role
+	Role     int32
 	Password string
 }
 
 type task struct {
 	Id          int32
-	Project     project
+	Project     int32
 	Title       string
 	Description string
-	Column      column
-	Tags        map[int32]tag
-	Users       map[int32]user
+	Column      int32
+	Tags        []int32
+	Users       []int32
 }
 
 type tag struct {
@@ -59,8 +58,8 @@ type project struct {
 	Name         string
 	Description  string
 	CreationDate time.Time
-	Owner        user
-	Users        map[int32]user
+	Owner        int32
+	Users        []int32
 }
 
 type column struct {
@@ -96,16 +95,23 @@ func Init() error {
 func convertProject(projects []*models.Projects) map[int32]project {
 	res := make(map[int32]project, 0)
 	for _, p := range projects {
-
-		res[p.Id] = project{
+		proj := project{
 			Id:           p.Id,
-			Project:      util.NilCheck(*p.ParentId, *defaultProjectId),
+			Project:      defaultProjectId,
 			Name:         p.Name,
-			Description:  util.NilCheck(*p.Description, *defaultDescription),
 			CreationDate: p.CreationDate,
-			Owner:        Cache.Users[p.OwnerId],
+			Description:  defaultDescription,
+			Owner:        p.OwnerId,
 			//Users:      users, //TODO
 		}
+		if p.ParentId != nil {
+			proj.Project = *p.ParentId
+		}
+		if p.Description != nil {
+			proj.Description = *p.Description
+		}
+
+		res[p.Id] = proj
 	}
 	return res
 }
@@ -113,15 +119,19 @@ func convertProject(projects []*models.Projects) map[int32]project {
 func convertTasks(tasks []*models.Tasks) map[int32]task {
 	res := make(map[int32]task, 0)
 	for _, t := range tasks {
-		res[t.Id] = task{
+		tas := task{
 			Id:          t.Id,
-			Project:     Cache.Projects[t.ProjectId],
+			Project:     t.ProjectId,
 			Title:       t.Title,
-			Description: *t.Description,
-			Column:      Cache.Columns[t.ColumnId],
+			Description: defaultDescription,
+			Column:      t.ColumnId,
 			//Tags:        tags,	//TODO
 			//Users:       users,	//TODO
 		}
+		if t.Description != nil {
+			tas.Description = *t.Description
+		}
+		res[t.Id] = tas
 	}
 
 	return res
@@ -136,7 +146,7 @@ func convertUsers(users []*models.Users) map[int32]user {
 			Surname:  u.Surname,
 			Nickname: u.Nickname,
 			Password: u.Password,
-			Role:     Cache.Roles[u.RoleId],
+			Role:     u.RoleId,
 		}
 	}
 	return res
