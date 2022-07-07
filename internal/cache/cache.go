@@ -1,6 +1,7 @@
 package cache
 
 import (
+	"log"
 	"main/db/sql"
 	"main/db/sql/models"
 	"sync"
@@ -9,6 +10,10 @@ import (
 
 const defaultProjectId = int32(0)
 const defaultDescription = ""
+
+type cacheTables interface {
+	user | tag | task | role | project | column
+}
 
 var once sync.Once
 var Cache cache
@@ -67,32 +72,36 @@ type column struct {
 	Name string
 }
 
-func Init() error {
+func Init() {
 	once.Do(func() {
-		tags := sql.GetAll[*models.Tags](models.TagsTable)
-		roles := sql.GetAll[*models.Roles](models.RolesTable)
-		columns := sql.GetAll[*models.Columns](models.ColumnsTable)
+		var err error
+		tags, err := sql.GetAll[*models.Tags](models.TagsTable)
+		roles, err := sql.GetAll[*models.Roles](models.RolesTable)
+		columns, err := sql.GetAll[*models.Columns](models.ColumnsTable)
 
-		users := sql.GetAll[*models.Users](models.UsersTable)
-		projects := sql.GetAll[*models.Projects](models.ProjectsTable)
-		tasks := sql.GetAll[*models.Tasks](models.TasksTable)
+		users, err := sql.GetAll[*models.Users](models.UsersTable)
+		projects, err := sql.GetAll[*models.Projects](models.ProjectsTable)
+		tasks, err := sql.GetAll[*models.Tasks](models.TasksTable)
 
-		//projectAndUsers := sql.GetAll[*models.ProjectAndUsers](models.ProjectAndUsersTable)
-		//taskAndTags := sql.GetAll[*models.TaskAndTags](models.TaskAndTagsTable)
-		//taskAndUsers := sql.GetAll[*models.TaskAndUsers](models.TaskAndUsersTable)
+		projectAndUsers, err := sql.GetAll[*models.ProjectAndUsers](models.ProjectAndUsersTable)
+		taskAndTags, err := sql.GetAll[*models.TaskAndTags](models.TaskAndTagsTable)
+		taskAndUsers, err := sql.GetAll[*models.TaskAndUsers](models.TaskAndUsersTable)
+
+		if err != nil {
+			log.Fatalf("Cache init err:%v\n", err)
+		}
 
 		Cache.Tags = convertTags(tags)
 		Cache.Roles = convertRoles(roles)
 		Cache.Columns = convertColumns(columns)
 
 		Cache.Users = convertUsers(users)
-		Cache.Projects = convertProject(projects)
-		Cache.Tasks = convertTasks(tasks)
+		Cache.Projects = convertProject(projects, projectAndUsers)
+		Cache.Tasks = convertTasks(tasks, taskAndTags, taskAndUsers)
 	})
-	return nil
 }
 
-func convertProject(projects []*models.Projects) map[int32]project {
+func convertProject(projects []*models.Projects, users []*models.ProjectAndUsers) map[int32]project {
 	res := make(map[int32]project, 0)
 	for _, p := range projects {
 		proj := project{
@@ -102,7 +111,6 @@ func convertProject(projects []*models.Projects) map[int32]project {
 			CreationDate: p.CreationDate,
 			Description:  defaultDescription,
 			Owner:        p.OwnerId,
-			//Users:      users, //TODO
 		}
 		if p.ParentId != nil {
 			proj.Project = *p.ParentId
@@ -110,13 +118,17 @@ func convertProject(projects []*models.Projects) map[int32]project {
 		if p.Description != nil {
 			proj.Description = *p.Description
 		}
-
+		for _, user := range users {
+			if user.ProjectId == proj.Id {
+				proj.Users = append(proj.Users, user.UserId)
+			}
+		}
 		res[p.Id] = proj
 	}
 	return res
 }
 
-func convertTasks(tasks []*models.Tasks) map[int32]task {
+func convertTasks(tasks []*models.Tasks, tags []*models.TaskAndTags, users []*models.TaskAndUsers) map[int32]task {
 	res := make(map[int32]task, 0)
 	for _, t := range tasks {
 		tas := task{
@@ -125,11 +137,19 @@ func convertTasks(tasks []*models.Tasks) map[int32]task {
 			Title:       t.Title,
 			Description: defaultDescription,
 			Column:      t.ColumnId,
-			//Tags:        tags,	//TODO
-			//Users:       users,	//TODO
 		}
 		if t.Description != nil {
 			tas.Description = *t.Description
+		}
+		for _, tag := range tags {
+			if tag.TaskId == tas.Id {
+				tas.Tags = append(tas.Tags, tag.TagId)
+			}
+		}
+		for _, user := range users {
+			if user.TaskId == tas.Id {
+				tas.Users = append(tas.Users, user.UserId)
+			}
 		}
 		res[t.Id] = tas
 	}

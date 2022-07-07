@@ -7,6 +7,7 @@ type Task struct {
 	Description string  `json:"description" example:"description"`
 	Column      string  `json:"column" form:"column" format:"string"`
 	Users       []int32 `json:"users" form:"users" format:"[]integer"`
+	Tags        []int32 `json:"tags" form:"tags" format:"[]integer"`
 }
 
 type AddTask struct {
@@ -23,6 +24,7 @@ type UpdateTask struct {
 	Description string  `json:"description" form:"description" example:"description"`
 	Column      string  `json:"column" form:"column" format:"string"`
 	Users       []int32 `json:"users" form:"users" format:"[]integer"`
+	Tags        []int32 `json:"tags" form:"tags" format:"[]integer"`
 }
 
 type DeleteTask struct {

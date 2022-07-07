@@ -21,11 +21,7 @@ func main() {
 		fmt.Printf("Database error:%s", err)
 		return
 	}
-	err = cache.Init()
-	if err != nil {
-		fmt.Printf("Cache error:%s", err)
-		return
-	}
+	cache.Init()
 
 	// setting up server
 	server.Init()

@@ -23,7 +23,7 @@ type DatabaseProvider struct {
 	DbLogger *log.Logger
 }
 
-type Tables interface {
+type tables interface {
 	*models.Tasks | *models.Columns | *models.Users | *models.TaskAndUsers | *models.ProjectAndUsers | *models.Projects | *models.Roles | *models.Tags | *models.TaskAndTags
 }
 
@@ -79,49 +79,45 @@ func GetDb() *DatabaseProvider {
 	return instance
 }
 
-func Upsert[T reform.Record](s []T) error {
+func Upsert[T reform.Record](s T) error {
 	Db := GetDb()
-	for _, a := range s {
-		err := Db.DB.Save(a)
-		if err != nil {
-			return err
-		}
+	err := Db.DB.Save(s)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Delete[T reform.Record](s T) error {
+	Db := GetDb()
+	err := Db.DB.Delete(s)
+	if err != nil {
+		return err
+	}
+
+	return nil
+}
+
+func Update[T reform.Record](s T) error {
+	Db := GetDb()
+	err := Db.DB.Update(s)
+	if err != nil {
+		return err
 	}
 	return nil
 }
 
-func Delete[T reform.Record](s []T) error {
-	Db := GetDb()
-	for _, a := range s {
-		err := Db.DB.Delete(a)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func Update[T reform.Record](s []T) error {
-	Db := GetDb()
-	for _, a := range s {
-		err := Db.DB.Update(a)
-		if err != nil {
-			return err
-		}
-	}
-	return nil
-}
-
-func GetAll[V Tables](s reform.View) []V {
+func GetAll[V tables](s reform.View) ([]V, error) {
 	Db := GetDb()
 	from, err := Db.DB.SelectAllFrom(s, "")
 	if err != nil {
-		return nil
+		return nil, err
 	}
 	var res []V
 	for _, s := range from {
 		s := s.(V)
 		res = append(res, s)
 	}
-	return res
+	return res, nil
 }

@@ -30,7 +30,7 @@ func (DbProvider DatabaseProvider) CreateNewTask(params apiModels.AddTask) error
 		ColumnId:    c,
 	}
 
-	err = Upsert([]*models.Tasks{s})
+	err = Upsert(s)
 	if err != nil {
 		DbProvider.DbLogger.Println(err)
 		return err
