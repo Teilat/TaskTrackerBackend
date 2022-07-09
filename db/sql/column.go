@@ -2,7 +2,6 @@ package sql
 
 import (
 	"main/db/sql/models"
-	"main/internal/util"
 	apiModels "main/server/api/v1/models"
 )
 
@@ -64,7 +63,7 @@ func (DbProvider DatabaseProvider) UpdateColumn(params apiModels.UpdateColumn) e
 	rec := from.(*models.Columns)
 
 	s := &models.Columns{
-		Name: util.NilCheck(params.Name, rec.Name).(string),
+		Name: NilCheck(params.Name, rec.Name).(string),
 	}
 
 	err = DbProvider.DB.Update(s)

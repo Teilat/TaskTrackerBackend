@@ -2,7 +2,6 @@ package sql
 
 import (
 	"main/db/sql/models"
-	"main/internal/util"
 	apiModels "main/server/api/v1/models"
 )
 
@@ -171,9 +170,9 @@ func (DbProvider DatabaseProvider) UpdateTask(params apiModels.UpdateTask) error
 	rec := from.(*models.Tasks)
 
 	s := &models.Tasks{
-		ProjectId:   util.NilCheck(params.ProjectId, rec.ProjectId).(int32),
-		Title:       util.NilCheck(params.Title, rec.Title).(string),
-		Description: util.NilCheck(params.Description, rec.Description).(*string),
+		ProjectId:   NilCheck(params.ProjectId, rec.ProjectId).(int32),
+		Title:       NilCheck(params.Title, rec.Title).(string),
+		Description: NilCheck(params.Description, rec.Description).(*string),
 		ColumnId:    rec.ColumnId,
 	}
 

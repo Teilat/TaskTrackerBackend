@@ -2,7 +2,6 @@ package sql
 
 import (
 	"main/db/sql/models"
-	"main/internal/util"
 	apiModels "main/server/api/v1/models"
 )
 
@@ -66,8 +65,8 @@ func (DbProvider DatabaseProvider) UpdateTag(params apiModels.UpdateTag) error {
 	rec := from.(*models.Tags)
 
 	s := &models.Tags{
-		Name:  util.NilCheck(params.Name, rec.Name).(string),
-		Color: util.NilCheck(params.Color, rec.Color).(string),
+		Name:  NilCheck(params.Name, rec.Name).(string),
+		Color: NilCheck(params.Color, rec.Color).(string),
 	}
 
 	err = DbProvider.DB.Update(s)
