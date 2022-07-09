@@ -18,13 +18,11 @@ type AddTask struct {
 }
 
 type UpdateTask struct {
-	Id          int32   `json:"id" form:"id" format:"integer"`
-	ProjectId   int32   `json:"projectId" form:"projectId" format:"integer"`
-	Title       string  `json:"title" form:"title" example:"task name"`
-	Description string  `json:"description" form:"description" example:"description"`
-	Column      string  `json:"column" form:"column" format:"string"`
-	Users       []int32 `json:"users" form:"users" format:"[]integer"`
-	Tags        []int32 `json:"tags" form:"tags" format:"[]integer"`
+	Id          int32  `json:"id" form:"id" format:"integer"`
+	ProjectId   int32  `json:"projectId" form:"projectId" format:"integer"`
+	Title       string `json:"title" form:"title" example:"task name"`
+	Description string `json:"description" form:"description" example:"description"`
+	Column      string `json:"column" form:"column" format:"string"`
 }
 
 type DeleteTask struct {

@@ -19,12 +19,15 @@ var once sync.Once
 var Cache cache
 
 type cache struct {
-	Users    map[int32]user
-	Tasks    map[int32]task
-	Tags     map[int32]tag
-	Roles    map[int32]role
-	Projects map[int32]project
-	Columns  map[int32]column
+	Users           map[int32]user
+	Tasks           map[int32]task
+	Tags            map[int32]tag
+	Roles           map[int32]role
+	Projects        map[int32]project
+	Columns         map[int32]column
+	TaskAndUsers    map[int32]taskAndUsers
+	TaskAndTags     map[int32]taskAndTags
+	ProjectAndUsers map[int32]projectAndUsers
 }
 
 type user struct {
@@ -42,8 +45,8 @@ type task struct {
 	Title       string
 	Description string
 	Column      int32
-	Tags        []int32
-	Users       []int32
+	Tags        map[int32]taskAndTags
+	Users       map[int32]taskAndUsers
 }
 
 type tag struct {
@@ -64,12 +67,30 @@ type project struct {
 	Description  string
 	CreationDate time.Time
 	Owner        int32
-	Users        []int32
+	Users        map[int32]projectAndUsers
 }
 
 type column struct {
 	Id   int32
 	Name string
+}
+
+type projectAndUsers struct {
+	Id        int32
+	ProjectId int32
+	UserId    int32
+}
+
+type taskAndTags struct {
+	Id     int32
+	TaskId int32
+	TagId  int32
+}
+
+type taskAndUsers struct {
+	Id     int32
+	TaskId int32
+	UserId int32
 }
 
 func Init() {
@@ -83,9 +104,9 @@ func Init() {
 		projects, err := sql.GetAll[*models.Projects](models.ProjectsTable)
 		tasks, err := sql.GetAll[*models.Tasks](models.TasksTable)
 
-		projectAndUsers, err := sql.GetAll[*models.ProjectAndUsers](models.ProjectAndUsersTable)
-		taskAndTags, err := sql.GetAll[*models.TaskAndTags](models.TaskAndTagsTable)
-		taskAndUsers, err := sql.GetAll[*models.TaskAndUsers](models.TaskAndUsersTable)
+		projectNUsers, err := sql.GetAll[*models.ProjectAndUsers](models.ProjectAndUsersTable)
+		taskNTags, err := sql.GetAll[*models.TaskAndTags](models.TaskAndTagsTable)
+		taskNUsers, err := sql.GetAll[*models.TaskAndUsers](models.TaskAndUsersTable)
 
 		if err != nil {
 			log.Fatalf("Cache init err:%v\n", err)
@@ -95,13 +116,17 @@ func Init() {
 		Cache.Roles = convertRoles(roles)
 		Cache.Columns = convertColumns(columns)
 
+		Cache.ProjectAndUsers = convertProjectAndUsers(projectNUsers)
+		Cache.TaskAndUsers = convertTaskAndUsers(taskNUsers)
+		Cache.TaskAndTags = convertTaskAndTags(taskNTags)
+
 		Cache.Users = convertUsers(users)
-		Cache.Projects = convertProject(projects, projectAndUsers)
-		Cache.Tasks = convertTasks(tasks, taskAndTags, taskAndUsers)
+		Cache.Projects = convertProject(projects)
+		Cache.Tasks = convertTasks(tasks)
 	})
 }
 
-func convertProject(projects []*models.Projects, users []*models.ProjectAndUsers) map[int32]project {
+func convertProject(projects []*models.Projects) map[int32]project {
 	res := make(map[int32]project, 0)
 	for _, p := range projects {
 		proj := project{
@@ -118,9 +143,9 @@ func convertProject(projects []*models.Projects, users []*models.ProjectAndUsers
 		if p.Description != nil {
 			proj.Description = *p.Description
 		}
-		for _, user := range users {
+		for _, user := range Cache.ProjectAndUsers {
 			if user.ProjectId == proj.Id {
-				proj.Users = append(proj.Users, user.UserId)
+				proj.Users[user.Id] = user
 			}
 		}
 		res[p.Id] = proj
@@ -128,7 +153,7 @@ func convertProject(projects []*models.Projects, users []*models.ProjectAndUsers
 	return res
 }
 
-func convertTasks(tasks []*models.Tasks, tags []*models.TaskAndTags, users []*models.TaskAndUsers) map[int32]task {
+func convertTasks(tasks []*models.Tasks) map[int32]task {
 	res := make(map[int32]task, 0)
 	for _, t := range tasks {
 		tas := task{
@@ -141,14 +166,14 @@ func convertTasks(tasks []*models.Tasks, tags []*models.TaskAndTags, users []*mo
 		if t.Description != nil {
 			tas.Description = *t.Description
 		}
-		for _, tag := range tags {
+		for _, tag := range Cache.TaskAndTags {
 			if tag.TaskId == tas.Id {
-				tas.Tags = append(tas.Tags, tag.TagId)
+				tas.Tags[tag.Id] = tag
 			}
 		}
-		for _, user := range users {
+		for _, user := range Cache.TaskAndUsers {
 			if user.TaskId == tas.Id {
-				tas.Users = append(tas.Users, user.UserId)
+				tas.Users[user.Id] = user
 			}
 		}
 		res[t.Id] = tas
@@ -179,6 +204,42 @@ func convertTags(tags []*models.Tags) map[int32]tag {
 			Id:    t.Id,
 			Name:  t.Name,
 			Color: t.Color,
+		}
+	}
+	return res
+}
+
+func convertProjectAndUsers(tags []*models.ProjectAndUsers) map[int32]projectAndUsers {
+	res := make(map[int32]projectAndUsers, 0)
+	for _, t := range tags {
+		res[t.Id] = projectAndUsers{
+			Id:        t.Id,
+			ProjectId: t.ProjectId,
+			UserId:    t.UserId,
+		}
+	}
+	return res
+}
+
+func convertTaskAndUsers(tags []*models.TaskAndUsers) map[int32]taskAndUsers {
+	res := make(map[int32]taskAndUsers, 0)
+	for _, t := range tags {
+		res[t.Id] = taskAndUsers{
+			Id:     t.Id,
+			TaskId: t.TaskId,
+			UserId: t.UserId,
+		}
+	}
+	return res
+}
+
+func convertTaskAndTags(tags []*models.TaskAndTags) map[int32]taskAndTags {
+	res := make(map[int32]taskAndTags, 0)
+	for _, t := range tags {
+		res[t.Id] = taskAndTags{
+			Id:     t.Id,
+			TaskId: t.TaskId,
+			TagId:  t.TagId,
 		}
 	}
 	return res
