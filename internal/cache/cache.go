@@ -16,9 +16,9 @@ type cacheTables interface {
 }
 
 var once sync.Once
-var Cache cache
+var Cache internalCache
 
-type cache struct {
+type internalCache struct {
 	Users           map[int32]user
 	Tasks           map[int32]task
 	Tags            map[int32]tag
