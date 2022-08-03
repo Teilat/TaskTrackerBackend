@@ -89,36 +89,39 @@ func (c internalCache) GetTasksByProject(params models.TasksByProject) []*models
 }
 
 func (c internalCache) UpdateTask(params models.UpdateTask) error {
-	upd := map[int32]task{}
-	upd[params.Id] = task{
-		Id:          params.Id,
-		Project:     params.ProjectId,
-		Title:       params.Title,
-		Description: params.Description,
+	t, ok := c.Tasks[params.Id]
+	if !ok {
+		return fmt.Errorf("task not found")
 	}
-
-	err := c.updateTasks(upd)
+	t.Project = params.ProjectId
+	t.Title = params.Title
+	t.Description = params.Description
+	for _, col := range c.Columns {
+		if params.Column == col.Name {
+			t.Column = col.Id
+		}
+	}
+	err := c.updateTasks(t)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c internalCache) updateTasks(upd map[int32]task) error {
-	for id, task := range upd {
-		model := &dbModels.Tasks{
-			Id:          task.Id,
-			ProjectId:   task.Project,
-			Title:       task.Title,
-			Description: &task.Description,
-			ColumnId:    task.Column,
-		}
-		err := sql.Update(model)
-		if err != nil {
-			return err
-		}
-		c.Tasks[id] = task
+func (c internalCache) updateTasks(t task) error {
+	model := &dbModels.Tasks{
+		Id:          t.Id,
+		ProjectId:   t.Project,
+		Title:       t.Title,
+		Description: &t.Description,
+		ColumnId:    t.Column,
 	}
+	err := sql.Update(model)
+	if err != nil {
+		return err
+	}
+	c.Tasks[t.Id] = t
+
 	return nil
 }
 
@@ -158,5 +161,18 @@ func (c internalCache) CreateTask(params models.AddTask) error {
 }
 
 func (c internalCache) UpdateTaskPos(params models.UpdateTaskPos) error {
+	t, ok := c.Tasks[params.Id]
+	if !ok {
+		return fmt.Errorf("task not found")
+	}
+	for _, col := range c.Columns {
+		if params.Column == col.Name {
+			t.Column = col.Id
+		}
+	}
+	err := c.updateTasks(t)
+	if err != nil {
+		return err
+	}
 	return nil
 }

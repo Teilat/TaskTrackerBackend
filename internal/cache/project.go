@@ -40,37 +40,35 @@ func (c internalCache) CreateProject(params models.AddProject) error {
 }
 
 func (c internalCache) UpdateProject(params models.UpdateProject) error {
-	upd := map[int32]project{}
-	upd[params.Id] = project{
-		Id:          params.Id,
-		Project:     params.ParentId,
-		Name:        params.Name,
-		Description: params.Description,
-		Owner:       params.OwnerId,
+	p, ok := c.Projects[params.Id]
+	if !ok {
+		return fmt.Errorf("task not found")
 	}
+	p.Project = params.ParentId
+	p.Name = params.Name
+	p.Description = params.Description
+	p.Owner = params.OwnerId
 
-	err := c.updateProjects(upd)
+	err := c.updateProjects(p)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func (c internalCache) updateProjects(upd map[int32]project) error {
-	for id, proj := range upd {
-		model := &dbModels.Projects{
-			ParentId:     &proj.Project,
-			Name:         proj.Name,
-			Description:  &proj.Description,
-			CreationDate: proj.CreationDate,
-			OwnerId:      proj.Owner,
-		}
-		err := sql.Update(model)
-		if err != nil {
-			return err
-		}
-		c.Projects[id] = proj
+func (c internalCache) updateProjects(p project) error {
+	model := &dbModels.Projects{
+		ParentId:     &p.Project,
+		Name:         p.Name,
+		Description:  &p.Description,
+		CreationDate: p.CreationDate,
+		OwnerId:      p.Owner,
 	}
+	err := sql.Update(model)
+	if err != nil {
+		return err
+	}
+	c.Projects[p.Id] = p
 	return nil
 }
 
