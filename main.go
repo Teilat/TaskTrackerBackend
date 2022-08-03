@@ -16,12 +16,12 @@ func main() {
 	config.GetConf()
 
 	// setting up db connection
-	db, err := sql.Init()
+	_, err := sql.Init()
 	if err != nil {
 		fmt.Printf("Database error:%s", err)
 		return
 	}
-	cache.Init(db)
+	cache.Init()
 
 	// setting up server
 	server.Init()

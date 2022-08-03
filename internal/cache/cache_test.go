@@ -6,33 +6,17 @@ import (
 	"testing"
 )
 
-func TestInit(t *testing.T) {
-	tests := []struct {
-		name string
-	}{
-		// TODO: Add test cases.
-	}
-	for _, tt := range tests {
-		t.Run(tt.name, func(t *testing.T) {
-			Init(nil)
-		})
-	}
-}
-
 func Test_convertColumns(t *testing.T) {
-	type args struct {
-		cols []*models.Columns
-	}
 	tests := []struct {
 		name string
-		args args
+		cols []*models.Columns
 		want map[int32]column
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertColumns(tt.args.cols); !reflect.DeepEqual(got, tt.want) {
+			if got := convertColumns(tt.cols); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("convertColumns() = %v, want %v", got, tt.want)
 			}
 		})
@@ -40,19 +24,16 @@ func Test_convertColumns(t *testing.T) {
 }
 
 func Test_convertProject(t *testing.T) {
-	type args struct {
-		projects []*models.Projects
-	}
 	tests := []struct {
-		name string
-		args args
-		want map[int32]project
+		name     string
+		projects []*models.Projects
+		want     map[int32]project
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertProject(tt.args.projects); !reflect.DeepEqual(got, tt.want) {
+			if got := convertProject(tt.projects); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("convertProject() = %v, want %v", got, tt.want)
 			}
 		})

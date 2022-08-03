@@ -10,10 +10,9 @@ import (
 const defaultProjectId = int32(0)
 const defaultDescription = ""
 
-var once sync.Once
 var Cache struct {
 	internalCache
-	db *sql.DatabaseProvider
+	once sync.Once
 }
 
 type internalCache struct {
@@ -28,8 +27,8 @@ type internalCache struct {
 	ProjectAndUsers map[int32]projectAndUsers
 }
 
-func Init(db *sql.DatabaseProvider) {
-	once.Do(func() {
+func Init() {
+	Cache.once.Do(func() {
 		var err error
 		tags, err := sql.GetAll[*models.Tags](models.TagsTable)
 		roles, err := sql.GetAll[*models.Roles](models.RolesTable)
@@ -58,8 +57,6 @@ func Init(db *sql.DatabaseProvider) {
 		Cache.Users = convertUsers(users)
 		Cache.Projects = convertProject(projects)
 		Cache.Tasks = convertTasks(tasks)
-
-		Cache.db = db
 	})
 }
 
