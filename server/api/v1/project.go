@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"main/db/sql"
+	"main/internal/cache"
 	"main/server/api/v1/models"
 	"net/http"
 )
@@ -23,16 +23,15 @@ func GetAllProjects() gin.HandlerFunc {
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		}
-		db := sql.GetDb()
 		if params.Id != 0 {
-			proj, err := db.GetProject(params)
+			proj, err := cache.Cache.GetProject(params)
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, err)
 			} else {
 				c.JSON(http.StatusOK, proj)
 			}
 		} else {
-			tags, err := db.GetAllProjects()
+			tags, err := cache.Cache.GetAllProjects()
 			if err != nil {
 				c.JSON(http.StatusInternalServerError, err)
 			} else {
@@ -60,8 +59,7 @@ func GetAllTasksByProject() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		db := sql.GetDb()
-		tags, err := db.GetAllTasksByProject(params)
+		tags := cache.Cache.GetTasksByProject(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
@@ -81,8 +79,7 @@ func GetAllTasksByProject() gin.HandlerFunc {
 // @Router      /project/tree [get]
 func GetProjectsTree() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		db := sql.GetDb()
-		tags, err := db.GetProjectsTree()
+		tags, err := cache.Cache.GetProjectTree()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
@@ -109,8 +106,7 @@ func CreateProject() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		db := sql.GetDb()
-		err = db.CreateProject(params)
+		err = cache.Cache.CreateProject(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
@@ -137,8 +133,7 @@ func DeleteProject() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		db := sql.GetDb()
-		err = db.DeleteProject(params)
+		err = cache.Cache.DeleteProject(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
@@ -165,8 +160,7 @@ func UpdateProject() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		db := sql.GetDb()
-		err = db.UpdateProject(params)
+		err = cache.Cache.UpdateProject(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {

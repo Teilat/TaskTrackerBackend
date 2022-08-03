@@ -7,6 +7,28 @@ import (
 	"main/server/api/v1/models"
 )
 
+type task struct {
+	Id          int32
+	Project     int32
+	Title       string
+	Description string
+	Column      int32
+	Tags        map[int32]taskAndTags
+	Users       map[int32]taskAndUsers
+}
+
+type taskAndTags struct {
+	Id     int32
+	TaskId int32
+	TagId  int32
+}
+
+type taskAndUsers struct {
+	Id     int32
+	TaskId int32
+	UserId int32
+}
+
 func (c internalCache) GetAllTasks() []*models.Task {
 	res := []*models.Task{}
 	for _, t := range c.Tasks {
@@ -132,5 +154,9 @@ func (c internalCache) CreateTask(params models.AddTask) error {
 	if err != nil {
 		return err
 	}
+	return nil
+}
+
+func (c internalCache) UpdateTaskPos(params models.UpdateTaskPos) error {
 	return nil
 }

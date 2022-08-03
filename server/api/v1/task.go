@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"main/db/sql"
+	"main/internal/cache"
 	"main/server/api/v1/models"
 	"net/http"
 )
@@ -18,13 +18,8 @@ import (
 // @Router      /task [get]
 func GetAllTasks() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		db := sql.GetDb()
-		tags, err := db.GetAllTasks()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
-		} else {
-			c.JSON(http.StatusOK, tags)
-		}
+		tags := cache.Cache.GetAllTasks()
+		c.JSON(http.StatusOK, tags)
 	}
 }
 
@@ -46,8 +41,7 @@ func CreateTask() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err)
 		}
 
-		db := sql.GetDb()
-		err = db.CreateNewTask(params)
+		err = cache.Cache.CreateTask(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 		} else {
@@ -74,8 +68,7 @@ func DeleteTask() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err)
 		}
 
-		db := sql.GetDb()
-		err = db.DeleteTask(params)
+		err = cache.Cache.DeleteTask(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 		} else {
@@ -101,8 +94,7 @@ func UpdateTaskPos() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		}
 
-		db := sql.GetDb()
-		err = db.UpdateTaskPos(params)
+		err = cache.Cache.UpdateTaskPos(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
@@ -129,8 +121,7 @@ func UpdateTask() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err)
 		}
 
-		db := sql.GetDb()
-		err = db.UpdateTask(params)
+		err = cache.Cache.UpdateTask(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 		} else {

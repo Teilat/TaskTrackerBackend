@@ -5,18 +5,16 @@ import (
 	"main/db/sql"
 	"main/db/sql/models"
 	"sync"
-	"time"
 )
 
 const defaultProjectId = int32(0)
 const defaultDescription = ""
 
-type cacheTables interface {
-	user | tag | task | role | project | column
-}
-
 var once sync.Once
-var Cache internalCache
+var Cache struct {
+	internalCache
+	db *sql.DatabaseProvider
+}
 
 type internalCache struct {
 	Users           map[int32]user
@@ -30,70 +28,7 @@ type internalCache struct {
 	ProjectAndUsers map[int32]projectAndUsers
 }
 
-type user struct {
-	Id       int32
-	Name     string
-	Surname  string
-	Nickname string
-	Role     int32
-	Password string
-}
-
-type task struct {
-	Id          int32
-	Project     int32
-	Title       string
-	Description string
-	Column      int32
-	Tags        map[int32]taskAndTags
-	Users       map[int32]taskAndUsers
-}
-
-type tag struct {
-	Id    int32
-	Name  string
-	Color string
-}
-
-type role struct {
-	Id   int32
-	Name string
-}
-
-type project struct {
-	Id           int32
-	Project      int32
-	Name         string
-	Description  string
-	CreationDate time.Time
-	Owner        int32
-	Users        map[int32]projectAndUsers
-}
-
-type column struct {
-	Id   int32
-	Name string
-}
-
-type projectAndUsers struct {
-	Id        int32
-	ProjectId int32
-	UserId    int32
-}
-
-type taskAndTags struct {
-	Id     int32
-	TaskId int32
-	TagId  int32
-}
-
-type taskAndUsers struct {
-	Id     int32
-	TaskId int32
-	UserId int32
-}
-
-func Init() {
+func Init(db *sql.DatabaseProvider) {
 	once.Do(func() {
 		var err error
 		tags, err := sql.GetAll[*models.Tags](models.TagsTable)
@@ -123,6 +58,8 @@ func Init() {
 		Cache.Users = convertUsers(users)
 		Cache.Projects = convertProject(projects)
 		Cache.Tasks = convertTasks(tasks)
+
+		Cache.db = db
 	})
 }
 

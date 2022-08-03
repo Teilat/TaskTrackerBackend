@@ -8,6 +8,22 @@ import (
 	"time"
 )
 
+type project struct {
+	Id           int32
+	Project      int32
+	Name         string
+	Description  string
+	CreationDate time.Time
+	Owner        int32
+	Users        map[int32]projectAndUsers
+}
+
+type projectAndUsers struct {
+	Id        int32
+	ProjectId int32
+	UserId    int32
+}
+
 func (c internalCache) CreateProject(params models.AddProject) error {
 	proj := &dbModels.Projects{
 		ParentId:     &params.ParentId,
