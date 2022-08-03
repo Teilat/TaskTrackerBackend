@@ -119,24 +119,10 @@ func Test_internalCache_GetAllTasks(t *testing.T) {
 }
 
 func Test_internalCache_GetTask(t *testing.T) {
-	type fields struct {
-		Users           map[int32]user
-		Tasks           map[int32]task
-		Tags            map[int32]tag
-		Roles           map[int32]role
-		Projects        map[int32]project
-		Columns         map[int32]column
-		TaskAndUsers    map[int32]taskAndUsers
-		TaskAndTags     map[int32]taskAndTags
-		ProjectAndUsers map[int32]projectAndUsers
-	}
-	type args struct {
-		param int32
-	}
 	tests := []struct {
 		name    string
-		fields  fields
-		args    args
+		cache   internalCache
+		param   int32
 		want    *models.Task
 		wantErr bool
 	}{
@@ -144,18 +130,8 @@ func Test_internalCache_GetTask(t *testing.T) {
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := internalCache{
-				Users:           tt.fields.Users,
-				Tasks:           tt.fields.Tasks,
-				Tags:            tt.fields.Tags,
-				Roles:           tt.fields.Roles,
-				Projects:        tt.fields.Projects,
-				Columns:         tt.fields.Columns,
-				TaskAndUsers:    tt.fields.TaskAndUsers,
-				TaskAndTags:     tt.fields.TaskAndTags,
-				ProjectAndUsers: tt.fields.ProjectAndUsers,
-			}
-			got, err := c.GetTask(tt.args.param)
+			tt.cache = mockedCache
+			got, err := tt.cache.GetTask(tt.param)
 			if (err != nil) != tt.wantErr {
 				t.Errorf("GetTask() error = %v, wantErr %v", err, tt.wantErr)
 				return
@@ -168,42 +144,18 @@ func Test_internalCache_GetTask(t *testing.T) {
 }
 
 func Test_internalCache_GetTasksByProject(t *testing.T) {
-	type fields struct {
-		Users           map[int32]user
-		Tasks           map[int32]task
-		Tags            map[int32]tag
-		Roles           map[int32]role
-		Projects        map[int32]project
-		Columns         map[int32]column
-		TaskAndUsers    map[int32]taskAndUsers
-		TaskAndTags     map[int32]taskAndTags
-		ProjectAndUsers map[int32]projectAndUsers
-	}
-	type args struct {
-		params models.TasksByProject
-	}
 	tests := []struct {
 		name   string
-		fields fields
-		args   args
+		cache  internalCache
+		params models.TasksByProject
 		want   []*models.Task
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := internalCache{
-				Users:           tt.fields.Users,
-				Tasks:           tt.fields.Tasks,
-				Tags:            tt.fields.Tags,
-				Roles:           tt.fields.Roles,
-				Projects:        tt.fields.Projects,
-				Columns:         tt.fields.Columns,
-				TaskAndUsers:    tt.fields.TaskAndUsers,
-				TaskAndTags:     tt.fields.TaskAndTags,
-				ProjectAndUsers: tt.fields.ProjectAndUsers,
-			}
-			if got := c.GetTasksByProject(tt.args.params); !reflect.DeepEqual(got, tt.want) {
+			tt.cache = mockedCache
+			if got := tt.cache.GetTasksByProject(tt.params); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("GetTasksByProject() = %v, want %v", got, tt.want)
 			}
 		})
@@ -211,42 +163,18 @@ func Test_internalCache_GetTasksByProject(t *testing.T) {
 }
 
 func Test_internalCache_UpdateTask(t *testing.T) {
-	type fields struct {
-		Users           map[int32]user
-		Tasks           map[int32]task
-		Tags            map[int32]tag
-		Roles           map[int32]role
-		Projects        map[int32]project
-		Columns         map[int32]column
-		TaskAndUsers    map[int32]taskAndUsers
-		TaskAndTags     map[int32]taskAndTags
-		ProjectAndUsers map[int32]projectAndUsers
-	}
-	type args struct {
-		params models.UpdateTask
-	}
 	tests := []struct {
 		name    string
-		fields  fields
-		args    args
+		cache   internalCache
+		params  models.UpdateTask
 		wantErr bool
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := internalCache{
-				Users:           tt.fields.Users,
-				Tasks:           tt.fields.Tasks,
-				Tags:            tt.fields.Tags,
-				Roles:           tt.fields.Roles,
-				Projects:        tt.fields.Projects,
-				Columns:         tt.fields.Columns,
-				TaskAndUsers:    tt.fields.TaskAndUsers,
-				TaskAndTags:     tt.fields.TaskAndTags,
-				ProjectAndUsers: tt.fields.ProjectAndUsers,
-			}
-			if err := c.UpdateTask(tt.args.params); (err != nil) != tt.wantErr {
+			tt.cache = mockedCache
+			if err := tt.cache.UpdateTask(tt.params); (err != nil) != tt.wantErr {
 				t.Errorf("UpdateTask() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -254,42 +182,18 @@ func Test_internalCache_UpdateTask(t *testing.T) {
 }
 
 func Test_internalCache_UpdateTaskPos(t *testing.T) {
-	type fields struct {
-		Users           map[int32]user
-		Tasks           map[int32]task
-		Tags            map[int32]tag
-		Roles           map[int32]role
-		Projects        map[int32]project
-		Columns         map[int32]column
-		TaskAndUsers    map[int32]taskAndUsers
-		TaskAndTags     map[int32]taskAndTags
-		ProjectAndUsers map[int32]projectAndUsers
-	}
-	type args struct {
-		params models.UpdateTaskPos
-	}
 	tests := []struct {
 		name    string
-		fields  fields
-		args    args
+		cache   internalCache
+		params  models.UpdateTaskPos
 		wantErr bool
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := internalCache{
-				Users:           tt.fields.Users,
-				Tasks:           tt.fields.Tasks,
-				Tags:            tt.fields.Tags,
-				Roles:           tt.fields.Roles,
-				Projects:        tt.fields.Projects,
-				Columns:         tt.fields.Columns,
-				TaskAndUsers:    tt.fields.TaskAndUsers,
-				TaskAndTags:     tt.fields.TaskAndTags,
-				ProjectAndUsers: tt.fields.ProjectAndUsers,
-			}
-			if err := c.UpdateTaskPos(tt.args.params); (err != nil) != tt.wantErr {
+			tt.cache = mockedCache
+			if err := tt.cache.UpdateTaskPos(tt.params); (err != nil) != tt.wantErr {
 				t.Errorf("UpdateTaskPos() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})
@@ -297,42 +201,18 @@ func Test_internalCache_UpdateTaskPos(t *testing.T) {
 }
 
 func Test_internalCache_updateTasks(t *testing.T) {
-	type fields struct {
-		Users           map[int32]user
-		Tasks           map[int32]task
-		Tags            map[int32]tag
-		Roles           map[int32]role
-		Projects        map[int32]project
-		Columns         map[int32]column
-		TaskAndUsers    map[int32]taskAndUsers
-		TaskAndTags     map[int32]taskAndTags
-		ProjectAndUsers map[int32]projectAndUsers
-	}
-	type args struct {
-		upd map[int32]task
-	}
 	tests := []struct {
 		name    string
-		fields  fields
-		args    args
+		cache   internalCache
+		upd     map[int32]task
 		wantErr bool
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			c := internalCache{
-				Users:           tt.fields.Users,
-				Tasks:           tt.fields.Tasks,
-				Tags:            tt.fields.Tags,
-				Roles:           tt.fields.Roles,
-				Projects:        tt.fields.Projects,
-				Columns:         tt.fields.Columns,
-				TaskAndUsers:    tt.fields.TaskAndUsers,
-				TaskAndTags:     tt.fields.TaskAndTags,
-				ProjectAndUsers: tt.fields.ProjectAndUsers,
-			}
-			if err := c.updateTasks(tt.args.upd); (err != nil) != tt.wantErr {
+			tt.cache = mockedCache
+			if err := tt.cache.updateTasks(tt.upd); (err != nil) != tt.wantErr {
 				t.Errorf("updateTasks() error = %v, wantErr %v", err, tt.wantErr)
 			}
 		})

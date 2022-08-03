@@ -60,19 +60,16 @@ func Test_convertProject(t *testing.T) {
 }
 
 func Test_convertProjectAndUsers(t *testing.T) {
-	type args struct {
-		tags []*models.ProjectAndUsers
-	}
 	tests := []struct {
 		name string
-		args args
+		tags []*models.ProjectAndUsers
 		want map[int32]projectAndUsers
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertProjectAndUsers(tt.args.tags); !reflect.DeepEqual(got, tt.want) {
+			if got := convertProjectAndUsers(tt.tags); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("convertProjectAndUsers() = %v, want %v", got, tt.want)
 			}
 		})
@@ -80,19 +77,16 @@ func Test_convertProjectAndUsers(t *testing.T) {
 }
 
 func Test_convertRoles(t *testing.T) {
-	type args struct {
-		roles []*models.Roles
-	}
 	tests := []struct {
-		name string
-		args args
-		want map[int32]role
+		name  string
+		roles []*models.Roles
+		want  map[int32]role
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertRoles(tt.args.roles); !reflect.DeepEqual(got, tt.want) {
+			if got := convertRoles(tt.roles); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("convertRoles() = %v, want %v", got, tt.want)
 			}
 		})
@@ -100,19 +94,16 @@ func Test_convertRoles(t *testing.T) {
 }
 
 func Test_convertTags(t *testing.T) {
-	type args struct {
-		tags []*models.Tags
-	}
 	tests := []struct {
 		name string
-		args args
+		tags []*models.Tags
 		want map[int32]tag
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertTags(tt.args.tags); !reflect.DeepEqual(got, tt.want) {
+			if got := convertTags(tt.tags); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("convertTags() = %v, want %v", got, tt.want)
 			}
 		})
@@ -120,19 +111,16 @@ func Test_convertTags(t *testing.T) {
 }
 
 func Test_convertTaskAndTags(t *testing.T) {
-	type args struct {
-		tags []*models.TaskAndTags
-	}
 	tests := []struct {
 		name string
-		args args
+		tags []*models.TaskAndTags
 		want map[int32]taskAndTags
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertTaskAndTags(tt.args.tags); !reflect.DeepEqual(got, tt.want) {
+			if got := convertTaskAndTags(tt.tags); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("convertTaskAndTags() = %v, want %v", got, tt.want)
 			}
 		})
@@ -140,19 +128,16 @@ func Test_convertTaskAndTags(t *testing.T) {
 }
 
 func Test_convertTaskAndUsers(t *testing.T) {
-	type args struct {
-		tags []*models.TaskAndUsers
-	}
 	tests := []struct {
 		name string
-		args args
+		tags []*models.TaskAndUsers
 		want map[int32]taskAndUsers
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertTaskAndUsers(tt.args.tags); !reflect.DeepEqual(got, tt.want) {
+			if got := convertTaskAndUsers(tt.tags); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("convertTaskAndUsers() = %v, want %v", got, tt.want)
 			}
 		})
@@ -160,19 +145,16 @@ func Test_convertTaskAndUsers(t *testing.T) {
 }
 
 func Test_convertTasks(t *testing.T) {
-	type args struct {
-		tasks []*models.Tasks
-	}
 	tests := []struct {
-		name string
-		args args
-		want map[int32]task
+		name  string
+		tasks []*models.Tasks
+		want  map[int32]task
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertTasks(tt.args.tasks); !reflect.DeepEqual(got, tt.want) {
+			if got := convertTasks(tt.tasks); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("convertTasks() = %v, want %v", got, tt.want)
 			}
 		})
@@ -180,19 +162,16 @@ func Test_convertTasks(t *testing.T) {
 }
 
 func Test_convertUsers(t *testing.T) {
-	type args struct {
-		users []*models.Users
-	}
 	tests := []struct {
-		name string
-		args args
-		want map[int32]user
+		name  string
+		users []*models.Users
+		want  map[int32]user
 	}{
 		// TODO: Add test cases.
 	}
 	for _, tt := range tests {
 		t.Run(tt.name, func(t *testing.T) {
-			if got := convertUsers(tt.args.users); !reflect.DeepEqual(got, tt.want) {
+			if got := convertUsers(tt.users); !reflect.DeepEqual(got, tt.want) {
 				t.Errorf("convertUsers() = %v, want %v", got, tt.want)
 			}
 		})
