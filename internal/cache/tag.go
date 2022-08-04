@@ -77,3 +77,16 @@ func (c internalCache) DeleteTag(params models.DeleteTag) error {
 	delete(c.Tags, col.Id)
 	return nil
 }
+
+func (c internalCache) GetTagsByTask(params models.TagsByTask) *[]models.Tag {
+	var res []models.Tag
+	for _, t := range c.Tasks[params.Id].Tags {
+		tags := c.Tags[t.TagId]
+		res = append(res, models.Tag{
+			Id:    tags.Id,
+			Name:  tags.Name,
+			Color: tags.Color,
+		})
+	}
+	return &res
+}

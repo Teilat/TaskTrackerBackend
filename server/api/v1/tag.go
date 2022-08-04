@@ -2,7 +2,7 @@ package v1
 
 import (
 	"github.com/gin-gonic/gin"
-	"main/db/sql"
+	"main/internal/cache"
 	"main/server/api/v1/models"
 	"net/http"
 )
@@ -18,13 +18,8 @@ import (
 // @Router      /tag/ [get]
 func GetAllTags() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		db := sql.GetDb()
-		tags, err := db.GetAllTags()
-		if err != nil {
-			c.JSON(http.StatusInternalServerError, err)
-		} else {
-			c.JSON(http.StatusOK, tags)
-		}
+		tags := cache.Cache.GetAllTags()
+		c.JSON(http.StatusOK, tags)
 	}
 }
 
@@ -46,8 +41,7 @@ func CreateTag() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err)
 		}
 
-		db := sql.GetDb()
-		err = db.CreateNewTag(params)
+		err = cache.Cache.CreateTag(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 		} else {
@@ -74,8 +68,7 @@ func DeleteTag() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err)
 		}
 
-		db := sql.GetDb()
-		err = db.DeleteTag(params)
+		err = cache.Cache.DeleteTag(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 		} else {
@@ -102,8 +95,7 @@ func UpdateTag() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err)
 		}
 
-		db := sql.GetDb()
-		err = db.UpdateTag(params)
+		err = cache.Cache.UpdateTag(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 		} else {
@@ -130,8 +122,7 @@ func GetTagsByTask() gin.HandlerFunc {
 			c.JSON(http.StatusInternalServerError, err)
 		}
 
-		db := sql.GetDb()
-		data, err := db.GetTagsByTask(params)
+		data := cache.Cache.GetTagsByTask(params)
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err)
 		} else {
