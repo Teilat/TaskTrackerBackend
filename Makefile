@@ -1,19 +1,20 @@
 PROJECTNAME=$(shell basename "$(PWD)")
 
-# Go переменные.
-GOBASE=$(shell pwd)
-GOPATH=$(GOBASE)/vendor:$(GOBASE):/  #Вы можете удалить или изменить путь после двоеточия.
-GOBIN=$(GOBASE)/bin
-GOFILES=$(wildcard *.go)
+BINARY_NAME := $(shell git config --get remote.origin.url | awk -F/ '{print $$5}' | awk -F. '{print $$1}')
+WIN_BINARY_NAME := $(BINARY_NAME).exe
+BINARY_VERSION := $(shell git describe --tags)
+BINARY_BUILD_DATE := $(shell date +%d.%m.%Y)
+BUILD_FOLDER := .build
+LINTERS = -E asciicheck -E dogsled -E durationcheck -E exportloopref -E forcetypeassert -E goconst -E gocritic -E ifshort -E nilerr -E unconvert -E unparam -E whitespace
+# disabled LINTERS: -E tagliatelle
 
-# Перенаправление вывода ошибок в файл, чтобы мы показывать его в режиме разработки.
-STDERR=/tmp/.$(PROJECTNAME)-stderr.txt
-
-# PID-файл будет хранить идентификатор процесса, когда он работает в режиме разработки
-PID=/tmp/.$(PROJECTNAME)-api-server.pid
-
-# Make пишет работу в консоль Linux. Сделаем его silent.
-MAKEFLAGS += --silent
+ABS_PATH := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
+ifeq ($(shell go env GOHOSTOS), windows)
+	ABS_PATH = $(PWD)
+	ifneq ($(shell whereis cygpath), "cygpath:")
+		ABS_PATH = $(shell cygpath -w $(CURDIR))
+	endif
+endif
 
 help: Makefile
 	@echo " Choose a command run in "$(PROJECTNAME)":"
@@ -27,3 +28,19 @@ vendor:
 	@echo "  >  Updating dependencies"
     @GOPATH=$(GOPATH) GOBIN=$(GOBIN) go mod tidy
     @GOPATH=$(GOPATH) GOBIN=$(GOBIN) go mod vendor
+
+gen-webapi: ## Generate API
+	"$(ABS_PATH)/server/api/v1/web/proto":/app $protoc -I=proto --go_out=. --remove_omitempty classes.web.proto
+	"$(ABS_PATH)/server/api/v1/web/proto":/app $protoc -I=proto --go_out=. --remove_omitempty elements.web.proto
+	"$(ABS_PATH)/server/api/v1/web/proto":/app $protoc -I=proto --go_out=. --remove_omitempty reference_book.web.proto
+	"$(ABS_PATH)/server/api/v1/web/proto":/app $protoc -I=proto --web_out=. web.proto
+
+
+gen:
+	protoc -I/usr/local/include -I. \
+    	-I${GOPATH}/src \
+    	-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
+    	-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway \
+    	--grpc-gateway_out=logtostderr=true:./api_pb \
+    	--swagger_out=allow_merge=true,merge_file_name=api:. \
+    	--go_out=plugins=grpc:./api_pb ./*.proto
