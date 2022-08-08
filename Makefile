@@ -1,13 +1,13 @@
-PROJECTNAME=$(shell basename "$(PWD)")
-
+PROJECT_NAME := $(shell $(basename $(PWD) ))
+#
 BINARY_NAME := $(shell git config --get remote.origin.url | awk -F/ '{print $$5}' | awk -F. '{print $$1}')
-WIN_BINARY_NAME := $(BINARY_NAME).exe
-BINARY_VERSION := $(shell git describe --tags)
-BINARY_BUILD_DATE := $(shell date +%d.%m.%Y)
-BUILD_FOLDER := .build
-LINTERS = -E asciicheck -E dogsled -E durationcheck -E exportloopref -E forcetypeassert -E goconst -E gocritic -E ifshort -E nilerr -E unconvert -E unparam -E whitespace
-# disabled LINTERS: -E tagliatelle
-
+#WIN_BINARY_NAME := $(BINARY_NAME).exe
+#BINARY_VERSION := $(shell git describe --tags)
+#BINARY_BUILD_DATE := $(shell date +%d.%m.%Y)
+#BUILD_FOLDER := .build
+#LINTERS = -E asciicheck -E dogsled -E durationcheck -E exportloopref -E forcetypeassert -E goconst -E gocritic -E ifshort -E nilerr -E unconvert -E unparam -E whitespace
+## disabled LINTERS: -E tagliatelle
+#
 ABS_PATH := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 ifeq ($(shell go env GOHOSTOS), windows)
 	ABS_PATH = $(PWD)
@@ -16,18 +16,25 @@ ifeq ($(shell go env GOHOSTOS), windows)
 	endif
 endif
 
-help: Makefile
+help:
 	@echo " Choose a command run in "$(PROJECTNAME)":"
 	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
+.PHONY: help
 
 clean:
-	@echo "  >  Cleaning build cache"
+	@echo "==> Cleaning build cache"
+	rm -r ./vendor
+.PHONY: clean
 
+path:
+	@echo $(ABS_PATH)
+.PHONY: path
 
 vendor:
-	@echo "  >  Updating dependencies"
-    @GOPATH=$(GOPATH) GOBIN=$(GOBIN) go mod tidy
-    @GOPATH=$(GOPATH) GOBIN=$(GOBIN) go mod vendor
+	@echo "==> Updating dependencies"
+	@go mod tidy
+	@go mod vendor
+.PHONY: vendor
 
 gen-webapi: ## Generate API
 	"$(ABS_PATH)/server/api/v1/web/proto":/app $protoc -I=proto --go_out=. --remove_omitempty classes.web.proto

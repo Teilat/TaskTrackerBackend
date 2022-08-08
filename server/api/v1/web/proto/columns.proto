@@ -1,0 +1,55 @@
+syntax = "proto3";
+
+package task_tracker;
+
+option go_package = "./web";
+
+// swagger:model
+message Column {
+  // Id колонки
+  // Required: true
+  uint32 id = 1;
+  // Имя колонки
+  // Required: true
+  string name = 2;
+}
+// swagger:model
+message ColumnUpdateRequest {
+  // структура обновляемой колонки
+  // Required: true
+  Column column = 1;
+}
+
+// swagger:model
+message ColumnUpdateResponse {
+  bool success = 1;
+}
+
+// swagger:model
+message ColumnCreateRequest {
+  // имя колонки
+  // Required: true
+  // Example: To Do
+  string name = 1;
+}
+
+// swagger:model
+message ColumnCreateResponse {
+  Column column = 1;
+}
+
+// swagger:model
+message ColumnDeleteRequest {
+  // id удаляемой колонки
+  uint32 id = 1;
+}
+// swagger:model
+message ColumnDeleteResponse {
+  bool success = 1;
+}
+
+// swagger:model
+message ColumnsListResponse {
+  // Список всех колонок
+  repeated Column columns = 1;
+}

@@ -1,0 +1,40 @@
+syntax = "proto3";
+
+import "columns.proto";
+import "google/api/annotations.proto";
+
+option go_package = "./web";
+
+// swagger:model
+message EmptyResponse { }
+
+// swagger:model
+message EmptyRequest { }
+
+service Web {
+  rpc ColumnsList (EmptyRequest) returns (ColumnsListResponse) {
+    option (google.api.http) = {
+      get: "/column/list"
+    };
+  }
+
+  rpc ColumnCreate (ColumnCreateRequest) returns (ColumnCreateResponse) {
+    option (google.api.http) = {
+      post: "/column/create"
+    };
+  }
+
+  rpc ColumnDelete (ColumnDeleteRequest) returns (ColumnDeleteResponse) {
+    option (google.api.http) = {
+      post: "/column/delete/{id}"
+      path: "id"
+    };
+  }
+
+  rpc ColumnUpdate (ColumnUpdateRequest) returns (ColumnUpdateResponse) {
+    option (google.api.http) = {
+      post: "/column/update/{id}"
+      path: "id"
+    };
+  }
+}
