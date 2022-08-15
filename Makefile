@@ -1,53 +1,38 @@
-PROJECT_NAME := $(shell $(basename $(PWD) ))
-#
 BINARY_NAME := $(shell git config --get remote.origin.url | awk -F/ '{print $$5}' | awk -F. '{print $$1}')
-#WIN_BINARY_NAME := $(BINARY_NAME).exe
-#BINARY_VERSION := $(shell git describe --tags)
-#BINARY_BUILD_DATE := $(shell date +%d.%m.%Y)
-#BUILD_FOLDER := .build
-#LINTERS = -E asciicheck -E dogsled -E durationcheck -E exportloopref -E forcetypeassert -E goconst -E gocritic -E ifshort -E nilerr -E unconvert -E unparam -E whitespace
-## disabled LINTERS: -E tagliatelle
-#
+BINARY_VERSION := $(shell git describe --tags)
+BINARY_BUILD_DATE := $(shell date +%d.%m.%Y)
+WIN_BINARY_NAME := $(BINARY_NAME).exe
+BUILD_FOLDER := .build
+
+PRINTF_FORMAT := "\033[35m%-18s\033[33m %s\033[0m\n"
+
 ABS_PATH := $(dir $(realpath $(lastword $(MAKEFILE_LIST))))
 ifeq ($(shell go env GOHOSTOS), windows)
 	ABS_PATH = $(PWD)
-	ifneq ($(shell whereis cygpath), "cygpath:")
-		ABS_PATH = $(shell cygpath -w $(CURDIR))
-	endif
 endif
 
-help:
-	@echo " Choose a command run in "$(PROJECTNAME)":"
-	@sed -n 's/^##//p' $< | column -t -s ':' |  sed -e 's/^/ /'
-.PHONY: help
+.PHONY: all build windows linux vendor gen-webapi clean
 
-clean:
-	@echo "==> Cleaning build cache"
-	rm -r ./vendor
-.PHONY: clean
+all: build
 
-path:
-	@echo $(ABS_PATH)
-.PHONY: path
+build: windows linux ## Default: build for windows and linux
 
-vendor:
-	@echo "==> Updating dependencies"
-	@go mod tidy
-	@go mod vendor
-.PHONY: vendor
+windows: vendor $(BUILD_FOLDER)/windows/logconfig.json ## Build artifacts for windows
+	@printf $(PRINTF_FORMAT) BINARY_NAME: $(WIN_BINARY_NAME)
+	@printf $(PRINTF_FORMAT) BINARY_BUILD_DATE: $(BINARY_BUILD_DATE)
+	mkdir -p $(BUILD_FOLDER)/windows
+	env GOOS=windows GOARCH=amd64 CGO_ENABLED=1 CXX=x86_64-w64-mingw32-g++ CC=x86_64-w64-mingw32-gcc  go build -ldflags "-s -w -X $(BINARY_NAME).Version=$(BINARY_VERSION) -X $(BINARY_NAME).BuildDate=$(BINARY_BUILD_DATE)" -o $(BUILD_FOLDER)/windows/$(WIN_BINARY_NAME) .
 
-gen-webapi: ## Generate API
-	"$(ABS_PATH)/server/api/v1/web/proto":/app $protoc -I=proto --go_out=. --remove_omitempty classes.web.proto
-	"$(ABS_PATH)/server/api/v1/web/proto":/app $protoc -I=proto --go_out=. --remove_omitempty elements.web.proto
-	"$(ABS_PATH)/server/api/v1/web/proto":/app $protoc -I=proto --go_out=. --remove_omitempty reference_book.web.proto
-	"$(ABS_PATH)/server/api/v1/web/proto":/app $protoc -I=proto --web_out=. web.proto
+linux: vendor $(BUILD_FOLDER)/linux/logconfig.json ## Build artifacts for linux
+	@printf $(PRINTF_FORMAT) BINARY_NAME: $(BINARY_NAME)
+	@printf $(PRINTF_FORMAT) BINARY_BUILD_DATE: $(BINARY_BUILD_DATE)
+	mkdir -p $(BUILD_FOLDER)/linux
+	env GOOS=linux GOARCH=amd64  go build -ldflags "-s -w -X $(BINARY_NAME).Version=$(BINARY_VERSION) -X $(BINARY_NAME).BuildDate=$(BINARY_BUILD_DATE)" -o $(BUILD_FOLDER)/linux/$(BINARY_NAME) .
 
+vendor: ## Get dependencies according to go.sum
+	env GO111MODULE=auto go mod tidy
+	env GO111MODULE=auto go mod vendor
 
-gen:
-	protoc -I/usr/local/include -I. \
-    	-I${GOPATH}/src \
-    	-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway/third_party/googleapis \
-    	-I${GOPATH}/src/github.com/grpc-ecosystem/grpc-gateway \
-    	--grpc-gateway_out=logtostderr=true:./api_pb \
-    	--swagger_out=allow_merge=true,merge_file_name=api:. \
-    	--go_out=plugins=grpc:./api_pb ./*.proto
+clean: ## Remove vendor and artifacts
+	rm -rf vendor
+	rm -rf $(BUILD_FOLDER)
