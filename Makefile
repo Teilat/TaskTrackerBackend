@@ -36,3 +36,15 @@ vendor: ## Get dependencies according to go.sum
 clean: ## Remove vendor and artifacts
 	rm -rf vendor
 	rm -rf $(BUILD_FOLDER)
+
+gen-webapi:
+	protoc -I=server/api/v1/web/proto \
+	  --grpc-gateway_out server/api/v1/ \
+      --grpc-gateway_opt logtostderr=true \
+      --grpc-gateway_opt paths=source_relative \
+      --go_out=server/api/v1/ columns.proto
+	protoc -I=server/api/v1/web/proto \
+      --grpc-gateway_out server/api/v1/ \
+      --grpc-gateway_opt logtostderr=true \
+      --grpc-gateway_opt paths=source_relative \
+      --web_out=server/api/v1/ web.proto
