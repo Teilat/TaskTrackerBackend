@@ -26,17 +26,34 @@ type projectAndUsers struct {
 
 func (c internalCache) CreateProject(params models.AddProject) error {
 	proj := &dbModels.Projects{
-		ParentId:     &params.ParentId,
 		Name:         params.Name,
 		Description:  &params.Description,
 		CreationDate: time.Now(),
 		OwnerId:      params.OwnerId,
 	}
+	if params.ParentId != 0 {
+		proj.ParentId = &params.ParentId
+	}
 	err := sql.Upsert(proj)
 	if err != nil {
 		return err
+	} else {
+		id := int32(0)
+		for i, _ := range c.Projects {
+			if i > id {
+				id = i
+			}
+		}
+		c.Projects[id+1] = project{
+			Id:           id + 1,
+			Project:      params.ParentId,
+			Name:         proj.Name,
+			Description:  *proj.Description,
+			CreationDate: proj.CreationDate,
+			Owner:        proj.OwnerId,
+		}
+		return nil
 	}
-	return nil
 }
 
 func (c internalCache) UpdateProject(params models.UpdateProject) error {
@@ -118,7 +135,7 @@ func (c internalCache) GetProject(param models.GetProject) (*models.Project, err
 	return res, nil
 }
 
-func (c internalCache) GetProjectTree() ([]*models.TreeNode, error) {
+func (c internalCache) GetProjectsTree() ([]*models.TreeNode, error) {
 	tree := []*models.TreeNode{}
 
 	for _, p := range c.Projects {
@@ -152,6 +169,16 @@ func (c internalCache) createNode(node *models.TreeNode) *models.TreeNode {
 					Title: p.Name,
 					Key:   p.Id,
 				})
+			}
+		}
+	}
+
+	if node.Children != nil {
+		for _, child := range node.Children {
+			for _, p := range c.Projects {
+				if child.Key == p.Project {
+					c.createNode(&child)
+				}
 			}
 		}
 	}

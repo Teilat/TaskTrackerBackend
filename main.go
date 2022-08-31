@@ -22,7 +22,6 @@ func main() {
 		return
 	}
 	cache.Init()
-
 	// setting up server
 	server.Init()
 }

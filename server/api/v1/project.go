@@ -79,7 +79,7 @@ func GetAllTasksByProject() gin.HandlerFunc {
 // @Router      /project/tree [get]
 func GetProjectsTree() gin.HandlerFunc {
 	return func(c *gin.Context) {
-		tags, err := cache.Cache.GetProjectTree()
+		tags, err := cache.Cache.GetProjectsTree()
 		if err != nil {
 			c.JSON(http.StatusInternalServerError, err.Error())
 		} else {
